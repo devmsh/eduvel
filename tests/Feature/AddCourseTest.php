@@ -2,9 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Admin;
 use App\Courses;
 use App\Http\Middleware\VerifyCsrfToken;
+use App\Role;
 use App\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -12,17 +15,30 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AddCourseTest extends TestCase
 {
+    use DatabaseMigrations;
+
+    public function createAdmin()
+    {
+        $admin = factory(User::class)->create();
+
+        $admin->roles()->attach(1);
+
+        return $admin;
+    }
+
     protected function setUp()
     {
         parent::setUp();
         $this->withoutMiddleware(VerifyCsrfToken::class);
+
+        Role::create(['name' => 'Admin',]);
     }
 
-    public function test_can_add_course()
+    public function test_admin_can_add_course()
     {
         Storage::fake();
 
-        $this->actingAs(User::find(1));
+        $this->actingAs($this->createAdmin());
 
         $response = $this->post('admin/courses/store', [
             'course_title' => 'Persius delenit has cu',
@@ -77,7 +93,7 @@ class AddCourseTest extends TestCase
 
     public function test_course_validated()
     {
-        $this->actingAs(User::find(1));
+        $this->actingAs($this->createAdmin());
 
         $response = $this->post('admin/courses/store', []);
 
