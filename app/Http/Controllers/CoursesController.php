@@ -50,14 +50,14 @@ class CoursesController extends Controller
 
         $courses = $request->user()->courses()->create($data);
 
-        $coursesFiles = new CoursesFiles();
-        $coursesFiles->video_title = request('video_title');
-        $coursesFiles->video_category = request('video_category');
-        $coursesFiles->video_url = request('video_url');
-        $coursesFiles->course_id = $courses->id;
-        $coursesFiles->save();
+        $courses->courses_file()->create($request->only([
+            'video_title',
+            'video_category',
+            'video_url',
+        ]));
 
         session()->flash('success', 'Successfully added');
+
         return redirect('/admin/courses');
     }
 
