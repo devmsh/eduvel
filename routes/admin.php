@@ -28,7 +28,7 @@ Route::post('reset/password/{token}', 'AdminAuth@reset_password_post');
 
 Route::group(['prefix' => 'admin'], function () {
 
-    Route::group(['middleware' => ['roles'], 'roles' => ['admin', 'Editor']], function () {
+    Route::group(['middleware' => ['roles'], 'roles' => ['Admin', 'Editor']], function () {
 
 
         Route::get('/', 'DashboardController@index');

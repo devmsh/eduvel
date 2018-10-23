@@ -13,7 +13,7 @@ class Courses extends Model
 
     public function courses_files()
     {
-        return $this->hasMany(CoursesFiles::Class);
+        return $this->hasMany(CoursesFiles::Class,'course_id');
     }
 
     public function course_comments()
