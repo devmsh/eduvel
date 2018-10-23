@@ -51,7 +51,7 @@ class AddCourseTest extends TestCase
 
         $response->assertRedirect('admin/courses');
         $response->assertSessionHas('success');
-//        Storage::disk()->assertExists($course->course_image);
+        Storage::disk()->assertExists($course->course_image);
 
         $this->assertEquals($course->course_title, 'Persius delenit has cu');
         $this->assertEquals($course->teacher_name, 'Teacher name');

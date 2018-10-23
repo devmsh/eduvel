@@ -27,10 +27,6 @@ class CoursesController extends Controller
 
     public function store(CourseRequest $request)
     {
-        if (!empty(request('course_image'))) {
-            $course_image_name = time() . '.' . $request->course_image->getClientOriginalExtension();
-        }
-
         $courses = new Courses();
         $courses->user_id = auth()->user()->id;
         $courses->course_title = request('course_title');
@@ -39,7 +35,7 @@ class CoursesController extends Controller
         $courses->course_expire = request('course_expire');
         $courses->course_price = request('course_price');
         $courses->course_discount_price = request('course_discount_price');
-        $courses->course_image = $course_image_name;
+        $courses->course_image = $request->course_image->store('uplaod/coursesimages');
         $courses->course_video = request('course_video');
         $courses->course_description = request('course_description');
         $courses->category_id = request('category_id');
@@ -51,10 +47,6 @@ class CoursesController extends Controller
         $courses->what_will_you_learn_title = request('what_will_you_learn_title');
         $courses->what_will_you_learn_description = request('what_will_you_learn_description');
         $courses->save();
-
-        if (!empty(request('course_image'))) {
-            $request->course_image->move(public_path('uplaod/courses/coursesimages/'), $course_image_name);
-        }
 
         $coursesFiles = new CoursesFiles();
         $coursesFiles->video_title = request('video_title');
