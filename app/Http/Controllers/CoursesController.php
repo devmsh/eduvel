@@ -56,9 +56,7 @@ class CoursesController extends Controller
             'video_url',
         ]));
 
-        session()->flash('success', 'Successfully added');
-
-        return redirect('/admin/courses');
+        return redirect('/admin/courses')->with('success', 'Successfully added');
     }
 
     public function edit($id)
