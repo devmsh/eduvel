@@ -30,53 +30,40 @@ class CoursesController extends Controller
         if (!empty(request('course_image'))) {
             $course_image_name = time() . '.' . $request->course_image->getClientOriginalExtension();
         }
-        /*if (!empty(request('course_video'))) {
-            $course_video_name = time()*2 . '.' . $request->course_video->getClientOriginalExtension();
-        }*/
-        //  preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/",  request('video'), $matches);
-        // $course_video_name = $matches[1];
 
-        $add = new Courses();
-        $add->user_id = auth()->user()->id;
-        $add->course_title = request('course_title');
-        $add->teacher_name = request('teacher_name');
-        $add->course_start = request('course_start');
-        $add->course_expire = request('course_expire');
-        $add->course_price = request('course_price');
-        $add->course_discount_price = request('course_discount_price');
-        $add->course_image = $course_image_name;
-        $add->course_video = request('course_video');
-        $add->course_description = request('course_description');
-        $add->category_id = request('category_id');
-        $add->coupon_code = request('coupon_code');
-        $add->coupon_code_discount_price = request('coupon_code_discount_price');
-        $add->whats_includes = request('whats_includes');
-        $add->isActive = request('isActive');
-        $add->course_time = request('course_time');
-        $add->what_will_you_learn_title = json_encode(request('what_will_you_learn_title'));
-        $add->what_will_you_learn_description = json_encode(request('what_will_you_learn_description'));
-        $add->save();
+        $courses = new Courses();
+        $courses->user_id = auth()->user()->id;
+        $courses->course_title = request('course_title');
+        $courses->teacher_name = request('teacher_name');
+        $courses->course_start = request('course_start');
+        $courses->course_expire = request('course_expire');
+        $courses->course_price = request('course_price');
+        $courses->course_discount_price = request('course_discount_price');
+        $courses->course_image = $course_image_name;
+        $courses->course_video = request('course_video');
+        $courses->course_description = request('course_description');
+        $courses->category_id = request('category_id');
+        $courses->coupon_code = request('coupon_code');
+        $courses->coupon_code_discount_price = request('coupon_code_discount_price');
+        $courses->whats_includes = request('whats_includes');
+        $courses->isActive = request('isActive');
+        $courses->course_time = request('course_time');
+        $courses->what_will_you_learn_title = json_encode(request('what_will_you_learn_title'));
+        $courses->what_will_you_learn_description = json_encode(request('what_will_you_learn_description'));
+        $courses->save();
 
         if (!empty(request('course_image'))) {
-
             $request->course_image->move(public_path('uplaod/courses/coursesimages/'), $course_image_name);
         }
-        // if (!empty(request('course_video'))) {
 
-        //     $request->course_video->move(public_path('uplaod/courses/coursesvideos/'), $course_video_name);
-        // }
-
-        $select = Courses::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->first();
-
-        $add = new CoursesFiles();
-        $add->video_title = json_encode(request('video_title'));
-        $add->video_category = json_encode(request('video_category'));
-        $add->video_url = json_encode(request('video_url'));
-        $add->course_id = $select->id;
-        $add->save();
+        $coursesFiles = new CoursesFiles();
+        $coursesFiles->video_title = json_encode(request('video_title'));
+        $coursesFiles->video_category = json_encode(request('video_category'));
+        $coursesFiles->video_url = json_encode(request('video_url'));
+        $coursesFiles->course_id = $courses->id;
+        $coursesFiles->save();
 
         session()->flash('success', 'Successfully added');
-
         return redirect('/admin/courses');
     }
 
