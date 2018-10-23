@@ -15,6 +15,11 @@ class Courses extends Model
     //     return $this->belongsTo('App\CourseCategory');
     // }
 
+    public function courses_file()
+    {
+        return $this->hasOne(CoursesFiles::Class,'course_id');
+    }
+
     public function courses_files()
     {
         return $this->hasMany(CoursesFiles::Class,'course_id');
