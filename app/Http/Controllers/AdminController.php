@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 // use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Request;
 // use Illuminate\Http\Request;
@@ -38,7 +39,7 @@ class AdminController extends Controller
     public function my_profile()
     {
         $user = User::find(auth()->user()->id);
-        
+
         return view('admin.myprofile.index', compact('user'));
     }
 
@@ -56,12 +57,12 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $register = $this->validate(request(),[
+        $register = $this->validate(request(), [
             'name' => 'required|min:4|max:191',
             'new_email' => 'required|email',
             'password' => 'required',
@@ -70,7 +71,7 @@ class AdminController extends Controller
         if (!empty(request('image'))) {
             $image_name = time() . '.' . $request->image->getClientOriginalExtension();
             $request->image->move(public_path('uplaod/user/'), $image_name);
-        }else{
+        } else {
             $image_name = 'user-image.png';
         }
 
@@ -85,9 +86,9 @@ class AdminController extends Controller
         $user->save();
 
         // Add Role
-        if(request('roles') == 'Admin') {            
+        if (request('roles') == 'Admin') {
             $user->roles()->attach(Role::where('name', 'Admin')->first());
-        }elseif(request('roles') == 'Editor'){
+        } elseif (request('roles') == 'Editor') {
             $user->roles()->attach(Role::where('name', 'Editor')->first());
         }
 
@@ -99,7 +100,7 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -110,7 +111,7 @@ class AdminController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -123,13 +124,13 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $register = $this->validate(request(),[
+        $register = $this->validate(request(), [
             'name' => 'required|min:4|max:191',
             // 'email' => 'required|email',
         ]);
@@ -140,10 +141,16 @@ class AdminController extends Controller
         }
 
         $add = User::find($id);
-        if (!empty(request('image'))){ $add->image = $image_name; }
+        if (!empty(request('image'))) {
+            $add->image = $image_name;
+        }
         $add->name = request('name');
-        if(!empty(request('new_email'))){ $add->email = request('new_email'); }
-        if(!empty(request('password'))){ $add->password = bcrypt(request('password')); }
+        if (!empty(request('new_email'))) {
+            $add->email = request('new_email');
+        }
+        if (!empty(request('password'))) {
+            $add->password = bcrypt(request('password'));
+        }
         // $add->confirmed = 1;
         $add->save();
 
@@ -154,7 +161,7 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -170,13 +177,12 @@ class AdminController extends Controller
         return 'admin Controller in delete_admin_all';
         return request('item');
 
-        if(is_array(request('item')))
-        {
+        if (is_array(request('item'))) {
             User::destroy(request('item'));
-        }else{
+        } else {
             User::find(request('item'))->delete();
         }
-        
+
         session()->flash('success', 'Successfully Deleted');
         return redirect('admin/admins');
     }
@@ -188,18 +194,18 @@ class AdminController extends Controller
         $user = User::where('uniqid', request('uniqid'))->first();
         $user->roles()->detach();
 
-        if(request('role_admin')) {
-            
+        if (request('role_admin')) {
+
             // Add Role
             $user->roles()->attach(Role::where('name', 'admin')->first());
         }
-        if(request('role_editor')) {
-            
+        if (request('role_editor')) {
+
             // Add Role
             $user->roles()->attach(Role::where('name', 'editor')->first());
         }
-        if(request('role_user')) {
-            
+        if (request('role_user')) {
+
             // Add Role
             $user->roles()->attach(Role::where('name', 'user')->first());
         }

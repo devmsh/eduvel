@@ -20,8 +20,8 @@ class CreateCoursesFilesTable extends Migration
             $table->text('video_url');
             $table->integer('course_id')->unsigned();
             $table->foreign('course_id')
-                    ->references('id')
-                    ->on('courses');
+                ->references('id')
+                ->on('courses');
             $table->timestamps();
         });
     }

@@ -27,8 +27,8 @@ class CreateCoursesTable extends Migration
             $table->text('course_description');
             $table->integer('category_id')->unsigned();
             $table->foreign('category_id')
-                    ->references('id')
-                    ->on('course_categories');
+                ->references('id')
+                ->on('course_categories');
             $table->string('coupon_code')->nullable();
             $table->string('coupon_code_discount_price')->nullable();
             $table->text('whats_includes')->nullable();

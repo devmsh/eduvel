@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 // use App\Http\Controllers\Controller;
 // use Illuminate\Support\Facades\Request;
 use App\Settings;
 use App\SocialMedia;
 use App\whychoose;
 use App\OurFounders;
-
 
 use App\Http\Controllers\SettingsController;
 
@@ -24,9 +24,9 @@ class SettingsController extends Controller
     {
         //
         $setting = Settings::get()->find(1);
-        if($setting){
+        if ($setting) {
             return view('admin.settings.index', compact('setting'));
-        }else{
+        } else {
             // return "No data, please add temporary data through DataBase";
             //return view('admin.settings.index');
         }
@@ -42,7 +42,7 @@ class SettingsController extends Controller
 
     public function socialMedia_store(Request $request)
     {
-        $socialMedia = $this->validate(request(),[
+        $socialMedia = $this->validate(request(), [
 
             'icon' => 'required',
             'link' => 'required',
@@ -65,7 +65,7 @@ class SettingsController extends Controller
 
     public function socialMedia_update(Request $request)
     {
-        $socialMedia = $this->validate(request(),[
+        $socialMedia = $this->validate(request(), [
 
             'icon' => 'required',
             'link' => 'required',
@@ -77,7 +77,6 @@ class SettingsController extends Controller
         $add->link = request('link');
         $add->icon = request('icon');
         $add->save();
-
 
         session()->flash('success', 'Edit Successfully');
         return back();
@@ -104,7 +103,7 @@ class SettingsController extends Controller
 
     public function why_choose_store(Request $request)
     {
-        $whychoose = $this->validate(request(),[
+        $whychoose = $this->validate(request(), [
 
             'icon' => 'required',
             'title' => 'required|max:25',
@@ -129,7 +128,7 @@ class SettingsController extends Controller
 
     public function why_choose_update(Request $request)
     {
-        $whychoose = $this->validate(request(),[
+        $whychoose = $this->validate(request(), [
 
             'icon' => 'required',
             'title' => 'required|max:25',
@@ -141,7 +140,6 @@ class SettingsController extends Controller
         $add->title = request('title');
         $add->description = request('description');
         $add->save();
-
 
         session()->flash('success', 'Edit Successfully');
         return back();
@@ -169,18 +167,18 @@ class SettingsController extends Controller
 
     public function our_founders_store(Request $request)
     {
-        $ourfounders = $this->validate(request(),[
+        $ourfounders = $this->validate(request(), [
 
             'image' => 'required',
             'name' => 'required|max:25',
             'job' => 'required|max:25',
         ]);
 
-        if(empty($request->image)){
+        if (empty($request->image)) {
 
             $img_name = $request->oldImage;
-        }elseif(!empty($request->image)){
-             
+        } elseif (!empty($request->image)) {
+
             $img_name = time() . '.' . $request->image->getClientOriginalExtension();
         }
 
@@ -190,8 +188,8 @@ class SettingsController extends Controller
         $add->job = request('job');
         $add->save();
 
-        if(!empty($request->image)){
-            
+        if (!empty($request->image)) {
+
             $request->image->move(public_path('uplaod/settings/ourfounders'), $img_name);
         }
 
@@ -207,18 +205,18 @@ class SettingsController extends Controller
 
     public function our_founders_update(Request $request)
     {
-        $whychoose = $this->validate(request(),[
+        $whychoose = $this->validate(request(), [
 
             //'image' => 'required',
             'name' => 'required|max:25',
             'job' => 'required|max:25',
         ]);
 
-        if(empty($request->image)){
+        if (empty($request->image)) {
 
             $img_name = $request->oldImage;
-        }elseif(!empty($request->image)){
-             
+        } elseif (!empty($request->image)) {
+
             $img_name = time() . '.' . $request->image->getClientOriginalExtension();
         }
 
@@ -228,8 +226,8 @@ class SettingsController extends Controller
         $add->job = request('job');
         $add->save();
 
-        if(!empty($request->image)){
-            
+        if (!empty($request->image)) {
+
             $request->image->move(public_path('uplaod/settings/ourfounders'), $img_name);
         }
 
@@ -243,16 +241,15 @@ class SettingsController extends Controller
         session()->flash('success', 'Deleted successfully');
         return back();
     }
+
     // End Our Founders
-
-
 
     public function update(Request $request)
     {
         //
         // return $request->image_story;
 
-        $settings = $this->validate(request(),[
+        $settings = $this->validate(request(), [
 
             'title_fixed' => 'required',
             'description_fixed' => 'required',
@@ -264,14 +261,13 @@ class SettingsController extends Controller
             'description_story' => 'required',
         ]);
 
-
         // Settings::where('id', 1)->update($settings);
 
-        if(empty($request->image_story)){
+        if (empty($request->image_story)) {
 
             $img_name = $request->oldImage;
-        }elseif(!empty($request->image_story)){
-             
+        } elseif (!empty($request->image_story)) {
+
             $img_name = time() . '.' . $request->image_story->getClientOriginalExtension();
         }
 
@@ -287,8 +283,8 @@ class SettingsController extends Controller
         $add->description_story = request('description_story');
         $add->save();
 
-        if(!empty($request->image_story)){
-            
+        if (!empty($request->image_story)) {
+
             $request->image_story->move(public_path('uplaod/settings'), $img_name);
         }
 
@@ -300,7 +296,7 @@ class SettingsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

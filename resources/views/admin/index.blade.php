@@ -2,17 +2,15 @@
 @include('admin.layouts.navbar')
 
 
-  <div class="content-wrapper">
+<div class="content-wrapper">
     <div class="container-fluid">
 
-     	@yield('content')
+        @yield('content')
 
-	  </div>
-	  <!-- /.container-fluid-->
-   	</div>
-    <!-- /.container-wrapper-->
-    
-
+    </div>
+    <!-- /.container-fluid-->
+</div>
+<!-- /.container-wrapper-->
 
 
 @include('admin.layouts.footer')

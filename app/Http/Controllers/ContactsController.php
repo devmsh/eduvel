@@ -7,7 +7,7 @@ use App\Contacts;
 
 class ContactsController extends Controller
 {
-    
+
     public function index()
     {
         $contacts = Contacts::orderBy('id', 'desc')->paginate(3);

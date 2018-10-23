@@ -33,7 +33,7 @@ class CheckoutPayments extends Mailable
     {
         // return $this->markdown('emails.checkout_payments');
         return $this->markdown('emails.checkout_payments')
-        ->subject('Checkout Payments')
-        ->with('data', $this->data);
+            ->subject('Checkout Payments')
+            ->with('data', $this->data);
     }
 }

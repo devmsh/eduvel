@@ -32,7 +32,7 @@ class AdminResetPassword extends Mailable
     public function build()
     {
         return $this->markdown('emails.admin_reset_password')
-        ->subject('Reset Admin Account')
-        ->with('data', $this->data);
+            ->subject('Reset Admin Account')
+            ->with('data', $this->data);
     }
 }

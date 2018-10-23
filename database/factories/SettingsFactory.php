@@ -5,7 +5,7 @@ use Faker\Generator as Faker;
 $factory->define(App\Settings::class, function (Faker $faker) {
     return [
 
-    	'title_fixed' => $faker->text($maxNbChars = 50),
+        'title_fixed' => $faker->text($maxNbChars = 50),
         'description_fixed' => $faker->text($maxNbChars = 400),
         'description_footer' => $faker->text($maxNbChars = 400),
         'telephone' => '+059-7733890',

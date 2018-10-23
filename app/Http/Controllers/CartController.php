@@ -43,12 +43,12 @@ class CartController extends Controller
         $settings = Settings::get()->find(1);
         $socialMedia = SocialMedia::get();
         $categories = Category::get();
-        $posts =Post::orderBy('id', 'desc')->paginate(4);
+        $posts = Post::orderBy('id', 'desc')->paginate(4);
         $course_categorys = CourseCategory::get();
         $courses = Courses::orderBy('id', 'desc')->where('isActive', 1)->paginate(6);
 
         if (!Session::has('cart')) {
-            
+
             return view('shopping-cart.shopping-cart', ['courses' => null], compact('settings', 'socialMedia', 'categories', 'posts', 'course_categorys', 'courses'));
         }
 
@@ -56,13 +56,14 @@ class CartController extends Controller
         $cart = new Cart($oldCart);
 
         return view('shopping-cart.shopping-cart',
-            ['courses' => $cart->items, 'totalPrice' => $cart->totalPrice], 
+            ['courses' => $cart->items, 'totalPrice' => $cart->totalPrice],
             compact('settings', 'socialMedia', 'categories', 'posts', 'course_categorys', 'courses')
         );
     }
 
-    public function getAddToCart(Request $request, $id) {
-            
+    public function getAddToCart(Request $request, $id)
+    {
+
         $product = Courses::find($id);
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
         $cart = new Cart($oldCart);
@@ -74,7 +75,8 @@ class CartController extends Controller
         return back();
     }
 
-    public function getReduceByOne($id){
+    public function getReduceByOne($id)
+    {
 
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
         $cart = new Cart($oldCart);
@@ -84,30 +86,32 @@ class CartController extends Controller
         return redirect('/shopping-cart');
     }
 
-    public function getRemoveItem($id){
+    public function getRemoveItem($id)
+    {
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
         $cart = new Cart($oldCart);
         $cart->removeItem($id);
 
         if (count($cart->items) > 0) {
             Session::put('cart', $cart);
-        }else{
+        } else {
             Session::forget('cart');
         }
         return redirect('/shopping-cart');
     }
 
-    public function getCheckout() {
-        
+    public function getCheckout()
+    {
+
         $settings = Settings::get()->find(1);
         $socialMedia = SocialMedia::get();
         $categories = Category::get();
-        $posts =Post::orderBy('id', 'desc')->paginate(4);
+        $posts = Post::orderBy('id', 'desc')->paginate(4);
         $course_categorys = CourseCategory::get();
         $courses = Courses::orderBy('id', 'desc')->where('isActive', 1)->paginate(6);
 
         if (!Session::has('cart')) {
-            
+
             return redirect('/shopping-cart');
         }
 
@@ -120,16 +124,17 @@ class CartController extends Controller
         return view('shopping-cart.checkout', ['total' => $total], compact('settings', 'socialMedia', 'categories', 'posts', 'course_categorys', 'courses'));
     }
 
-    public function postCheckout(Request $request) {
-        
-        if(!empty(request('stripeEmail'))){
+    public function postCheckout(Request $request)
+    {
+
+        if (!empty(request('stripeEmail'))) {
 
             $email = request('stripeEmail');
-        }else{
+        } else {
             $email = Auth::user()->email;
         }
 
-       if (!Session::has('cart')) {
+        if (!Session::has('cart')) {
             return redirect('/shopping-cart');
         }
 
@@ -144,11 +149,11 @@ class CartController extends Controller
 
         // return request();
 
-         // Charge::setApiKey('sk_test_fwmVPdJfpkmwlQRedXec5IxR');
+        // Charge::setApiKey('sk_test_fwmVPdJfpkmwlQRedXec5IxR');
         \Stripe\Stripe::setApiKey("sk_test_EJzqFDxNBwcV12kl425fQxZ7");
         $token = $_POST['stripeToken'];
 
-        try{
+        try {
 
             $charge = \Stripe\Charge::create([
                 'amount' => $total * 100,
@@ -167,10 +172,9 @@ class CartController extends Controller
 
             Auth::user()->orders()->save($order);
 
-        }catch(\Exaption $e){
+        } catch (\Exaption $e) {
             return redirect('/checkout')->with('error', $e->getMessage());
         }
-
 
         Session::forget('cart');
 
@@ -178,7 +182,7 @@ class CartController extends Controller
         $socialMedia = SocialMedia::get();
         $user = User::where('id', auth()->user()->id)->first();
         $payment_id = $charge->id;
-        Mail::to($email)->send(new CheckoutPayments(['data' => $user, 'total' => $total, 'payment_id'=> $payment_id]));
+        Mail::to($email)->send(new CheckoutPayments(['data' => $user, 'total' => $total, 'payment_id' => $payment_id]));
 
         return view('shopping-cart.finish', compact('settings', 'socialMedia'));
         // return redirect('/')->with('success', 'Successfuly purchased courses');
@@ -203,17 +207,17 @@ class CartController extends Controller
     //     return back();
     // }
 
-    public function getAddToCoupon(Request $request) {
+    public function getAddToCoupon(Request $request)
+    {
 
         $coupon = Coupon::whereNull('deleted_at')->where('coupon_code', $request->coupon_code)->first();
-        if(empty($coupon)){
+        if (empty($coupon)) {
             return back();
-        }else{
+        } else {
             $product = Courses::find($coupon->course_id);
             // return $course->course_price;
         }
-        
-        
+
         $product->course_price = $coupon->coupon_code_discount_price;
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
         $cart = new Cart($oldCart);
@@ -221,7 +225,6 @@ class CartController extends Controller
 
         $request->session()->put('cart', $cart);
         // dd($request->session()->get('cart'));
-
 
         // $oldCart = Session::has('cart') ? Session::get('cart') : null;
         // $cart = new Cart($oldCart);
@@ -231,7 +234,6 @@ class CartController extends Controller
         return back();
     }
 
-    
 }
 
 

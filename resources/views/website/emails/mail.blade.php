@@ -1,4 +1,3 @@
-
 Hi <strong>{{ $name }}</strong>
 
 # Confirm your account.

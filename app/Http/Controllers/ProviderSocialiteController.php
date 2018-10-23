@@ -30,64 +30,63 @@ class ProviderSocialiteController extends Controller
         // return $user->token;
 
         // All Providers
-		/*$user->getId();
-		$user->getNickname();
-		$user->getName();
-		$user->getEmail();
-		$user->getAvatar();*/
+        /*$user->getId();
+        $user->getNickname();
+        $user->getName();
+        $user->getEmail();
+        $user->getAvatar();*/
 
-		$selectProvider = Provider::where('provider_id', $user->getId())->first();
-		if (!$selectProvider) {
-			// New User
-			$userGetRole = User::where('email', $user->getEmail())->first();
-			if (!$userGetRole) {
-				$userGetRole = new User();
-				$userGetRole->uniqid = uniqid();
-		        $userGetRole->type_user = 'Student';
-		        $userGetRole->image = 'user-image.png';
-		        $userGetRole->confirmed = 0;
-	        	$userGetRole->token = str_random(55);
-				$userGetRole->name = $user->getName();
-				$userGetRole->email = $user->getEmail();
-				$userGetRole->save();
-			}
-			$newProvider = new User();
-			$newProvider->provider_id = $user->getId();
-			$newProvider->provider = $provider;
-			$newProvider->user_id = $userGetRole->id;
-			$newProvider->save();
-        
-		}else{
-			// login User
-			$userGetRole = User::find($selectProvider->user_id);
-		}
+        $selectProvider = Provider::where('provider_id', $user->getId())->first();
+        if (!$selectProvider) {
+            // New User
+            $userGetRole = User::where('email', $user->getEmail())->first();
+            if (!$userGetRole) {
+                $userGetRole = new User();
+                $userGetRole->uniqid = uniqid();
+                $userGetRole->type_user = 'Student';
+                $userGetRole->image = 'user-image.png';
+                $userGetRole->confirmed = 0;
+                $userGetRole->token = str_random(55);
+                $userGetRole->name = $user->getName();
+                $userGetRole->email = $user->getEmail();
+                $userGetRole->save();
+            }
+            $newProvider = new User();
+            $newProvider->provider_id = $user->getId();
+            $newProvider->provider = $provider;
+            $newProvider->user_id = $userGetRole->id;
+            $newProvider->save();
 
-		auth()->login($userGetRole);
-		return $this->userHasRole($userGetRole->id);
+        } else {
+            // login User
+            $userGetRole = User::find($selectProvider->user_id);
+        }
+
+        auth()->login($userGetRole);
+        return $this->userHasRole($userGetRole->id);
 
     }
 
-
     public function userHasRole($id)
     {
-    	$user = User::find($id);
+        $user = User::find($id);
 
-    	if ($user->hasRole('Admin')) {
-    			
-			return redirect('/admin');
-		}elseif ($user->hasRole('Editor')) {
+        if ($user->hasRole('Admin')) {
 
-			return redirect('/editor');
-		}elseif ($user->hasRole('User')) {
-			
-			return 'User';
-		}elseif ($user->hasRole('Teacher')) {
-			
-			return redirect('/dashboard');
-			return redirect('/profile/'.auth()->user()->name);
-		}elseif ($user->hasRole('Student')) {
-			
-			return redirect('/profile/'.auth()->user()->name);
-		}
+            return redirect('/admin');
+        } elseif ($user->hasRole('Editor')) {
+
+            return redirect('/editor');
+        } elseif ($user->hasRole('User')) {
+
+            return 'User';
+        } elseif ($user->hasRole('Teacher')) {
+
+            return redirect('/dashboard');
+            return redirect('/profile/' . auth()->user()->name);
+        } elseif ($user->hasRole('Student')) {
+
+            return redirect('/profile/' . auth()->user()->name);
+        }
     }
 }

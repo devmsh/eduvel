@@ -31,19 +31,19 @@ class CourseCategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $course_categorys = $this->validate(request(),[
+        $course_categorys = $this->validate(request(), [
 
             'name' => 'required',
             'image' => 'required',
         ]);
 
-        if(!empty($request->image)){
-             
+        if (!empty($request->image)) {
+
             $img_name = time() . '.' . $request->image->getClientOriginalExtension();
         }
 
@@ -52,7 +52,7 @@ class CourseCategoryController extends Controller
         $add->image = $img_name;
         $add->save();
 
-        if(!empty($request->image)){
+        if (!empty($request->image)) {
 
             $request->image->move(public_path('uplaod/coursecategorys/'), $img_name);
         }
@@ -64,47 +64,46 @@ class CourseCategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $course_categorys = CourseCategory::where('id', $id)->first();
-        return view('admin.coursecategorys.show',compact('course_categorys'));
+        return view('admin.coursecategorys.show', compact('course_categorys'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-   public function edit($id)
+    public function edit($id)
     {
         $course_categorys = CourseCategory::get()->find($id);
-        return view('admin.coursecategorys.edit',compact('course_categorys'));
+        return view('admin.coursecategorys.edit', compact('course_categorys'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
 
-        $course_categorys = $this->validate(request(),[
+        $course_categorys = $this->validate(request(), [
 
             'name' => 'required',
         ]);
 
-        
-        if(!empty($request->image)){
-             
+        if (!empty($request->image)) {
+
             $img_name = time() . '.' . $request->image->getClientOriginalExtension();
-        }elseif(empty($request->image)){
+        } elseif (empty($request->image)) {
 
             $img_name = $request->oldimage;
         }
@@ -114,8 +113,8 @@ class CourseCategoryController extends Controller
         $add->image = $img_name;
         $add->save();
 
-        if(!empty($request->image)){
-            
+        if (!empty($request->image)) {
+
             $request->image->move(public_path('uplaod/coursecategorys'), $img_name);
 
         }
@@ -127,7 +126,7 @@ class CourseCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

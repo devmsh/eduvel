@@ -74,58 +74,58 @@ Route::post('/searsh', 'IndexController@searsh');
 // For Login student
 Route::group(['middleware' => ['roles'], 'roles' => ['Student', 'student']], function () {
 
-	Route::get('/profile/{name?}', 'ProfileStudentController@profile');
-	Route::post('/profile/{id}/update', 'ProfileStudentController@update_profile');
-	Route::group(['prefix' => 'dashboard'], function () {
-		Route::get('/my-course', 'ProfileStudentController@my_courses');
-	});
-	Route::get('/logout', 'ProfileStudentController@logout');
+    Route::get('/profile/{name?}', 'ProfileStudentController@profile');
+    Route::post('/profile/{id}/update', 'ProfileStudentController@update_profile');
+    Route::group(['prefix' => 'dashboard'], function () {
+        Route::get('/my-course', 'ProfileStudentController@my_courses');
+    });
+    Route::get('/logout', 'ProfileStudentController@logout');
 });
 
 // For Login student
 Route::group(['middleware' => ['roles'], 'roles' => ['teacher', 'Teacher']], function () {
 
-	Route::get('/my-profile/{name}', 'ProfileTeacherController@profile');
-	Route::post('/profile/update', 'ProfileTeacherController@update_profile');
-	Route::get('/logout', 'ProfileTeacherController@logout');
+    Route::get('/my-profile/{name}', 'ProfileTeacherController@profile');
+    Route::post('/profile/update', 'ProfileTeacherController@update_profile');
+    Route::get('/logout', 'ProfileTeacherController@logout');
 
-	Route::group(['prefix' => 'dashboard'], function () {
+    Route::group(['prefix' => 'dashboard'], function () {
 
-		Route::get('/', 'CoursesTeacherController@dashboard');
-		// For Add Courses
-		Route::get('courses', 'CoursesTeacherController@index');
-		Route::get('add-courses', 'CoursesTeacherController@create');
-		Route::post('courses/store', 'CoursesTeacherController@store');
-		Route::get('course/{id}/edit', 'CoursesTeacherController@edit');
-		Route::post('course/update', 'CoursesTeacherController@update');
-		Route::get('course/{id}/delete', 'CoursesTeacherController@destroy');
-		Route::get('category/{courses_category}', 'CoursesTeacherController@searsh_category');
+        Route::get('/', 'CoursesTeacherController@dashboard');
+        // For Add Courses
+        Route::get('courses', 'CoursesTeacherController@index');
+        Route::get('add-courses', 'CoursesTeacherController@create');
+        Route::post('courses/store', 'CoursesTeacherController@store');
+        Route::get('course/{id}/edit', 'CoursesTeacherController@edit');
+        Route::post('course/update', 'CoursesTeacherController@update');
+        Route::get('course/{id}/delete', 'CoursesTeacherController@destroy');
+        Route::get('category/{courses_category}', 'CoursesTeacherController@searsh_category');
 
-		Route::get('all-comments', 'CoursesTeacherController@all_comments');
-		Route::get('comment/{id}/dane-read', 'CoursesTeacherController@dane_read_comment');
+        Route::get('all-comments', 'CoursesTeacherController@all_comments');
+        Route::get('comment/{id}/dane-read', 'CoursesTeacherController@dane_read_comment');
 
-		Route::any('/coupon', 'CouponController@index');
-		Route::post('/add-coupon', 'CouponController@create');
-		Route::get('/{coupon_code}/delete', 'CouponController@delete');
+        Route::any('/coupon', 'CouponController@index');
+        Route::post('/add-coupon', 'CouponController@create');
+        Route::get('/{coupon_code}/delete', 'CouponController@delete');
 
-		Route::get('/my-courses', 'ProfileTeacherController@my_courses');
+        Route::get('/my-courses', 'ProfileTeacherController@my_courses');
 
-		Route::get('/files', 'CoursesTeacherController@add_course_files');
-		Route::post('/files', 'CoursesTeacherController@store_course_files');
-		Route::get('/files/{id}/delete', 'CoursesTeacherController@file_delete');
+        Route::get('/files', 'CoursesTeacherController@add_course_files');
+        Route::post('/files', 'CoursesTeacherController@store_course_files');
+        Route::get('/files/{id}/delete', 'CoursesTeacherController@file_delete');
 
-	});
+    });
 
 });
 
 Route::group(['middleware' => ['roles'], 'roles' => ['Admin', 'Editor', 'Teacher', 'Student']], function () {
 
-	// For Comment Course
-	Route::post('/course/comment-store', 'IndexController@course_comments_store');
+    // For Comment Course
+    Route::post('/course/comment-store', 'IndexController@course_comments_store');
 });
 
-Route::any('/logout', function(){
+Route::any('/logout', function () {
 
-	\Auth::logout();
+    \Auth::logout();
     return redirect('/login');
 });

@@ -31,20 +31,20 @@ class MediaGalleryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $media_gallery = $this->validate(request(),[
+        $media_gallery = $this->validate(request(), [
 
             'title' => 'required|max:25',
             'image' => 'required',
             'category' => 'required',
         ]);
 
-        if(!empty($request->image)){
-             
+        if (!empty($request->image)) {
+
             $img_name = time() . '.' . $request->image->getClientOriginalExtension();
         }
 
@@ -54,13 +54,13 @@ class MediaGalleryController extends Controller
         $add->category = request('category');
         $add->save();
 
-        if(!empty($request->image)){
-            
+        if (!empty($request->image)) {
+
             if (request('category') == 'videos') {
                 $request->image->move(public_path('uplaod/mediagallery/videos'), $img_name);
-            }elseif (request('category') == 'pictures') {
+            } elseif (request('category') == 'pictures') {
                 $request->image->move(public_path('uplaod/mediagallery/pictures'), $img_name);
-            }else{
+            } else {
                 return redirect('/not-found');
             }
 
@@ -73,48 +73,47 @@ class MediaGalleryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $media_gallery = MediaGallery::where('id', $id)->first();
-        return view('admin.mediagallery.show',compact('media_gallery'));
+        return view('admin.mediagallery.show', compact('media_gallery'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $media_gallery = MediaGallery::get()->find($id);
-        return view('admin.mediagallery.edit',compact('media_gallery'));
+        return view('admin.mediagallery.edit', compact('media_gallery'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
 
-        $media_gallery = $this->validate(request(),[
+        $media_gallery = $this->validate(request(), [
 
             'title' => 'required|max:25',
             'category' => 'required',
         ]);
 
-        
-        if(!empty($request->image)){
-             
+        if (!empty($request->image)) {
+
             $img_name = time() . '.' . $request->image->getClientOriginalExtension();
-        }elseif(empty($request->image)){
+        } elseif (empty($request->image)) {
 
             $img_name = $request->oldimage;
         }
@@ -125,8 +124,8 @@ class MediaGalleryController extends Controller
         $add->category = $request->category;
         $add->save();
 
-        if(!empty($request->image)){
-            
+        if (!empty($request->image)) {
+
             $request->image->move(public_path('uplaod/mediagallery'), $img_name);
 
         }
@@ -138,7 +137,7 @@ class MediaGalleryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

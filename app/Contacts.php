@@ -7,7 +7,8 @@ use Carbon\Carbon;
 
 class Contacts extends Model
 {
-    public function getCreatedAtAttribute($val){
-    	return Carbon::parse($val)->diffForHumans();
-	}
+    public function getCreatedAtAttribute($val)
+    {
+        return Carbon::parse($val)->diffForHumans();
+    }
 }

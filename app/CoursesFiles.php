@@ -8,6 +8,6 @@ class CoursesFiles extends Model
 {
     public function courses()
     {
-    	return $this->belongsTo(Courses::Class);
+        return $this->belongsTo(Courses::Class);
     }
 }

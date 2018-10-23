@@ -13,24 +13,24 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-                // AdminSeeder::class,
-        		SettingsSeeder::class,
-                SocialMediaSeeder::class,
-                WhyChooseSeeder::class,
-                OurFoundersSeeder::class,
-                CategorySeeder::class,
-                PostSeeder::class,
-                BlogCommentSeeder::class,
-                FaqSeeder::class,
-                ContactsSeeder::class,
-                CourseCategorySeeder::class,
-                MediaGallerySeeder::class,
-                CoursesSeeder::class,
-                CoursesFilesSeeder::class,
-                RoleSeeder::class,
-                UserSeeder::class,
-                UserRoleSeeder::class,
-                AdmissionSeeder::class,
-        	]);
+            // AdminSeeder::class,
+            SettingsSeeder::class,
+            SocialMediaSeeder::class,
+            WhyChooseSeeder::class,
+            OurFoundersSeeder::class,
+            CategorySeeder::class,
+            PostSeeder::class,
+            BlogCommentSeeder::class,
+            FaqSeeder::class,
+            ContactsSeeder::class,
+            CourseCategorySeeder::class,
+            MediaGallerySeeder::class,
+            CoursesSeeder::class,
+            CoursesFilesSeeder::class,
+            RoleSeeder::class,
+            UserSeeder::class,
+            UserRoleSeeder::class,
+            AdmissionSeeder::class,
+        ]);
     }
 }

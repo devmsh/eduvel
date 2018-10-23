@@ -14,7 +14,8 @@ use App\Helpers\EducationAlzardHelpers;
 class CoursesTeacherController extends Controller
 {
 
-    public function dashboard(){
+    public function dashboard()
+    {
 
         $count_courses = Courses::where('user_id', auth()->user()->id)->where('isActive', 1)->count();
         $count_inactive_courses = Courses::where('user_id', auth()->user()->id)->where('isActive', 0)->count();
@@ -24,7 +25,7 @@ class CoursesTeacherController extends Controller
         foreach ($myCourses as $myCourse) {
             $count_comments = $count_comments + CourseComment::where('course_id', $myCourse->id)->where('dane_read', 0)->count();
         }
-        
+
         return view('teacher.home', compact('count_courses', 'count_inactive_courses', 'count_comments'));
     }
 
@@ -55,12 +56,12 @@ class CoursesTeacherController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $courses = $this->validate(request(),[
+        $courses = $this->validate(request(), [
             'course_title' => 'required',
             'teacher_name' => 'required',
             'course_start' => 'required',
@@ -74,12 +75,11 @@ class CoursesTeacherController extends Controller
             'what_will_you_learn_description' => 'required',
         ]);
 
-
         if (!empty(request('course_image'))) {
             $course_image_name = time() . '.' . $request->course_image->getClientOriginalExtension();
         }
         if (!empty(request('course_video'))) {
-            $course_video_name = time()*2 . '.' . $request->course_video->getClientOriginalExtension();
+            $course_video_name = time() * 2 . '.' . $request->course_video->getClientOriginalExtension();
         }
 
         $add = new Courses();
@@ -119,17 +119,17 @@ class CoursesTeacherController extends Controller
         $add->video_category = json_encode(request('video_category'));
         $add->video_url = json_encode(request('video_url'));
         $add->course_id = $select->id;
-        $add->save();       
+        $add->save();
 
         session()->flash('success', 'Successfully added');
-        
+
         return redirect('/dashboard/courses');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -140,7 +140,7 @@ class CoursesTeacherController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -153,13 +153,14 @@ class CoursesTeacherController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request){
+    public function update(Request $request)
+    {
 
-        $courses = $this->validate(request(),[
+        $courses = $this->validate(request(), [
             'course_title' => 'required',
             'teacher_name' => 'required',
             'course_start' => 'required',
@@ -176,12 +177,12 @@ class CoursesTeacherController extends Controller
 
         if (!empty(request('course_image'))) {
             $course_image_name = time() . '.' . $request->course_image->getClientOriginalExtension();
-        }else{
+        } else {
             $course_image_name = $course->course_image;
         }
         if (!empty(request('course_video'))) {
-            $course_video_name = time()*2 . '.' . $request->course_video->getClientOriginalExtension();
-        }else{
+            $course_video_name = time() * 2 . '.' . $request->course_video->getClientOriginalExtension();
+        } else {
             $course_video_name = $course->course_video;
         }
 
@@ -219,18 +220,19 @@ class CoursesTeacherController extends Controller
         $add->video_title = json_encode(request('video_title'));
         $add->video_category = json_encode(request('video_category'));
         $add->video_url = json_encode(request('video_url'));
-        $add->save();       
+        $add->save();
 
         session()->flash('success', 'Successfully updated');
-        
+
         return back();
     }
 
-    public function searsh_category($courses_category){
+    public function searsh_category($courses_category)
+    {
 
         $courses_category = CourseCategory::select(array('id', 'name'))
-                        ->orWhere('name', 'LIKE', '%'.$courses_category.'%')                        
-                        ->first();
+            ->orWhere('name', 'LIKE', '%' . $courses_category . '%')
+            ->first();
 
         $course_categorys = CourseCategory::get();
         $courses = Courses::where('category_id', $courses_category->id)->where('user_id', auth()->user()->id)->paginate(3);
@@ -241,7 +243,7 @@ class CoursesTeacherController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -252,12 +254,15 @@ class CoursesTeacherController extends Controller
         return back();
     }
 
-    public function all_comments(){
+    public function all_comments()
+    {
 
-        $get_comments = CourseComment::/*where('course_id', 2)->*/get();
+        $get_comments = CourseComment::/*where('course_id', 2)->*/
+        get();
         // return $get_comments;
 
-        $user_id = CourseComment::select('user_id')->/*where('course_id', 2)->*/get()->toarray();
+        $user_id = CourseComment::select('user_id')->/*where('course_id', 2)->*/
+        get()->toarray();
         $user = [];
         $length_users = count($user_id);
         // return $user_id;
@@ -266,27 +271,29 @@ class CoursesTeacherController extends Controller
             $user[$i] = User::where('id', $user_id[$i]['user_id'])->first();
         }
 
-
         $course = Courses::where('user_id', auth()->user()->id)->first();
 
         $comments = array_map(null, $get_comments->toArray(), $user);
 
         return view('teacher.courses.allComments', compact('comments'));
     }
-    public function dane_read_comment($id){
-        
+
+    public function dane_read_comment($id)
+    {
+
         $update = CourseComment::find($id);
         $update->dane_read = 1;
-        $update->save();       
+        $update->save();
 
         // session()->flash('success', 'Successfully Dane Read');
-        
+
         return back();
 
     }
 
-    public function add_course_files(){
-        
+    public function add_course_files()
+    {
+
         $course_categorys = CourseCategory::get();
         $courses = Courses::where('user_id', auth()->user()->id)->get();
         $courseFiles = CourseFiles::where('user_id', auth()->user()->id)->where('isActive', 1)->get();
@@ -294,14 +301,15 @@ class CoursesTeacherController extends Controller
         return view('teacher.courses.files', compact('course_categorys', 'courses', 'courseFiles'));
     }
 
-    public function store_course_files(Request $request){
+    public function store_course_files(Request $request)
+    {
 
         if (!empty(request('file_name'))) {
             $file = request()->file('file_name');
             $size_bytes = $file->getSize();
             $mimtype = $file->getMimeType();
 
-            $file_name= request('name') . time() . '.' . $request->file_name->getClientOriginalExtension();
+            $file_name = request('name') . time() . '.' . $request->file_name->getClientOriginalExtension();
             $request->file_name->move(public_path('uplaod/courses/files/'), $file_name);
         }
 
@@ -319,7 +327,8 @@ class CoursesTeacherController extends Controller
         return back();
     }
 
-    public function file_delete($id){
+    public function file_delete($id)
+    {
 
         $courseFiles = CourseFiles::where('id', $id)->where('user_id', auth()->user()->id)->delete();
         // CourseFiles::find($id)->delete();

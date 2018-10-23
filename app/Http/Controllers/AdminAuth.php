@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 // use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Request;
 // use Illuminate\Http\Request;
@@ -21,172 +22,170 @@ class AdminAuth extends Controller
 {
     public function userHasRole($id)
     {
-    	$user = User::find($id);
+        $user = User::find($id);
 
-    	if ($user->hasRole('Admin')) {
-    			
-			return redirect('/admin');
-		}elseif ($user->hasRole('Editor')) {
+        if ($user->hasRole('Admin')) {
 
-			return redirect('/editor');
-		}elseif ($user->hasRole('User')) {
-			
-			return 'User';
-		}elseif ($user->hasRole('Teacher')) {
-			
-			return redirect('/dashboard');
-			return redirect('/profile/'.auth()->user()->name);
-		}elseif ($user->hasRole('Student')) {
-			
-			return redirect('/courses-grid');
-			return redirect('/profile/'.auth()->user()->name);
-		}
+            return redirect('/admin');
+        } elseif ($user->hasRole('Editor')) {
+
+            return redirect('/editor');
+        } elseif ($user->hasRole('User')) {
+
+            return 'User';
+        } elseif ($user->hasRole('Teacher')) {
+
+            return redirect('/dashboard');
+            return redirect('/profile/' . auth()->user()->name);
+        } elseif ($user->hasRole('Student')) {
+
+            return redirect('/courses-grid');
+            return redirect('/profile/' . auth()->user()->name);
+        }
     }
 
     public function login()
     {
-    	return view('auth.login');
+        return view('auth.login');
     }
 
-    public function dologin() 
+    public function dologin()
     {
-    	$this->validate(request(),[
+        $this->validate(request(), [
 
-    		'email' => 'required|email',
-			'password' => 'required'
-		]);
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
 
-		$rememberme = request('rememberme') == 1?true:false;
-    	if (auth()->attempt(request(['email', 'password']), $rememberme)) {
-    		
-    		$user = User::where('email', request('email'))->first();
+        $rememberme = request('rememberme') == 1 ? true : false;
+        if (auth()->attempt(request(['email', 'password']), $rememberme)) {
 
-    		// if (Session::has('oldUrl')) {
-    		// 	return $oldUrl = Session::get('oldUrl');
-    		// 	Session::forget('oldUrl');
-    		// 	return redirect('/checkout');
-    		// }
-    		return $this->userHasRole($user->id);
-    		
-    	}else {
+            $user = User::where('email', request('email'))->first();
 
-			// session()->flash('error', trans('admin.inccorrect_information_login'));
-			return redirect('login')->with('status', 'Inccorrect information login!');
-		}
-		
-	}
+            // if (Session::has('oldUrl')) {
+            // 	return $oldUrl = Session::get('oldUrl');
+            // 	Session::forget('oldUrl');
+            // 	return redirect('/checkout');
+            // }
+            return $this->userHasRole($user->id);
 
-	public function logout()
-	{
-		auth()->logout();
-		return redirect('/login');
-	}
+        } else {
 
-	public function forgot_password()
-	{
-		return view('auth.forgot_password');
-	}
+            // session()->flash('error', trans('admin.inccorrect_information_login'));
+            return redirect('login')->with('status', 'Inccorrect information login!');
+        }
 
-	public function forgot_password_post()
-	{		
-		$this->validate(request(),[
+    }
 
-    		'email' => 'required|email',
-		]);
+    public function logout()
+    {
+        auth()->logout();
+        return redirect('/login');
+    }
 
-		$user = User::where('email', request('email'))->first();
-		if(!empty($user)){
+    public function forgot_password()
+    {
+        return view('auth.forgot_password');
+    }
 
-			$token = app('auth.password.broker')->createToken($user);
-			$data = DB::table('password_resets')->insert([
-				'email' => $user->email,
-				'token' => $token,
-				'created_at' => Carbon::now(),
-			]);
-			Mail::to($user->email)->send(new AdminResetPassword(['data' => $user, 'token' => $token]));
-			session()->flash('success', 'Reset Link Is Sent');
-			return back();
+    public function forgot_password_post()
+    {
+        $this->validate(request(), [
 
-			// return new AdminResetPassword(['data' => $user, 'token' => $token]);
-		}
+            'email' => 'required|email',
+        ]);
 
-		return back();
-	}
+        $user = User::where('email', request('email'))->first();
+        if (!empty($user)) {
 
-	public function reset_password($token)
-	{
-		$this->validate(request(),[
-    		'token' => 'required',
-		]);
+            $token = app('auth.password.broker')->createToken($user);
+            $data = DB::table('password_resets')->insert([
+                'email' => $user->email,
+                'token' => $token,
+                'created_at' => Carbon::now(),
+            ]);
+            Mail::to($user->email)->send(new AdminResetPassword(['data' => $user, 'token' => $token]));
+            session()->flash('success', 'Reset Link Is Sent');
+            return back();
 
-		$check_token = DB::table('password_resets')->where('token', $token)->where('created_at', '>', Carbon::now()->subHours(2))->first();
-		
-		if(!empty($check_token))
-		{
+            // return new AdminResetPassword(['data' => $user, 'token' => $token]);
+        }
 
-			return view('auth.reset_password', ['data' => $check_token]);
+        return back();
+    }
 
-		}else{
-			return redirect('/forgot/password');
-		}
-	}
+    public function reset_password($token)
+    {
+        $this->validate(request(), [
+            'token' => 'required',
+        ]);
 
-	public function reset_password_post($token)
-	{
-		$this->validate(request(),[
-			'token' => 'required',
-			'password' => 'required|confirmed',
-			'password_confirmation' => 'required',
+        $check_token = DB::table('password_resets')->where('token', $token)->where('created_at', '>', Carbon::now()->subHours(2))->first();
 
-		], [], [
+        if (!empty($check_token)) {
 
-			'password' => 'Password',
-			'password_confirmation' => 'Confirmation Password',
-		]);
+            return view('auth.reset_password', ['data' => $check_token]);
 
-		$check_token = DB::table('password_resets')->where('token', $token)->where('created_at', '>', Carbon::now()->subHours(2))->first();
+        } else {
+            return redirect('/forgot/password');
+        }
+    }
 
-		if(!empty($check_token))
-		{
-			$user = User::where('email', $check_token->email)->update([
-				'email' => $check_token->email, 
-				'password' => bcrypt(request('password'))
-			]);
+    public function reset_password_post($token)
+    {
+        $this->validate(request(), [
+            'token' => 'required',
+            'password' => 'required|confirmed',
+            'password_confirmation' => 'required',
 
-			DB::table('password_resets')->where('email', request('email'))->delete();
-			// For Login 
-			auth()->attempt(['email' => $check_token->email, 'password' => request('password')], true);
+        ], [], [
 
-			$user = User::where('email', $check_token->email)->first();
-			
-			return $this->userHasRole($user->id);
+            'password' => 'Password',
+            'password_confirmation' => 'Confirmation Password',
+        ]);
 
-		} else {
+        $check_token = DB::table('password_resets')->where('token', $token)->where('created_at', '>', Carbon::now()->subHours(2))->first();
 
-			return redirect('/forgot/password');
-		}
-	}
+        if (!empty($check_token)) {
+            $user = User::where('email', $check_token->email)->update([
+                'email' => $check_token->email,
+                'password' => bcrypt(request('password'))
+            ]);
 
-	// For Register
-	public function register()
-	{
-		return view('auth.register');
-	}
+            DB::table('password_resets')->where('email', request('email'))->delete();
+            // For Login
+            auth()->attempt(['email' => $check_token->email, 'password' => request('password')], true);
 
-	public function doregister(Request $request)
-	{
+            $user = User::where('email', $check_token->email)->first();
 
-		$register = $this->validate(request(),[
+            return $this->userHasRole($user->id);
+
+        } else {
+
+            return redirect('/forgot/password');
+        }
+    }
+
+    // For Register
+    public function register()
+    {
+        return view('auth.register');
+    }
+
+    public function doregister(Request $request)
+    {
+
+        $register = $this->validate(request(), [
             'name' => 'required|min:4|max:191',
             'type_user' => '|in:Student,Teacher',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed',
-			'password_confirmation' => 'required',
+            'password_confirmation' => 'required',
         ], [], [
 
-			'password' => 'Password',
-			'password_confirmation' => 'Confirmation Password',
-		]);
+            'password' => 'Password',
+            'password_confirmation' => 'Confirmation Password',
+        ]);
 
         $add = new User();
         $add->uniqid = uniqid();
@@ -200,179 +199,171 @@ class AdminAuth extends Controller
         $add->save();
 
         // Add Role
-		if(request('type_user') == 'Student'){
-			$add->roles()->attach(Role::where('name', 'Student')->first());
-		}
+        if (request('type_user') == 'Student') {
+            $add->roles()->attach(Role::where('name', 'Student')->first());
+        }
 
-        $rememberme = request('rememberme') == 1?true:false;
-		if (true/*auth()->attempt(['email' => request('email'), 'password' => request('password')], $rememberme)*/) 
-		{
+        $rememberme = request('rememberme') == 1 ? true : false;
+        if (true/*auth()->attempt(['email' => request('email'), 'password' => request('password')], $rememberme)*/) {
 
-			$user = User::where('email', request('email'))->first();
-			if(!empty($user)){
+            $user = User::where('email', request('email'))->first();
+            if (!empty($user)) {
 
-				$token = app('auth.password.broker')->createToken($user);
-				$data = DB::table('password_resets')->insert([
-					'email' => $user->email,
-					'token' => $token,
-					'created_at' => Carbon::now(),
-				]);
+                $token = app('auth.password.broker')->createToken($user);
+                $data = DB::table('password_resets')->insert([
+                    'email' => $user->email,
+                    'token' => $token,
+                    'created_at' => Carbon::now(),
+                ]);
 
-				/******************* Start Mail ******************/
-		        $get = User::where('email', request('email'))->get();
+                /******************* Start Mail ******************/
+                $get = User::where('email', request('email'))->get();
 
-		        foreach($get as $getdata) 
-		        { 
-		            $id = $getdata->id;
-		            $name = $getdata->name;
-		            $email = $getdata->email;
-		            $confirmed = $getdata->confirmed;
-		            $getToken = $getdata->token;
+                foreach ($get as $getdata) {
+                    $id = $getdata->id;
+                    $name = $getdata->name;
+                    $email = $getdata->email;
+                    $confirmed = $getdata->confirmed;
+                    $getToken = $getdata->token;
 
-		            if($confirmed == 0)
-		            {
-		                /*$data = array('name'=> $name, "body" => "Please click the link to confirm your account.", "token" => $getToken);
-		                Mail::send('website.emails.mail', $data, function($message) use($getToken) {
-		                    $message->to(request('email'))->subject('The Message For Checked Email');
-		                    $message->from('alzard@gmail.com','Mohammed Alzard');
-		                });*/
+                    if ($confirmed == 0) {
+                        /*$data = array('name'=> $name, "body" => "Please click the link to confirm your account.", "token" => $getToken);
+                        Mail::send('website.emails.mail', $data, function($message) use($getToken) {
+                            $message->to(request('email'))->subject('The Message For Checked Email');
+                            $message->from('alzard@gmail.com','Mohammed Alzard');
+                        });*/
 
-						$token = $getToken;
-						Mail::to($user->email)->send(new ConfirmAccount(['data' => $user, 'token' => $token]));
-		                
-		                session()->flash('success', 'Please check your email, Admission Apply link has been sent');
-		                return view('auth.chech_email');
-		                // return redirect()->route('/url/test=', $kolid);
-		            }
-		        }
-		        /******************* End Mail ******************/
-				
-			}
+                        $token = $getToken;
+                        Mail::to($user->email)->send(new ConfirmAccount(['data' => $user, 'token' => $token]));
 
-			return back();
+                        session()->flash('success', 'Please check your email, Admission Apply link has been sent');
+                        return view('auth.chech_email');
+                        // return redirect()->route('/url/test=', $kolid);
+                    }
+                }
+                /******************* End Mail ******************/
 
+            }
 
-			//return redirect('/admin');
+            return back();
 
-		} else {
+            //return redirect('/admin');
 
-			session()->flash('error', trans('admin.inccorrect_information_login'));
-			return redirect('/login');
-		}
+        } else {
 
-		// return request();
-	}
+            session()->flash('error', trans('admin.inccorrect_information_login'));
+            return redirect('/login');
+        }
 
-	public function confirmation($token)
-	{
-		// $this->validate(request(),[
+        // return request();
+    }
 
-  //   		'token' => 'required',
-		// ]);
-		if (!empty($token)) {
-			$check_token = User::where('token', $token)->where('created_at', '>', Carbon::now()->subHours(2))->first();
-		}
+    public function confirmation($token)
+    {
+        // $this->validate(request(),[
 
-		if(!empty($check_token))
-		{
+        //   		'token' => 'required',
+        // ]);
+        if (!empty($token)) {
+            $check_token = User::where('token', $token)->where('created_at', '>', Carbon::now()->subHours(2))->first();
+        }
 
-			if($check_token->type_user !== 'Student'){
+        if (!empty($check_token)) {
 
-				return view('admission', ['data' => $check_token]);
-			}
+            if ($check_token->type_user !== 'Student') {
 
-			$update = User::find($check_token->id);
-			$update->token = '';
-			$update->confirmed = 1;
-			$update->save();
+                return view('admission', ['data' => $check_token]);
+            }
 
-			auth()->attempt(['email' => $check_token->email, 'password' => request('password')], true);
+            $update = User::find($check_token->id);
+            $update->token = '';
+            $update->confirmed = 1;
+            $update->save();
 
-			/*if (Session::has('oldUrl')) {
-    			$oldUrl = Session::get('oldUrl');
-    			Session::forget('oldUrl');
-    			return redirect()->to($oldUrl);
-    		}*/
-			return $this->userHasRole($check_token->id);
-			// return redirect('/Student');
-		}else{
-			return redirect('/not-found');
-		}
-	}
+            auth()->attempt(['email' => $check_token->email, 'password' => request('password')], true);
 
-	public function confirmation_post($token)
-	{
-		$this->validate(request(),[
+            /*if (Session::has('oldUrl')) {
+                $oldUrl = Session::get('oldUrl');
+                Session::forget('oldUrl');
+                return redirect()->to($oldUrl);
+            }*/
+            return $this->userHasRole($check_token->id);
+            // return redirect('/Student');
+        } else {
+            return redirect('/not-found');
+        }
+    }
 
-    		'telephone' => 'required',
-			'age' => 'required',
-			'education_level' => 'required',
-			'gender' => 'required',
-			'address' => 'required',
-			'city' => 'required',
-			'zipcode' => 'required',
-			'country' => 'required',
-			'preferences' => 'required',
-			'messagere_here' => 'required',
-			'terms' => 'required',
-		]);
-		$check_token = DB::table('users')->where('token', $token)->where('created_at', '>', Carbon::now()->subHours(2))->first();
+    public function confirmation_post($token)
+    {
+        $this->validate(request(), [
 
-		if(!empty($check_token))
-		{
+            'telephone' => 'required',
+            'age' => 'required',
+            'education_level' => 'required',
+            'gender' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+            'zipcode' => 'required',
+            'country' => 'required',
+            'preferences' => 'required',
+            'messagere_here' => 'required',
+            'terms' => 'required',
+        ]);
+        $check_token = DB::table('users')->where('token', $token)->where('created_at', '>', Carbon::now()->subHours(2))->first();
 
-			if(request('terms') == 'yes')
-			{
-				$admission = new Admission();
-				$admission->user_uniqid = $check_token->uniqid;
-		        $admission->telephone = request('telephone');
-		        $admission->age = request('age');
-				$admission->education_level = request('education_level');
-		        $admission->gender = request('gender');
-		        $admission->address = request('address');
-		        $admission->city = request('city');
-		        $admission->zipcode = request('zipcode');
-		        $admission->country = request('country');
-		        $admission->preferences = json_encode(request('preferences'));
-		        $admission->messagere_here = request('messagere_here');
-		        $admission->terms = request('terms');
-		        $admission->save();
+        if (!empty($check_token)) {
 
-		        $update = User::find($check_token->id);
-				$update->token = '';
-				$update->confirmed = 1;
-				$update->save();
+            if (request('terms') == 'yes') {
+                $admission = new Admission();
+                $admission->user_uniqid = $check_token->uniqid;
+                $admission->telephone = request('telephone');
+                $admission->age = request('age');
+                $admission->education_level = request('education_level');
+                $admission->gender = request('gender');
+                $admission->address = request('address');
+                $admission->city = request('city');
+                $admission->zipcode = request('zipcode');
+                $admission->country = request('country');
+                $admission->preferences = json_encode(request('preferences'));
+                $admission->messagere_here = request('messagere_here');
+                $admission->terms = request('terms');
+                $admission->save();
 
-				DB::table('password_resets')->where('email', request('email'))->delete();
-				
-				// Add Role
-				if($check_token->type_user == 'Teacher'){
-					$user = User::find($check_token->id);
-        			$user->roles()->attach(Role::where('name', 'Teacher')->first());
-				}
-				
-				// For Login 
-				auth()->attempt(['email' => $check_token->email, 'password' => request('password')], true);
-				
-				/*if (Session::has('oldUrl')) {
-	    			$oldUrl = Session::get('oldUrl');
-	    			Session::forget('oldUrl');
-	    			return redirect()->to($oldUrl);
-	    		}*/
-				return $this->userHasRole($check_token->id);
-				// return redirect('/Teacher');
+                $update = User::find($check_token->id);
+                $update->token = '';
+                $update->confirmed = 1;
+                $update->save();
 
-			} else {
+                DB::table('password_resets')->where('email', request('email'))->delete();
 
-				// Session For Terms
-				session()->flash('error_terms', 'Please agree to the terms and conditions');
-				return back();
-			}
+                // Add Role
+                if ($check_token->type_user == 'Teacher') {
+                    $user = User::find($check_token->id);
+                    $user->roles()->attach(Role::where('name', 'Teacher')->first());
+                }
 
-		} 
+                // For Login
+                auth()->attempt(['email' => $check_token->email, 'password' => request('password')], true);
 
-		return redirect('/not-found');
-	}
+                /*if (Session::has('oldUrl')) {
+                    $oldUrl = Session::get('oldUrl');
+                    Session::forget('oldUrl');
+                    return redirect()->to($oldUrl);
+                }*/
+                return $this->userHasRole($check_token->id);
+                // return redirect('/Teacher');
 
+            } else {
+
+                // Session For Terms
+                session()->flash('error_terms', 'Please agree to the terms and conditions');
+                return back();
+            }
+
+        }
+
+        return redirect('/not-found');
+    }
 
 }

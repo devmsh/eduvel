@@ -10,8 +10,8 @@ class Admin
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next = null, $guard = null)
@@ -20,8 +20,8 @@ class Admin
 
             return $next($request);
             // return redirect('/admin');
-        }else{
-            
+        } else {
+
             return redirect('login');
         }
 

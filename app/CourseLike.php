@@ -8,11 +8,11 @@ class CourseLike extends Model
 {
     public function course()
     {
-    	return $this->belongsTo(Courses::Class);
+        return $this->belongsTo(Courses::Class);
     }
 
     public function user()
     {
-    	return $this->belongsTo(User::Class);
+        return $this->belongsTo(User::Class);
     }
 }

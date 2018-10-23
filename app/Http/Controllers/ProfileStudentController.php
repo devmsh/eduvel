@@ -12,17 +12,17 @@ class ProfileStudentController extends Controller
     public function profile($name = null)
     {
         if (empty($name)) {
-            
-            return redirect('/profile/'. auth()->user()->name);
+
+            return redirect('/profile/' . auth()->user()->name);
         }
 
-    	$user = User::find(auth()->user()->id);
-    	return view('student.profile', compact('user'));
+        $user = User::find(auth()->user()->id);
+        return view('student.profile', compact('user'));
     }
 
     public function update_profile(Request $request, $id)
     {
-        $register = $this->validate(request(),[
+        $register = $this->validate(request(), [
             'name' => 'required|min:4|max:191',
             // 'email' => 'required|email',
         ]);
@@ -33,20 +33,27 @@ class ProfileStudentController extends Controller
         }
 
         $add = User::find($id);
-        if (!empty(request('image'))){ $add->image = $image_name; }
+        if (!empty(request('image'))) {
+            $add->image = $image_name;
+        }
         $add->name = request('name');
-        if(!empty(request('new_email'))){ $add->email = request('new_email'); }
-        if(!empty(request('password'))){ $add->password = bcrypt(request('password')); }
+        if (!empty(request('new_email'))) {
+            $add->email = request('new_email');
+        }
+        if (!empty(request('password'))) {
+            $add->password = bcrypt(request('password'));
+        }
         $add->save();
 
         session()->flash('success', 'Successfully Updated');
-        return redirect('/profile/'.request('name'));
+        return redirect('/profile/' . request('name'));
     }
 
-    public function my_courses(){
-        
+    public function my_courses()
+    {
+
         $orders = Auth::user()->orders;
-        $orders->transform(function($order, $key){
+        $orders->transform(function ($order, $key) {
             $order->cart = unserialize($order->cart);
             return $order;
         });
@@ -56,7 +63,7 @@ class ProfileStudentController extends Controller
 
     public function logout()
     {
-    	Auth::logout();
-    	return redirect('/login');
+        Auth::logout();
+        return redirect('/login');
     }
 }

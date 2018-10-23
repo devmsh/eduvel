@@ -37,7 +37,7 @@ class IndexController extends Controller
         $settings = Settings::get()->find(1);
         $socialMedia = SocialMedia::get();
         $categories = Category::get();
-        $posts =Post::orderBy('id', 'desc')->paginate(4);
+        $posts = Post::orderBy('id', 'desc')->paginate(4);
         $course_categorys = CourseCategory::get();
         $courses = Courses::orderBy('id', 'desc')->where('isActive', 1)->paginate(6);
 
@@ -45,7 +45,6 @@ class IndexController extends Controller
 
         return view('index', compact('settings', 'socialMedia', 'categories', 'posts', 'course_categorys', 'courses', 'countCourses'));
     }
-
 
     public function contacts()
     {
@@ -61,7 +60,7 @@ class IndexController extends Controller
     public function contacts_store(Request $request)
     {
 
-        $contacts = $this->validate(request(),[
+        $contacts = $this->validate(request(), [
 
             'name_contact' => 'required',
             'lastname_contact' => 'required',
@@ -96,10 +95,10 @@ class IndexController extends Controller
         $add->save();
 
         // For Add To Server redis -- For Notifications
-        $q = Contacts::OrderBy('id', 'desc')->first(); 
+        $q = Contacts::OrderBy('id', 'desc')->first();
         // return $q;
         $redis = LRedis::connection();
-        $redis->publish('message',json_encode($q));
+        $redis->publish('message', json_encode($q));
 
         // session()->flash('success', 'Send Successfully');
         // return back();
@@ -167,14 +166,14 @@ class IndexController extends Controller
 
     public function blog_comments_store(Request $request)
     {
-        $blog_comments_store = $this->validate(request(),[
+        $blog_comments_store = $this->validate(request(), [
 
             'post_id' => 'required',
             'name' => 'required',
             'email' => 'required|email',
             'website' => 'required',
             'comment' => 'required',
-        ]);        
+        ]);
 
         $add = new BlogComment;
         $add->post_id = request('post_id');
@@ -182,8 +181,7 @@ class IndexController extends Controller
         $add->email = request('email');
         $add->website = request('website');
         $add->comment = request('comment');
-        if(!empty(request('reply_id')))
-        {
+        if (!empty(request('reply_id'))) {
             $add->reply_id = request('reply_id');
         }
         $add->save();
@@ -200,21 +198,19 @@ class IndexController extends Controller
 
         $multiplied = $collection->map(function ($item, $key) {
             $search = Post::where('title', 'like', '%' . $item . '%')
-            ->orWhere('image', 'LIKE', '%'.$item.'%')
-            ->orWhere('title', 'LIKE', '%'.$item.'%')
-            ->orWhere('description', 'LIKE', '%'.$item.'%')
-            ->orWhere('category_id', 'LIKE', '%'.$item.'%')
-            ->orWhere('admin_id', 'LIKE', '%'.$item.'%')
-            ->get();
+                ->orWhere('image', 'LIKE', '%' . $item . '%')
+                ->orWhere('title', 'LIKE', '%' . $item . '%')
+                ->orWhere('description', 'LIKE', '%' . $item . '%')
+                ->orWhere('category_id', 'LIKE', '%' . $item . '%')
+                ->orWhere('admin_id', 'LIKE', '%' . $item . '%')
+                ->get();
 
-            if($search !== null)
-            {
+            if ($search !== null) {
                 return $search;
             }
         });
 
-        if($multiplied->all() !== null)
-        {
+        if ($multiplied->all() !== null) {
             $settings = Settings::get()->find(1);
             $socialMedia = SocialMedia::get();
             $posts = Post::orderBy('id', 'desc')->paginate(4);
@@ -223,7 +219,6 @@ class IndexController extends Controller
             // return $data[0];
             return view('blog', compact('settings', 'socialMedia', 'categories', 'data', 'value'));
         }
-
 
         return 'Not Found';
     }
@@ -255,7 +250,8 @@ class IndexController extends Controller
         return view('media-gallery', compact('settings', 'socialMedia', 'mediaGallery'));
     }
 
-    public function all_courses(){
+    public function all_courses()
+    {
 
         $settings = Settings::get()->find(1);
         $socialMedia = SocialMedia::get();
@@ -264,7 +260,8 @@ class IndexController extends Controller
         return view('all-courses', compact('courses', 'course_categorys', 'settings', 'socialMedia'));
     }
 
-    public function all_courses_list(){
+    public function all_courses_list()
+    {
 
         $settings = Settings::get()->find(1);
         $socialMedia = SocialMedia::get();
@@ -273,14 +270,15 @@ class IndexController extends Controller
         return view('all-courses-list', compact('courses', 'course_categorys', 'settings', 'socialMedia'));
     }
 
-    public function searsh_category($courses_category){
+    public function searsh_category($courses_category)
+    {
 
         $settings = Settings::get()->find(1);
         $socialMedia = SocialMedia::get();
 
         $courses_category = CourseCategory::select(array('id', 'name'))
-                        ->orWhere('name', 'LIKE', '%'.$courses_category.'%')                        
-                        ->first();
+            ->orWhere('name', 'LIKE', '%' . $courses_category . '%')
+            ->first();
 
         $course_categorys = CourseCategory::get();
         $courses = Courses::where('category_id', $courses_category->id)->where('isActive', 1)->paginate(3);
@@ -288,7 +286,8 @@ class IndexController extends Controller
         return view('all-courses', compact('course_categorys', 'courses', 'settings', 'socialMedia'));
     }
 
-    public function course_details($course_title){
+    public function course_details($course_title)
+    {
 
         $settings = Settings::get()->find(1);
         $socialMedia = SocialMedia::get();
@@ -309,16 +308,16 @@ class IndexController extends Controller
             $comment[$i] = User::where('id', $user_id[$i]['user_id'])->first();
         }
 
-        $comments = (array_map(null,  $get_comments->toArray() , $comment ));
-    
+        $comments = (array_map(null, $get_comments->toArray(), $comment));
+
         $countReviews = 0;
         foreach ($get_comments as $get_comment) {
-            
+
             $countReviews = $countReviews + $get_comment->star_number;
         }
         if ($countReviews == 0) {
             $x = 0;
-        }else{
+        } else {
             $x = $countReviews / count($get_comments);
         }
         // return $x;
@@ -329,11 +328,11 @@ class IndexController extends Controller
         $reviews3 = CourseComment::where('star_number', 3)->where('course_id', $course_details->id)->count();
         $reviews2 = CourseComment::where('star_number', 2)->where('course_id', $course_details->id)->count();
         $reviews1 = CourseComment::where('star_number', 1)->where('course_id', $course_details->id)->count();
-        
+
         // return ($reviews4 / count($get_comments))*100;
 
         $reviews = collect([
-            'countReviews' =>  $countReviews,
+            'countReviews' => $countReviews,
             'totalReviews' => $totalReviews,
             'reviews5' => $reviews5,
             'reviews4' => $reviews4,
@@ -342,9 +341,9 @@ class IndexController extends Controller
             'reviews1' => $reviews1,
         ]);
 
-        if(Auth::check()){
+        if (Auth::check()) {
             $orders = Auth::user()->orders;
-            $orders->transform(function($order, $key){
+            $orders->transform(function ($order, $key) {
                 $order->cart = unserialize($order->cart);
                 return $order;
             });
@@ -374,19 +373,19 @@ class IndexController extends Controller
     public function course_comments_store(Request $request)
     {
 
-        $course_comments_store = $this->validate(request(),[
+        $course_comments_store = $this->validate(request(), [
 
             'course_id' => 'required',
             'star_number' => 'required',
             'comment' => 'required',
-        ]);        
+        ]);
 
         $add = new CourseComment;
         $add->user_id = auth()->user()->id;
         $add->course_id = request('course_id');
         $add->star_number = request('star_number');
         $add->comment = request('comment');
-        if(!empty(request('reply_id'))){
+        if (!empty(request('reply_id'))) {
             $add->reply_id = request('reply_id');
         }
         $add->dane_read = 0;
@@ -396,7 +395,8 @@ class IndexController extends Controller
         return back();
     }
 
-    public function teacher_detail(Request $request, $name){
+    public function teacher_detail(Request $request, $name)
+    {
         $settings = Settings::get()->find(1);
         $socialMedia = SocialMedia::get();
 
@@ -407,12 +407,13 @@ class IndexController extends Controller
         $course_categorys = CourseCategory::get();
 
         return view('teacher-detail', compact('settings', 'socialMedia', 'teacher_detail', 'admission', 'myCourses', 'course_categorys', 'countMyCourses'));
-        
+
     }
 
-    public function newsletter_form(Request $request){
+    public function newsletter_form(Request $request)
+    {
 
-        $contacts = $this->validate(request(),[
+        $contacts = $this->validate(request(), [
 
             'email_newsletter' => 'required|email',
         ]);
@@ -429,37 +430,38 @@ class IndexController extends Controller
         return "success";
     }
 
-    public function searsh(Request $request){
+    public function searsh(Request $request)
+    {
 
-        if (!preg_match('/^[a-zA-Z ]*$/',$request->search)) {
-          return redirect('/courses-list');
-        }
-        $courses = Courses::select('courses.*')
-                        ->orWhere('user_id', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('course_title', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('teacher_name', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('course_start', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('course_expire', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('course_price', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('course_discount_price', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('course_image', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('course_video', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('course_description', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('category_id', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('coupon_code', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('coupon_code_discount_price', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('whats_includes', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('isActive', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('course_time', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('what_will_you_learn_title', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('what_will_you_learn_description', 'LIKE', '%'.$request->search.'%')
-                        ->where('isActive', 1)->orderBy('updated_at', 'desc')                            
-                        ->get();
-        if (empty($courses[0])) {
-            
+        if (!preg_match('/^[a-zA-Z ]*$/', $request->search)) {
             return redirect('/courses-list');
         }
-        
+        $courses = Courses::select('courses.*')
+            ->orWhere('user_id', 'LIKE', '%' . $request->search . '%')
+            ->orWhere('course_title', 'LIKE', '%' . $request->search . '%')
+            ->orWhere('teacher_name', 'LIKE', '%' . $request->search . '%')
+            ->orWhere('course_start', 'LIKE', '%' . $request->search . '%')
+            ->orWhere('course_expire', 'LIKE', '%' . $request->search . '%')
+            ->orWhere('course_price', 'LIKE', '%' . $request->search . '%')
+            ->orWhere('course_discount_price', 'LIKE', '%' . $request->search . '%')
+            ->orWhere('course_image', 'LIKE', '%' . $request->search . '%')
+            ->orWhere('course_video', 'LIKE', '%' . $request->search . '%')
+            ->orWhere('course_description', 'LIKE', '%' . $request->search . '%')
+            ->orWhere('category_id', 'LIKE', '%' . $request->search . '%')
+            ->orWhere('coupon_code', 'LIKE', '%' . $request->search . '%')
+            ->orWhere('coupon_code_discount_price', 'LIKE', '%' . $request->search . '%')
+            ->orWhere('whats_includes', 'LIKE', '%' . $request->search . '%')
+            ->orWhere('isActive', 'LIKE', '%' . $request->search . '%')
+            ->orWhere('course_time', 'LIKE', '%' . $request->search . '%')
+            ->orWhere('what_will_you_learn_title', 'LIKE', '%' . $request->search . '%')
+            ->orWhere('what_will_you_learn_description', 'LIKE', '%' . $request->search . '%')
+            ->where('isActive', 1)->orderBy('updated_at', 'desc')
+            ->get();
+        if (empty($courses[0])) {
+
+            return redirect('/courses-list');
+        }
+
         $settings = Settings::get()->find(1);
         $socialMedia = SocialMedia::get();
         $course_categorys = CourseCategory::get();
@@ -467,6 +469,4 @@ class IndexController extends Controller
         return view('all-courses', compact('course_categorys', 'courses', 'settings', 'socialMedia'));
     }
 
-
-   
 }

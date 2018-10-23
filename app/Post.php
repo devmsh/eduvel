@@ -10,11 +10,11 @@ class Post extends Model
 
     public function categotey()
     {
-    	return $this->belongsTo(Category::Class);
+        return $this->belongsTo(Category::Class);
     }
 
     public function blog_comments()
     {
-    	return $this->hasMany(BlogComment::Class);
+        return $this->hasMany(BlogComment::Class);
     }
 }

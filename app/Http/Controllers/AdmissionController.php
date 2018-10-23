@@ -17,7 +17,7 @@ class AdmissionController extends Controller
     public function admission_post(Request $Request)
     {
 
-        $this->validate(request(),[
+        $this->validate(request(), [
 
             'firstname' => 'required',
             'lastname' => 'required',
@@ -34,7 +34,7 @@ class AdmissionController extends Controller
             'country' => 'required',
             /*'preferences' =>  'required',*/
             'messagere_here' => 'required',
-            'terms' =>  'required',
+            'terms' => 'required',
         ]);
 
         $add = new Admission();
@@ -86,7 +86,7 @@ class AdmissionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -97,7 +97,7 @@ class AdmissionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -108,7 +108,7 @@ class AdmissionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -119,8 +119,8 @@ class AdmissionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -131,7 +131,7 @@ class AdmissionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class CourseFiles extends Model
 {
-     protected $fillable = ['file_name'];
+    protected $fillable = ['file_name'];
 }

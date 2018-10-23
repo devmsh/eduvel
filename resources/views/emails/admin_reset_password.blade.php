@@ -1,16 +1,17 @@
 @component('mail::message')
-# Reset Account
-Welcome {{ $data['data']->name }} <br>
+    # Reset Account
+    Welcome {{ $data['data']->name }} <br>
 
-The body of your message.
+    The body of your message.
 
-@component('mail::button', ['url' => '/reset/password/'.$data['token']])
-Click Here To Reset Your Password
-@endcomponent
+    @component('mail::button', ['url' => '/reset/password/'.$data['token']])
+        Click Here To Reset Your Password
+    @endcomponent
 
-Or Copy Link | <a href="{{ url('/reset/password/'.$data['token']) }}">{{ url('/reset/password/'.$data['token']) }}</a>
+    Or Copy Link | <a
+            href="{{ url('/reset/password/'.$data['token']) }}">{{ url('/reset/password/'.$data['token']) }}</a>
 
-Thanks,<br>
-Education Alzard
-<!-- {{ config('app.name') }} -->
+    Thanks,<br>
+    Education Alzard
+    <!-- {{ config('app.name') }} -->
 @endcomponent

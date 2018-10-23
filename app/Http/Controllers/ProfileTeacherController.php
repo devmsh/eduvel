@@ -10,22 +10,22 @@ use App\Admission;
 class ProfileTeacherController extends Controller
 {
     public function profile($name)
-    {        
+    {
         if (empty($name)) {
-            
-            return redirect('/profile/'. auth()->user()->name);
+
+            return redirect('/profile/' . auth()->user()->name);
         }
         # return redirect('/profile/'. auth()->user()->name);
-        
-    	$user = User::find(auth()->user()->id);
-    	$admission = Admission::where('user_uniqid', auth()->user()->uniqid)->first();
 
-    	return view('teacher.profile', compact('user', 'admission'));
+        $user = User::find(auth()->user()->id);
+        $admission = Admission::where('user_uniqid', auth()->user()->uniqid)->first();
+
+        return view('teacher.profile', compact('user', 'admission'));
     }
 
     public function update_profile(Request $request)
     {
-        $this->validate(request(),[
+        $this->validate(request(), [
 
             'name' => 'required|min:4|max:191',
             'telephone' => 'required',
@@ -40,10 +40,10 @@ class ProfileTeacherController extends Controller
             'messagere_here' => 'required',
         ]);
 
-    	// return $request;
-    	$user = User::where('uniqid', $request->uniqid)->first();
-    	$admission = Admission::where('user_uniqid', auth()->user()->uniqid)->first();
-        $register = $this->validate(request(),[
+        // return $request;
+        $user = User::where('uniqid', $request->uniqid)->first();
+        $admission = Admission::where('user_uniqid', auth()->user()->uniqid)->first();
+        $register = $this->validate(request(), [
             'name' => 'required|min:4|max:191',
             'uniqid' => 'required',
             // 'email' => 'required|email',
@@ -55,16 +55,22 @@ class ProfileTeacherController extends Controller
         }
 
         $user = User::find($user->id);
-        if (!empty(request('image'))){ $user->image = $image_name; }
+        if (!empty(request('image'))) {
+            $user->image = $image_name;
+        }
         $user->name = request('name');
-        if(!empty(request('new_email'))){ $user->email = request('new_email'); }
-        if(!empty(request('password'))){ $user->password = bcrypt(request('password')); }
+        if (!empty(request('new_email'))) {
+            $user->email = request('new_email');
+        }
+        if (!empty(request('password'))) {
+            $user->password = bcrypt(request('password'));
+        }
         $user->save();
 
         $admission = Admission::find($admission->id);
         $admission->telephone = request('telephone');
         $admission->age = request('age');
-		$admission->education_level = request('education_level');
+        $admission->education_level = request('education_level');
         $admission->gender = request('gender');
         $admission->address = request('address');
         $admission->city = request('city');
@@ -75,13 +81,14 @@ class ProfileTeacherController extends Controller
         $admission->save();
 
         session()->flash('success', 'Successfully Updated');
-        return redirect('/profile/'.request('name'));
+        return redirect('/profile/' . request('name'));
     }
 
-    public function my_courses(){
-        
+    public function my_courses()
+    {
+
         $orders = Auth::user()->orders;
-        $orders->transform(function($order, $key){
+        $orders->transform(function ($order, $key) {
             $order->cart = unserialize($order->cart);
             return $order;
         });
@@ -91,7 +98,7 @@ class ProfileTeacherController extends Controller
 
     public function logout()
     {
-    	Auth::logout();
-    	return redirect('/login');
+        Auth::logout();
+        return redirect('/login');
     }
 }

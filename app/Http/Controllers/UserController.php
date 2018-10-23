@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 // use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Request;
 // use Illuminate\Http\Request;
@@ -22,21 +23,23 @@ class UserController extends Controller
      */
 
     // For Get All Users 
-   /* public function index()
-    {
-        //
-        $users = User::whereIn('type_user', ['Student'])->get();
-        return view('admin.users.index', compact('users'));
-    }*/
+    /* public function index()
+     {
+         //
+         $users = User::whereIn('type_user', ['Student'])->get();
+         return view('admin.users.index', compact('users'));
+     }*/
 
-    public function show_all_teachers(){
+    public function show_all_teachers()
+    {
 
         $users = User::orderBy('created_at', 'desc')->whereIn('type_user', ['Teacher'])->get();
         // return $users;
         return view('admin.users.teachers', compact('users'));
     }
 
-    public function show_all_students(){
+    public function show_all_students()
+    {
 
         $users = User::whereIn('type_user', ['Student'])->get();
         // return $users;
@@ -56,12 +59,12 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store_teacher(Request $request)
     {
-        $this->validate(request(),[
+        $this->validate(request(), [
 
             'name' => 'required|min:4|max:191',
             // 'email' => 'required|email|unique:users',
@@ -93,7 +96,11 @@ class UserController extends Controller
         $user = new User();
         $user->uniqid = uniqid();
         $user->type_user = 'Teacher';
-        if (!empty(request('image'))){ $user->image = $image_name; }else{ $user->image = 'user-image.png';}
+        if (!empty(request('image'))) {
+            $user->image = $image_name;
+        } else {
+            $user->image = 'user-image.png';
+        }
         $user->name = request('name');
         $user->email = request('new_email');
         $user->password = bcrypt(request('password'));
@@ -103,7 +110,6 @@ class UserController extends Controller
 
         // Add Role
         $user->roles()->attach(Role::where('name', 'Teacher')->first());
-
 
         $user = User::orderBy('created_at', 'desc')->first();
 
@@ -130,7 +136,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -151,8 +157,8 @@ class UserController extends Controller
     // Fot Update Teachers
     public function update_teacher(Request $request, $id)
     {
-        
-        $this->validate(request(),[
+
+        $this->validate(request(), [
 
             'name' => 'required|min:4|max:191',
             'telephone' => 'required',
@@ -177,10 +183,16 @@ class UserController extends Controller
         }
 
         $user = User::find($user->id);
-        if (!empty(request('image'))){ $user->image = $image_name; }
+        if (!empty(request('image'))) {
+            $user->image = $image_name;
+        }
         $user->name = request('name');
-        if(!empty(request('new_email'))){ $user->email = request('new_email'); }
-        if(!empty(request('password'))){ $user->password = bcrypt(request('password')); }
+        if (!empty(request('new_email'))) {
+            $user->email = request('new_email');
+        }
+        if (!empty(request('password'))) {
+            $user->password = bcrypt(request('password'));
+        }
         $user->save();
 
         $admission = Admission::find($admission->id);
@@ -204,7 +216,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -219,13 +231,12 @@ class UserController extends Controller
         return 'admin Controller in delete_admin_all';
         return request('item');
 
-        if(is_array(request('item')))
-        {
+        if (is_array(request('item'))) {
             User::destroy(request('item'));
-        }else{
+        } else {
             User::find(request('item'))->delete();
         }
-        
+
         session()->flash('success', 'Successfully Deleted');
         return redirect('admin/users');
     }

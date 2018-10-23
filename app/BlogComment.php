@@ -8,6 +8,6 @@ class BlogComment extends Model
 {
     public function post()
     {
-    	return $this->belongsTo(Post::Class);
+        return $this->belongsTo(Post::Class);
     }
 }

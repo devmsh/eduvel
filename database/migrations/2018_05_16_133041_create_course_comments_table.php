@@ -19,8 +19,8 @@ class CreateCourseCommentsTable extends Migration
             // $table->integer('course_id');
             $table->integer('course_id')->unsigned();
             $table->foreign('course_id')
-                    ->references('id')
-                    ->on('courses');
+                ->references('id')
+                ->on('courses');
             $table->integer('star_number');
             $table->text('comment');
             $table->integer('reply_id')->nullable();

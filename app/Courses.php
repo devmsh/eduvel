@@ -13,7 +13,7 @@ class Courses extends Model
 
     public function courses_files()
     {
-    	return $this->hasMany(CoursesFiles::Class);
+        return $this->hasMany(CoursesFiles::Class);
     }
 
     public function course_comments()
@@ -25,6 +25,5 @@ class Courses extends Model
     {
         return $this->hasMany(User::Class);
     }
-
 
 }

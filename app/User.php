@@ -12,7 +12,6 @@ class User extends Authenticatable
         return $this->hasMany(User::Class);
     }
 
-
     public function roles()
     {
         return $this->belongsToMany('App\Role', 'user_roles', 'user_id', 'role_id');
@@ -26,7 +25,7 @@ class User extends Authenticatable
                     return true;
                 }
             }
-        }else{
+        } else {
             if ($this->hasRole($role)) {
                 return true;
             }
@@ -35,14 +34,13 @@ class User extends Authenticatable
 
     public function hasRole($role)
     {
-        if ($this->roles()->where('name', $role)->first()) 
-        {
+        if ($this->roles()->where('name', $role)->first()) {
             return true;
         }
 
         return false;
     }
-    
+
     use Notifiable;
 
     /**
@@ -63,7 +61,7 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function orders($value='')
+    public function orders($value = '')
     {
         return $this->hasMany('App\Order');
     }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Request;
 // use Illuminate\Http\Request;
@@ -25,9 +26,9 @@ class UserController extends Controller
         //
         $users = User::get();
 
-       /* foreach ($users as $value) {
-            return unserialize($value->preferences);
-        }*/
+        /* foreach ($users as $value) {
+             return unserialize($value->preferences);
+         }*/
 
         return view('admin.users.index', compact('users'));
     }
@@ -46,12 +47,12 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $register = $this->validate(request(),[
+        $register = $this->validate(request(), [
             'name' => 'required|min:4|max:191',
             // 'control' => 'required|in:user,company,vendor',
             'email' => 'required|email',
@@ -77,7 +78,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -88,7 +89,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -101,14 +102,14 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         //
-        $register = $this->validate(request(),[
+        $register = $this->validate(request(), [
             'name' => 'required|min:4|max:191',
             'control' => 'required|in:user,company,vendor',
             'email' => 'required|email',
@@ -119,7 +120,9 @@ class UserController extends Controller
         $add = User::find($id);
         $add->name = request('name');
         $add->email = request('email');
-        if(request('password')){ $add->password = bcrypt(request('password')); }
+        if (request('password')) {
+            $add->password = bcrypt(request('password'));
+        }
         $add->control = request('control');
         // $add->description = request('description');
         // $add->confirmed = 1;
@@ -133,7 +136,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -149,13 +152,12 @@ class UserController extends Controller
         return 'admin Controller in delete_admin_all';
         return request('item');
 
-        if(is_array(request('item')))
-        {
+        if (is_array(request('item'))) {
             User::destroy(request('item'));
-        }else{
+        } else {
             User::find(request('item'))->delete();
         }
-        
+
         session()->flash('success', 'Successfully Deleted');
         return redirect('admin/users');
     }

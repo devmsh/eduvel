@@ -35,12 +35,12 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $post = $this->validate(request(),[
+        $post = $this->validate(request(), [
             'image' => 'required|image',
             'title' => 'required|min:6|max:191',
             'description' => 'required',
@@ -64,19 +64,19 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show(Post $post)
     {
         $name_category = Category::where('id', $post->category_id)->first();
-        return view('admin.blog.post.show',compact('post', 'name_category'));
+        return view('admin.blog.post.show', compact('post', 'name_category'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -89,23 +89,23 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
-        $post = $this->validate(request(),[
+        $post = $this->validate(request(), [
             // 'image' => 'required|image',
             'title' => 'required|min:6|max:191',
             'description' => 'required',
         ]);
 
-        if(empty($request->image)){
+        if (empty($request->image)) {
 
             $img_name = $request->oldImage;
-        }elseif(!empty($request->image)){
-             
+        } elseif (!empty($request->image)) {
+
             $img_name = time() . '.' . $request->image->getClientOriginalExtension();
         }
 
@@ -116,8 +116,8 @@ class PostController extends Controller
         $add->category_id = request('category_id');
         $add->save();
 
-        if(!empty($request->image)){
-            
+        if (!empty($request->image)) {
+
             $request->image->move(public_path('uplaod/posts'), $img_name);
         }
 
@@ -128,7 +128,7 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

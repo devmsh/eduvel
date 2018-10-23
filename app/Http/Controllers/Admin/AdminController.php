@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Request;
 // use Illuminate\Http\Request;
@@ -25,9 +26,9 @@ class AdminController extends Controller
         //
         $admins = Admin::get();
 
-       /* foreach ($admins as $value) {
-            return unserialize($value->preferences);
-        }*/
+        /* foreach ($admins as $value) {
+             return unserialize($value->preferences);
+         }*/
 
         return view('admin.admins.admins', compact('admins'));
     }
@@ -52,12 +53,12 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $register = $this->validate(request(),[
+        $register = $this->validate(request(), [
             'name' => 'required|min:4|max:191',
             'email' => 'required|email',
             'password' => 'required|min:6',
@@ -82,7 +83,7 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -93,7 +94,7 @@ class AdminController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -106,14 +107,14 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         //
-        $register = $this->validate(request(),[
+        $register = $this->validate(request(), [
             'name' => 'required|min:4|max:191',
             'email' => 'required|email',
             'control' => 'required',
@@ -123,7 +124,9 @@ class AdminController extends Controller
         $add = Admin::find($id);
         $add->name = request('name');
         $add->email = request('email');
-        if(request('password')){ $add->password = bcrypt(request('password')); }
+        if (request('password')) {
+            $add->password = bcrypt(request('password'));
+        }
         $add->control = request('control');
         $add->description = request('description');
         $add->confirmed = 1;
@@ -136,7 +139,7 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -152,13 +155,12 @@ class AdminController extends Controller
         return 'admin Controller in delete_admin_all';
         return request('item');
 
-        if(is_array(request('item')))
-        {
+        if (is_array(request('item'))) {
             Admin::destroy(request('item'));
-        }else{
+        } else {
             Admin::find(request('item'))->delete();
         }
-        
+
         session()->flash('success', 'Successfully Deleted');
         return redirect('admin/admins');
     }
