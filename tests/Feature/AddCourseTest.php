@@ -67,12 +67,12 @@ class AddCourseTest extends TestCase
         $this->assertEquals($course->whats_includes, 'Mobile support, Lesson archive, Mobile support, Tutor chat, Course certificate');
         $this->assertEquals($course->isActive, 0);
         $this->assertEquals($course->course_time, '1h 30min');
-        $this->assertEquals($course->what_will_you_learn_title, json_encode(["Suas summo id sed erat erant oporteat", "Illud singulis indoctum ad sed", "Alterum bonorum mentitum an mel"]));
-        $this->assertEquals($course->what_will_you_learn_description, json_encode(["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.", "Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.", "Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]));
+        $this->assertEquals($course->what_will_you_learn_title, ["Suas summo id sed erat erant oporteat", "Illud singulis indoctum ad sed", "Alterum bonorum mentitum an mel"]);
+        $this->assertEquals($course->what_will_you_learn_description, ["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.", "Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.", "Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]);
 
-        $this->assertEquals($course->courses_files[0]->video_title, json_encode(["Health Science", "Health and Social Care", "Health Science", "Health and Social Care"]));
-        $this->assertEquals($course->courses_files[0]->video_category, json_encode(["Introdocution", "Generative Modeling Review", "Variational Autoencoders", "Gaussian Mixture Model Review"]));
-        $this->assertEquals($course->courses_files[0]->video_url, json_encode(["https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw"]));
+        $this->assertEquals($course->courses_files[0]->video_title, ["Health Science", "Health and Social Care", "Health Science", "Health and Social Care"]);
+        $this->assertEquals($course->courses_files[0]->video_category, ["Introdocution", "Generative Modeling Review", "Variational Autoencoders", "Gaussian Mixture Model Review"]);
+        $this->assertEquals($course->courses_files[0]->video_url, ["https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw"]);
     }
 
     public function test_course_validated()

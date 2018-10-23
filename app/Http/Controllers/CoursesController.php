@@ -48,8 +48,8 @@ class CoursesController extends Controller
         $courses->whats_includes = request('whats_includes');
         $courses->isActive = request('isActive');
         $courses->course_time = request('course_time');
-        $courses->what_will_you_learn_title = json_encode(request('what_will_you_learn_title'));
-        $courses->what_will_you_learn_description = json_encode(request('what_will_you_learn_description'));
+        $courses->what_will_you_learn_title = request('what_will_you_learn_title');
+        $courses->what_will_you_learn_description = request('what_will_you_learn_description');
         $courses->save();
 
         if (!empty(request('course_image'))) {
@@ -57,9 +57,9 @@ class CoursesController extends Controller
         }
 
         $coursesFiles = new CoursesFiles();
-        $coursesFiles->video_title = json_encode(request('video_title'));
-        $coursesFiles->video_category = json_encode(request('video_category'));
-        $coursesFiles->video_url = json_encode(request('video_url'));
+        $coursesFiles->video_title = request('video_title');
+        $coursesFiles->video_category = request('video_category');
+        $coursesFiles->video_url = request('video_url');
         $coursesFiles->course_id = $courses->id;
         $coursesFiles->save();
 

@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Courses extends Model
 {
+    protected $casts = [
+        'what_will_you_learn_title' => 'array',
+        'what_will_you_learn_description' => 'array',
+    ];
     // public function course_category()
     // {
     //     return $this->belongsTo('App\CourseCategory');
