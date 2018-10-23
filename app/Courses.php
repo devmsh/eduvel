@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Courses extends Model
 {
+    protected $guarded = [];
+
     protected $casts = [
         'what_will_you_learn_title' => 'array',
         'what_will_you_learn_description' => 'array',

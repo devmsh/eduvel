@@ -27,26 +27,28 @@ class CoursesController extends Controller
 
     public function store(CourseRequest $request)
     {
-        $courses = new Courses();
-        $courses->user_id = auth()->user()->id;
-        $courses->course_title = request('course_title');
-        $courses->teacher_name = request('teacher_name');
-        $courses->course_start = request('course_start');
-        $courses->course_expire = request('course_expire');
-        $courses->course_price = request('course_price');
-        $courses->course_discount_price = request('course_discount_price');
-        $courses->course_image = $request->course_image->store('uplaod/coursesimages');
-        $courses->course_video = request('course_video');
-        $courses->course_description = request('course_description');
-        $courses->category_id = request('category_id');
-        $courses->coupon_code = request('coupon_code');
-        $courses->coupon_code_discount_price = request('coupon_code_discount_price');
-        $courses->whats_includes = request('whats_includes');
-        $courses->isActive = request('isActive');
-        $courses->course_time = request('course_time');
-        $courses->what_will_you_learn_title = request('what_will_you_learn_title');
-        $courses->what_will_you_learn_description = request('what_will_you_learn_description');
-        $courses->save();
+        $data = $request->only([
+            'course_title',
+            'teacher_name',
+            'course_start',
+            'course_expire',
+            'course_price',
+            'course_discount_price',
+            'course_image',
+            'course_video',
+            'course_description',
+            'category_id',
+            'coupon_code',
+            'coupon_code_discount_price',
+            'whats_includes',
+            'isActive',
+            'course_time',
+            'what_will_you_learn_title',
+            'what_will_you_learn_description',
+        ]);
+        $data['course_image'] = $request->course_image->store('uplaod/coursesimages');
+
+        $courses = $request->user()->courses()->create($data);
 
         $coursesFiles = new CoursesFiles();
         $coursesFiles->video_title = request('video_title');
