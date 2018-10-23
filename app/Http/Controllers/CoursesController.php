@@ -27,22 +27,19 @@ class CoursesController extends Controller
 
     public function store(CourseRequest $request)
     {
-        $courseData = $request->only([
+        $data = $request->only([
             'course_title', 'teacher_name', 'course_start',
             'course_expire', 'course_price', 'course_discount_price',
             'course_image', 'course_video', 'course_description',
             'category_id', 'coupon_code', 'coupon_code_discount_price',
             'whats_includes', 'isActive', 'course_time',
             'what_will_you_learn_title', 'what_will_you_learn_description',
-        ]);
-
-        $courseData['course_image'] = $request->course_image->store('upload/courses');
-
-        $videosData = $request->only([
             'video_title', 'video_category', 'video_url',
         ]);
 
-        Courses::createFor($request->user(),$courseData,$videosData);
+        $data['course_image'] = $request->course_image->store('upload/courses');
+
+        Courses::createFor($request->user(),$data);
 
         return redirect('/admin/courses')->with('success', 'Successfully added');
     }

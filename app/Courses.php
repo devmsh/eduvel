@@ -13,11 +13,17 @@ class Courses extends Model
         'what_will_you_learn_description' => 'array',
     ];
 
-    public static function createFor($user, $courseData, $videosData)
+    public static function createFor($user, $data)
     {
-        $courses = $user->courses()->create($courseData);
+        $data = collect($data);
 
-        $courses->courses_file()->create($videosData);
+        $courses = $user->courses()->create($data->except([
+            'video_title', 'video_category', 'video_url'
+        ])->toArray());
+
+        $courses->courses_file()->create($data->only([
+            'video_title', 'video_category', 'video_url'
+        ])->toArray());
 
         return $courses;
     }
