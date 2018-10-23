@@ -12,6 +12,16 @@ class Courses extends Model
         'what_will_you_learn_title' => 'array',
         'what_will_you_learn_description' => 'array',
     ];
+
+    public static function createFor($user, $courseData, $videosData)
+    {
+        $courses = $user->courses()->create($courseData);
+
+        $courses->courses_file()->create($videosData);
+
+        return $courses;
+    }
+
     // public function course_category()
     // {
     //     return $this->belongsTo('App\CourseCategory');
@@ -19,12 +29,12 @@ class Courses extends Model
 
     public function courses_file()
     {
-        return $this->hasOne(CoursesFiles::Class,'course_id');
+        return $this->hasOne(CoursesFiles::Class, 'course_id');
     }
 
     public function courses_files()
     {
-        return $this->hasMany(CoursesFiles::Class,'course_id');
+        return $this->hasMany(CoursesFiles::Class, 'course_id');
     }
 
     public function course_comments()
