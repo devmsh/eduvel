@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CourseRequest;
 use Illuminate\Http\Request;
 use App\CourseCategory;
 use App\Courses;
@@ -24,23 +25,8 @@ class CoursesController extends Controller
         return view('admin.courses.create', compact('course_categorys'));
     }
 
-    public function store(Request $request)
+    public function store(CourseRequest $request)
     {
-
-        $courses = $this->validate(request(), [
-            'course_title' => 'required',
-            'teacher_name' => 'required',
-            'course_start' => 'required',
-            'course_price' => 'required',
-            'course_image' => 'required',
-            'course_video' => 'required',
-            'course_description' => 'required',
-            'category_id' => 'required',
-            'course_time' => 'required',
-            'what_will_you_learn_title' => 'required',
-            'what_will_you_learn_description' => 'required',
-        ]);
-
         if (!empty(request('course_image'))) {
             $course_image_name = time() . '.' . $request->course_image->getClientOriginalExtension();
         }
