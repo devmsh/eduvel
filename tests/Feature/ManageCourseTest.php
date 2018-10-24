@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class AddCourseTest extends TestCase
+class ManageCourseTest extends TestCase
 {
     use DatabaseMigrations;
 
@@ -269,6 +269,39 @@ class AddCourseTest extends TestCase
         }
 
         return $basicData;
+    }
+
+    public function test_can_view_list_of_courses()
+    {
+        factory(Courses::class, 10)->create();
+
+        $this->actingAs($this->createAdmin());
+
+        $response = $this->get('admin/courses');
+
+        $response->assertViewHas('courses', function ($courses) {
+            $this->assertCount(3, $courses);
+            return true;
+        });
+    }
+
+    public function test_can_filter_list_of_courses_by_category()
+    {
+        $cats = factory(CourseCategory::class, 3)->create();
+        foreach ($cats as $cat) {
+            factory(Courses::class, 2)->create([
+                'category_id' => $cat->id
+            ]);
+        }
+
+        $this->actingAs($this->createAdmin());
+
+        $response = $this->get('admin/courses?category_id=1');
+
+        $response->assertViewHas('courses', function ($courses) {
+            $this->assertCount(2, $courses);
+            return true;
+        });
     }
 }
 
