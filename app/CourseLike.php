@@ -8,7 +8,7 @@ class CourseLike extends Model
 {
     public function course()
     {
-        return $this->belongsTo(Courses::Class);
+        return $this->belongsTo(Course::Class);
     }
 
     public function user()

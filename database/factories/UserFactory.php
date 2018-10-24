@@ -18,8 +18,8 @@ $factory->define(App\User::class, function (Faker $faker) {
         'uniqid' => uniqid(),
         'type_user' => 'Admin',
         'image' => 'user-image.png',
-        'name' => 'Mohammed A. Alzard',
-        'email' => 'mm@mm.mm',
+        'name' => $faker->email,
+        'email' => $faker->email,
         'password' => bcrypt(123123), // secret
         'remember_token' => str_random(10),
         'confirmed' => 1,

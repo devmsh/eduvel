@@ -9,6 +9,6 @@ class CourseCategory extends Model
     public function courses()
     {
         // return $this->hasMany('App\Courses');
-        return $this->hasMany('App\Courses', 'category_id', 'id');
+        return $this->hasMany('App\Course', 'category_id', 'id');
     }
 }

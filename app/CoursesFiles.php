@@ -6,8 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class CoursesFiles extends Model
 {
-    public function courses()
+    protected $guarded = [];
+
+    protected $casts = [
+        'video_title' => 'array',
+        'video_category' => 'array',
+        'video_url' => 'array',
+    ];
+
+    public function course()
     {
-        return $this->belongsTo(Courses::Class);
+        return $this->belongsTo(Course::Class);
     }
 }

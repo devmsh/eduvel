@@ -2,174 +2,72 @@
 
 namespace App\Http\Controllers;
 
-// use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Request;
-// use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Admin;
-use App\User;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateAdminRequest;
 use App\Role;
-use App\Mail\AdminResetPassword;
-use DB;
-use Carbon\Carbon;
-use Mail;
+use App\User;
+use Illuminate\Support\Facades\Request;
+use App\Admin;
 
 class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    // For Get All Admins 
     public function index()
     {
-        //
-        $admins = User::where('type_user', 'admin')->get();
-
-        /*foreach ($admins as $value) {
-            echo $value->hasRole('admin');
-            // return unserialize($value->preferences);
-        }*/
-
+        $admins = User::where('type_user','Admin')->paginate();
         return view('admin.admins.admins', compact('admins'));
     }
 
-    public function my_profile()
-    {
-        $user = User::find(auth()->user()->id);
-
-        return view('admin.myprofile.index', compact('user'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
         return view('admin.admins.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(CreateAdminRequest $request)
     {
-        $register = $this->validate(request(), [
-            'name' => 'required|min:4|max:191',
-            'new_email' => 'required|email',
-            'password' => 'required',
-        ]);
-
-        if (!empty(request('image'))) {
-            $image_name = time() . '.' . $request->image->getClientOriginalExtension();
-            $request->image->move(public_path('uplaod/user/'), $image_name);
-        } else {
-            $image_name = 'user-image.png';
-        }
-
         $user = new User();
         $user->uniqid = uniqid();
         $user->type_user = 'Admin';
-        $user->image = $image_name;
+        $user->image = $request->image ? $request->image->store('upload/users') : null;
         $user->name = request('name');
         $user->email = request('new_email');
         $user->password = bcrypt(request('password'));
         $user->confirmed = 1;
         $user->save();
 
-        // Add Role
         if (request('roles') == 'Admin') {
             $user->roles()->attach(Role::where('name', 'Admin')->first());
         } elseif (request('roles') == 'Editor') {
             $user->roles()->attach(Role::where('name', 'Editor')->first());
         }
 
-        session()->flash('success', 'Successfully added');
-
-        return redirect('admin/admins');
+        return redirect('admin/admins')->with('success', 'Successfully added');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function edit(User $admin)
     {
-        //
+        return view('admin.admins.edit', compact('admin'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function update(Request $request, User $admin)
     {
-        //
-        $user = User::find($id);
-        return view('admin.admins.edit', compact('user'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $register = $this->validate(request(), [
+        $this->validate(request(), [
             'name' => 'required|min:4|max:191',
-            // 'email' => 'required|email',
         ]);
 
-        if (!empty(request('image'))) {
-            $image_name = time() . '.' . request('image')->getClientOriginalExtension();
-            request('image')->move(public_path('uplaod/user/'), $image_name);
-        }
+        $admin->image = $request->image ? $request->image->store('upload/users') : $admin->image;
+        $admin->name = request('name');
+        $admin->email = request('new_email',$admin->email);
+        $admin->password = bcrypt(request('password'),$admin->password);
+        $admin->save();
 
-        $add = User::find($id);
-        if (!empty(request('image'))) {
-            $add->image = $image_name;
-        }
-        $add->name = request('name');
-        if (!empty(request('new_email'))) {
-            $add->email = request('new_email');
-        }
-        if (!empty(request('password'))) {
-            $add->password = bcrypt(request('password'));
-        }
-        // $add->confirmed = 1;
-        $add->save();
-
-        session()->flash('success', 'Successfully Updated');
-        return back();
+        return back()->with('success', 'Successfully Updated');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(User $admin)
     {
-        //
-        User::find($id)->delete();
-        session()->flash('success', 'Successfully Deleted');
-        return redirect('admin/admins');
+        $admin->delete();
+
+        return redirect('admin/admins')->with('success', 'Successfully Deleted');
     }
 
     public function delete_admin_all()
@@ -212,5 +110,10 @@ class AdminController extends Controller
 
         return back();
 
+    }
+
+    public function my_profile()
+    {
+        return view('admin.myprofile.index');
     }
 }

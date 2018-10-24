@@ -14,7 +14,7 @@ use App\BlogComment;
 use App\Faq;
 use App\MediaGallery;
 use App\CourseCategory;
-use App\Courses;
+use App\Course;
 use App\Newsletter;
 use App\CourseComment;
 use App\User;
@@ -39,9 +39,9 @@ class IndexController extends Controller
         $categories = Category::get();
         $posts = Post::orderBy('id', 'desc')->paginate(4);
         $course_categorys = CourseCategory::get();
-        $courses = Courses::orderBy('id', 'desc')->where('isActive', 1)->paginate(6);
+        $courses = Course::orderBy('id', 'desc')->where('isActive', 1)->paginate(6);
 
-        $countCourses = Courses::where('isActive', 1)->count();
+        $countCourses = Course::where('isActive', 1)->count();
 
         return view('index', compact('settings', 'socialMedia', 'categories', 'posts', 'course_categorys', 'courses', 'countCourses'));
     }
@@ -256,7 +256,7 @@ class IndexController extends Controller
         $settings = Settings::get()->find(1);
         $socialMedia = SocialMedia::get();
         $course_categorys = CourseCategory::get();
-        $courses = Courses::where('isActive', 1)->orderBy('id', 'desc')->get();
+        $courses = Course::where('isActive', 1)->orderBy('id', 'desc')->get();
         return view('all-courses', compact('courses', 'course_categorys', 'settings', 'socialMedia'));
     }
 
@@ -266,7 +266,7 @@ class IndexController extends Controller
         $settings = Settings::get()->find(1);
         $socialMedia = SocialMedia::get();
         $course_categorys = CourseCategory::get();
-        $courses = Courses::where('isActive', 1)->orderBy('id', 'desc')->get();
+        $courses = Course::where('isActive', 1)->orderBy('id', 'desc')->get();
         return view('all-courses-list', compact('courses', 'course_categorys', 'settings', 'socialMedia'));
     }
 
@@ -281,7 +281,7 @@ class IndexController extends Controller
             ->first();
 
         $course_categorys = CourseCategory::get();
-        $courses = Courses::where('category_id', $courses_category->id)->where('isActive', 1)->paginate(3);
+        $courses = Course::where('category_id', $courses_category->id)->where('isActive', 1)->paginate(3);
 
         return view('all-courses', compact('course_categorys', 'courses', 'settings', 'socialMedia'));
     }
@@ -293,7 +293,7 @@ class IndexController extends Controller
         $socialMedia = SocialMedia::get();
         $course_categorys = CourseCategory::get();
 
-        $course_details = Courses::where('course_title', $course_title)->first();
+        $course_details = Course::where('course_title', $course_title)->first();
         $teacher_detail = User::where('id', $course_details->user_id)->first();
 
         $get_comments = CourseComment::where('course_id', $course_details->id)->get();
@@ -402,8 +402,8 @@ class IndexController extends Controller
 
         $teacher_detail = User::where('id', $request->id)->first();
         $admission = Admission::where('user_uniqid', $teacher_detail->uniqid)->first();
-        $myCourses = Courses::where('user_id', $request->id)->get();
-        $countMyCourses = Courses::where('user_id', $request->id)->count();
+        $myCourses = Course::where('user_id', $request->id)->get();
+        $countMyCourses = Course::where('user_id', $request->id)->count();
         $course_categorys = CourseCategory::get();
 
         return view('teacher-detail', compact('settings', 'socialMedia', 'teacher_detail', 'admission', 'myCourses', 'course_categorys', 'countMyCourses'));
@@ -436,7 +436,7 @@ class IndexController extends Controller
         if (!preg_match('/^[a-zA-Z ]*$/', $request->search)) {
             return redirect('/courses-list');
         }
-        $courses = Courses::select('courses.*')
+        $courses = Course::select('courses.*')
             ->orWhere('user_id', 'LIKE', '%' . $request->search . '%')
             ->orWhere('course_title', 'LIKE', '%' . $request->search . '%')
             ->orWhere('teacher_name', 'LIKE', '%' . $request->search . '%')
