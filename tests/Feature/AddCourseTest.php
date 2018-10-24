@@ -5,8 +5,6 @@ namespace Tests\Feature;
 use App\CourseCategory;
 use App\Courses;
 use App\Http\Middleware\VerifyCsrfToken;
-use App\Role;
-use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -17,22 +15,9 @@ class AddCourseTest extends TestCase
 {
     use DatabaseMigrations;
 
-    protected function setUp()
+    private function validCourse($category)
     {
-        parent::setUp();
-        Storage::fake();
-        Role::create(['name' => 'Admin']);
-
-        $this->withoutMiddleware(VerifyCsrfToken::class);
-    }
-
-    public function test_admin_can_add_course()
-    {
-        $category = factory(CourseCategory::class)->create();
-
-        $this->actingAs($this->createAdmin());
-
-        $response = $this->post('admin/courses/store', [
+        return [
             'course_title' => 'Persius delenit has cu',
             'teacher_name' => 'Teacher name',
             'course_start' => '2018-07-07',
@@ -48,7 +33,25 @@ class AddCourseTest extends TestCase
             'video_title' => ["Health Science", "Health and Social Care", "Health Science", "Health and Social Care"],
             'video_category' => ["Introdocution", "Generative Modeling Review", "Variational Autoencoders", "Gaussian Mixture Model Review"],
             'video_url' => ["https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw"],
-        ]);
+        ];
+    }
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        Storage::fake();
+
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+    }
+
+    public function test_admin_can_add_course()
+    {
+        $category = factory(CourseCategory::class)->create();
+
+        $this->actingAs($this->createAdmin());
+
+        $response = $this->post('admin/courses/store', $this->validCourse($category));
 
         $course = Courses::latest()->first();
 
@@ -73,35 +76,51 @@ class AddCourseTest extends TestCase
         $this->assertEquals($course->courses_file->video_url, ["https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw"]);
     }
 
-    public function test_admin_can_add_course_with_extra_fields()
+    public function test_editor_can_add_course()
+    {
+        $category = factory(CourseCategory::class)->create();
+
+        $this->actingAs($this->createEditor());
+
+        $response = $this->post('admin/courses/store', $this->validCourse($category));
+
+        $course = Courses::latest()->first();
+
+        $response->assertRedirect('admin/courses');
+        $response->assertSessionHas('success');
+        Storage::disk()->assertExists($course->course_image);
+
+        $this->assertEquals($course->course_title, 'Persius delenit has cu');
+        $this->assertEquals($course->teacher_name, 'Teacher name');
+        $this->assertEquals($course->course_start, '2018-07-07');
+        $this->assertEquals($course->course_price, 150);
+        $this->assertEquals($course->course_video, 'https://www.youtube.com/watch?v=LDgd_gUcqCw');
+        $this->assertEquals($course->course_description, 'Per consequat adolescens ex, cu nibh commune temporibus vim, ad sumo viris eloquentiam sed. Mea appareat omittantur eloquentiam ad, nam ei quas oportere democritum. Prima causae admodum id est, ei timeam inimicus sed. Sit an meis aliquam, cetero inermis vel ut. An sit illum euismod facilisis, tamquam vulputate pertinacia eum at.');
+        $this->assertEquals($course->category_id, '1');
+        $this->assertEquals($course->isActive, 0);
+        $this->assertEquals($course->course_time, '1h 30min');
+        $this->assertEquals($course->what_will_you_learn_title, ["Suas summo id sed erat erant oporteat", "Illud singulis indoctum ad sed", "Alterum bonorum mentitum an mel"]);
+        $this->assertEquals($course->what_will_you_learn_description, ["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.", "Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.", "Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]);
+
+        $this->assertEquals($course->courses_file->video_title, ["Health Science", "Health and Social Care", "Health Science", "Health and Social Care"]);
+        $this->assertEquals($course->courses_file->video_category, ["Introdocution", "Generative Modeling Review", "Variational Autoencoders", "Gaussian Mixture Model Review"]);
+        $this->assertEquals($course->courses_file->video_url, ["https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw"]);
+    }
+
+    public function test_can_add_course_with_extra_fields()
     {
         $category = factory(CourseCategory::class)->create();
 
         $this->actingAs($this->createAdmin());
 
-        $response = $this->post('admin/courses/store', [
-            'course_title' => 'Persius delenit has cu',
-            'teacher_name' => 'Teacher name',
-            'course_start' => '2018-07-07',
-            'course_price' => 150,
-            'course_image' => UploadedFile::fake()->image('any_image.jpg'),
-            'course_video' => 'https://www.youtube.com/watch?v=LDgd_gUcqCw',
-            'course_description' => 'Per consequat adolescens ex, cu nibh commune temporibus vim, ad sumo viris eloquentiam sed. Mea appareat omittantur eloquentiam ad, nam ei quas oportere democritum. Prima causae admodum id est, ei timeam inimicus sed. Sit an meis aliquam, cetero inermis vel ut. An sit illum euismod facilisis, tamquam vulputate pertinacia eum at.',
-            'category_id' => $category->id,
-            'course_time' => '1h 30min',
-            'what_will_you_learn_title' => ["Suas summo id sed erat erant oporteat", "Illud singulis indoctum ad sed", "Alterum bonorum mentitum an mel"],
-            'what_will_you_learn_description' => ["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.", "Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.", "Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."],
-
-            'video_title' => ["Health Science", "Health and Social Care", "Health Science", "Health and Social Care"],
-            'video_category' => ["Introdocution", "Generative Modeling Review", "Variational Autoencoders", "Gaussian Mixture Model Review"],
-            'video_url' => ["https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw"],
-
+        $response = $this->post('admin/courses/store', array_merge(
+            $this->validCourse($category), [
             'course_expire' => '2018-08-08',
             'course_discount_price' => 50,
             'coupon_code' => 'coupon code',
             'coupon_code_discount_price' => '50',
             'whats_includes' => 'Mobile support, Lesson archive, Mobile support, Tutor chat, Course certificate',
-        ]);
+        ]));
 
         $course = Courses::latest()->first();
 
