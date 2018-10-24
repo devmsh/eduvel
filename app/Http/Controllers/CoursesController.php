@@ -75,7 +75,7 @@ class CoursesController extends Controller
     {
         $course->approve();
 
-        return back();
+        return back()->with('success', 'Approved successfully');
     }
 
     public function searsh_category($courses_category)
@@ -90,12 +90,11 @@ class CoursesController extends Controller
         return view('admin.courses.index', compact('course_categorys', 'courses'));
     }
 
-    public function destroy($id)
+    public function destroy(Courses $course)
     {
+        $course->delete();
 
-        Courses::find($id)->delete();
-        session()->flash('success', 'Deleted successfully');
-        return back();
+        return back()->with('success', 'Deleted successfully');
     }
 
 }

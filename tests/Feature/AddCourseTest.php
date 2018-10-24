@@ -207,9 +207,24 @@ class AddCourseTest extends TestCase
         $this->assertFalse($course->isActive);
 
         $response = $this->put("admin/courses/{$course->id}/approve");
+
+        $response->assertSessionHas('success');
         $response->assertRedirect();
 
         $this->assertTrue($course->fresh()->isActive);
+    }
+
+    public function test_admin_can_delete_course()
+    {
+        $course = factory(Courses::class)->create();
+        $this->actingAs($this->createAdmin());
+
+        $response = $this->delete("admin/courses/{$course->id}");
+
+        $response->assertSessionHas('success');
+        $response->assertRedirect();
+
+        $this->assertNull($course->fresh());
     }
 
     private function validCourse($category,$update = false)
