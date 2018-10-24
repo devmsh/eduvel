@@ -28,7 +28,7 @@ class CourseRequest extends FormRequest
             'teacher_name' => 'required',
             'course_start' => 'required',
             'course_price' => 'required',
-            'course_image' => 'required',
+            'course_image' => 'required|image',
             'course_video' => 'required',
             'course_description' => 'required',
             'category_id' => 'required',

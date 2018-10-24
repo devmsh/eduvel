@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\CourseCategory;
 use App\Courses;
+use App\CoursesFiles;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
@@ -178,25 +179,67 @@ class AddCourseTest extends TestCase
         $this->assertEquals($course->whats_includes, 'Mobile support, Lesson archive, Mobile support, Tutor chat, Course certificate');
     }
 
-    private function validCourse($category)
+    public function test_admin_can_edit_course()
     {
-        return [
-            'course_title' => 'Persius delenit has cu',
-            'teacher_name' => 'Teacher name',
-            'course_start' => '2018-07-07',
-            'course_price' => 150,
-            'course_image' => UploadedFile::fake()->image('any_image.jpg'),
-            'course_video' => 'https://www.youtube.com/watch?v=LDgd_gUcqCw',
-            'course_description' => 'Per consequat adolescens ex, cu nibh commune temporibus vim, ad sumo viris eloquentiam sed. Mea appareat omittantur eloquentiam ad, nam ei quas oportere democritum. Prima causae admodum id est, ei timeam inimicus sed. Sit an meis aliquam, cetero inermis vel ut. An sit illum euismod facilisis, tamquam vulputate pertinacia eum at.',
-            'category_id' => $category->id,
-            'course_time' => '1h 30min',
-            'what_will_you_learn_title' => ["Suas summo id sed erat erant oporteat", "Illud singulis indoctum ad sed", "Alterum bonorum mentitum an mel"],
-            'what_will_you_learn_description' => ["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.", "Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.", "Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."],
+        $this->withoutExceptionHandling();
 
-            'video_title' => ["Health Science", "Health and Social Care", "Health Science", "Health and Social Care"],
-            'video_category' => ["Introdocution", "Generative Modeling Review", "Variational Autoencoders", "Gaussian Mixture Model Review"],
-            'video_url' => ["https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw"],
-        ];
+        $category = factory(CourseCategory::class)->create();
+
+        $this->actingAs($this->createAdmin());
+
+        $this->post('admin/courses/store', $this->validCourse($category));
+
+        $response = $this->post('admin/courses/1/update', $this->validCourse($category,true));
+
+        $course = Courses::latest()->first();
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+        Storage::disk()->assertExists($course->course_image);
+
+        $this->assertFalse($course->isActive);
+        $this->assertEquals($course->course_title, 'updatedPersius delenit has cu');
+    }
+
+    private function validCourse($category,$update = false)
+    {
+        if($update){
+            return [
+                'course_title' => 'updatedPersius delenit has cu',
+                'teacher_name' => 'Teacher name',
+                'course_start' => '2018-07-07',
+                'course_price' => 150,
+                'course_image' => UploadedFile::fake()->image('any_image.jpg'),
+                'course_video' => 'https://www.youtube.com/watch?v=LDgd_gUcqCw',
+                'course_description' => 'Per consequat adolescens ex, cu nibh commune temporibus vim, ad sumo viris eloquentiam sed. Mea appareat omittantur eloquentiam ad, nam ei quas oportere democritum. Prima causae admodum id est, ei timeam inimicus sed. Sit an meis aliquam, cetero inermis vel ut. An sit illum euismod facilisis, tamquam vulputate pertinacia eum at.',
+                'category_id' => $category->id,
+                'course_time' => '1h 30min',
+                'what_will_you_learn_title' => ["Suas summo id sed erat erant oporteat", "Illud singulis indoctum ad sed", "Alterum bonorum mentitum an mel"],
+                'what_will_you_learn_description' => ["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.", "Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.", "Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."],
+
+                'video_title' => ["Health Science", "Health and Social Care", "Health Science", "Health and Social Care"],
+                'video_category' => ["Introdocution", "Generative Modeling Review", "Variational Autoencoders", "Gaussian Mixture Model Review"],
+                'video_url' => ["https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw"],
+            ];
+        }else{
+            return [
+                'course_title' => 'Persius delenit has cu',
+                'teacher_name' => 'Teacher name',
+                'course_start' => '2018-07-07',
+                'course_price' => 150,
+                'course_image' => UploadedFile::fake()->image('any_image.jpg'),
+                'course_video' => 'https://www.youtube.com/watch?v=LDgd_gUcqCw',
+                'course_description' => 'Per consequat adolescens ex, cu nibh commune temporibus vim, ad sumo viris eloquentiam sed. Mea appareat omittantur eloquentiam ad, nam ei quas oportere democritum. Prima causae admodum id est, ei timeam inimicus sed. Sit an meis aliquam, cetero inermis vel ut. An sit illum euismod facilisis, tamquam vulputate pertinacia eum at.',
+                'category_id' => $category->id,
+                'course_time' => '1h 30min',
+                'what_will_you_learn_title' => ["Suas summo id sed erat erant oporteat", "Illud singulis indoctum ad sed", "Alterum bonorum mentitum an mel"],
+                'what_will_you_learn_description' => ["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.", "Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.", "Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."],
+
+                'video_title' => ["Health Science", "Health and Social Care", "Health Science", "Health and Social Care"],
+                'video_category' => ["Introdocution", "Generative Modeling Review", "Variational Autoencoders", "Gaussian Mixture Model Review"],
+                'video_url' => ["https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw"],
+            ];
+        }
     }
 }
 

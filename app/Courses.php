@@ -33,6 +33,21 @@ class Courses extends Model
         return $courses;
     }
 
+    public function updateFor($user, $data)
+    {
+        $data = collect($data)->put('user_id', $user->id);
+
+        $this->update($data->except([
+            'video_title', 'video_category', 'video_url'
+        ])->toArray());
+
+        $this->courses_file()->create($data->only([
+            'video_title', 'video_category', 'video_url'
+        ])->toArray());
+
+        return $this;
+    }
+
     // public function course_category()
     // {
     //     return $this->belongsTo('App\CourseCategory');

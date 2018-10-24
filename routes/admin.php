@@ -170,5 +170,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('course/{id}/approve', 'CoursesController@approve');
         Route::get('category/{courses_category}', 'CoursesController@searsh_category');
 
+        Route::post('courses/{course}/update', 'CoursesController@update');
+
     });
 });
