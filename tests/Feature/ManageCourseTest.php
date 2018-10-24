@@ -279,6 +279,10 @@ class ManageCourseTest extends TestCase
 
         $response = $this->get('admin/courses');
 
+        $response->assertSuccessful();
+
+        $response->assertViewHas('course_categorys');
+
         $response->assertViewHas('courses', function ($courses) {
             $this->assertCount(3, $courses);
             return true;
@@ -297,6 +301,8 @@ class ManageCourseTest extends TestCase
         $this->actingAs($this->createAdmin());
 
         $response = $this->get('admin/courses?category_id=1');
+
+        $response->assertViewHas('course_categorys');
 
         $response->assertViewHas('courses', function ($courses) {
             $this->assertCount(2, $courses);
