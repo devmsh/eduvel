@@ -1,9 +1,6 @@
 <?php
 
 // For In order to determine the input through the router
-Route::pattern('id', '[0-9]+');
-Route::pattern('category', '[0-9]+');
-Route::pattern('post', '[0-9]+');
 
 Route::group(['middleware' => 'guest'], function () {
 

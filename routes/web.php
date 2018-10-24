@@ -1,30 +1,6 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-Route::pattern('id', '[0-9]+');
-// Route::pattern('courses_category', '[a-z]+, [A-Z]+');
-
-/*Route::get('/', function () {
-    return view('welcome');
-});*/
-
-// Route::get('/get-message', 'DashboardController@get_message');
-// Route::get('/get-message/{id}', 'DashboardController@get_message_id');
-
 Route::get('/', 'IndexController@index');
-
-// Route::get('admission', 'AdmissionController@admission');
-// Route::post('admission', 'AdmissionController@admission_post');
 
 // contacts
 Route::get('contacts', 'IndexController@contacts');
@@ -106,9 +82,7 @@ Route::group(['middleware' => ['roles'], 'roles' => ['teacher', 'Teacher']], fun
         Route::get('/files', 'CoursesTeacherController@add_course_files');
         Route::post('/files', 'CoursesTeacherController@store_course_files');
         Route::get('/files/{id}/delete', 'CoursesTeacherController@file_delete');
-
     });
-
 });
 
 Route::group(['middleware' => ['roles'], 'roles' => ['Admin', 'Editor', 'Teacher', 'Student']], function () {
