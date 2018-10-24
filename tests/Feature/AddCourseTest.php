@@ -181,15 +181,13 @@ class AddCourseTest extends TestCase
 
     public function test_admin_can_edit_course()
     {
-        $this->withoutExceptionHandling();
-
         $category = factory(CourseCategory::class)->create();
 
         $this->actingAs($this->createAdmin());
 
         $this->post('admin/courses/store', $this->validCourse($category));
 
-        $response = $this->post('admin/courses/1/update', $this->validCourse($category,true));
+        $response = $this->put('admin/courses/1/update', $this->validCourse($category,true));
 
         $course = Courses::latest()->first();
 
@@ -199,6 +197,19 @@ class AddCourseTest extends TestCase
 
         $this->assertFalse($course->isActive);
         $this->assertEquals($course->course_title, 'updatedPersius delenit has cu');
+    }
+
+    public function test_admin_can_approve_course()
+    {
+        $course = factory(Courses::class)->create();
+        $this->actingAs($this->createAdmin());
+
+        $this->assertFalse($course->isActive);
+
+        $response = $this->put("admin/courses/{$course->id}/approve");
+        $response->assertRedirect();
+
+        $this->assertTrue($course->fresh()->isActive);
     }
 
     private function validCourse($category,$update = false)

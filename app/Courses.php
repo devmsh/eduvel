@@ -73,4 +73,9 @@ class Courses extends Model
         return $this->hasMany(User::Class);
     }
 
+    public function approve()
+    {
+        return $this->update(['isActive' => true]);
+    }
+
 }

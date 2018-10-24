@@ -71,19 +71,15 @@ class CoursesController extends Controller
         return back()->with('success', 'Successfully added');
     }
 
-    public function approve($id)
+    public function approve(Courses $course)
     {
-
-        $add = Courses::find($id);
-        $add->isActive = 1;
-        $add->save();
+        $course->approve();
 
         return back();
     }
 
     public function searsh_category($courses_category)
     {
-
         $courses_category = CourseCategory::select(array('id', 'name'))
             ->orWhere('name', 'LIKE', '%' . $courses_category . '%')
             ->first();

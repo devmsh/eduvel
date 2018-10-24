@@ -165,12 +165,13 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('add-courses', 'CoursesController@create');
         Route::post('courses/store', 'CoursesController@store');
         Route::get('course/{id}/edit', 'CoursesController@edit');
-        Route::post('course/update', 'CoursesController@update');
+//        Route::post('course/update', 'CoursesController@update');
         Route::get('course/{id}/delete', 'CoursesController@destroy');
-        Route::get('course/{id}/approve', 'CoursesController@approve');
+//        Route::get('course/{id}/approve', 'CoursesController@approve');
         Route::get('category/{courses_category}', 'CoursesController@searsh_category');
 
-        Route::post('courses/{course}/update', 'CoursesController@update');
+        Route::put('courses/{course}/update', 'CoursesController@update');
+        Route::put('courses/{course}/approve', 'CoursesController@approve');
 
     });
 });
