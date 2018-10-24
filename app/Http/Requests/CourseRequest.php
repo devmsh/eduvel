@@ -38,7 +38,6 @@ class CourseRequest extends FormRequest
             'video_title' => 'required',
             'video_category' => 'required',
             'video_url' => 'required',
-
         ];
     }
 }

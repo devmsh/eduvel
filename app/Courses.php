@@ -6,9 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Courses extends Model
 {
+    protected $attributes = [
+        'isActive' => 0
+    ];
+
     protected $guarded = [];
 
     protected $casts = [
+        'isActive' => 'boolean',
         'what_will_you_learn_title' => 'array',
         'what_will_you_learn_description' => 'array',
     ];

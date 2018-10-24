@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CourseRequest;
 use Illuminate\Http\Request;
 use App\CourseCategory;
 use App\Courses;
@@ -59,71 +60,24 @@ class CoursesTeacherController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CourseRequest $request)
     {
-        $courses = $this->validate(request(), [
-            'course_title' => 'required',
-            'teacher_name' => 'required',
-            'course_start' => 'required',
-            'course_price' => 'required',
-            'course_image' => 'required',
-            'course_video' => 'required',
-            'course_description' => 'required',
-            'category_id' => 'required',
-            'course_time' => 'required',
-            'what_will_you_learn_title' => 'required',
-            'what_will_you_learn_description' => 'required',
+        $data = $request->only([
+            'course_title', 'teacher_name', 'course_start',
+            'course_expire', 'course_price', 'course_discount_price',
+            'course_image', 'course_video', 'course_description',
+            'category_id', 'coupon_code', 'coupon_code_discount_price',
+            'whats_includes', 'isActive', 'course_time',
+            'what_will_you_learn_title', 'what_will_you_learn_description',
+            'video_title', 'video_category', 'video_url',
         ]);
 
-        if (!empty(request('course_image'))) {
-            $course_image_name = time() . '.' . $request->course_image->getClientOriginalExtension();
-        }
-        if (!empty(request('course_video'))) {
-            $course_video_name = time() * 2 . '.' . $request->course_video->getClientOriginalExtension();
-        }
+        $data['isActive'] = 0;
+        $data['course_image'] = $request->course_image->store('upload/courses');
 
-        $add = new Courses();
-        $add->user_id = auth()->user()->id;
-        $add->course_title = request('course_title');
-        $add->teacher_name = request('teacher_name');
-        $add->course_start = request('course_start');
-        $add->course_expire = request('course_expire');
-        $add->course_price = request('course_price');
-        $add->course_discount_price = request('course_discount_price');
-        $add->course_image = $course_image_name;
-        $add->course_video = $course_video_name;
-        $add->course_description = request('course_description');
-        $add->category_id = request('category_id');
-        $add->coupon_code = request('coupon_code');
-        $add->coupon_code_discount_price = request('coupon_code_discount_price');
-        $add->whats_includes = request('whats_includes');
-        $add->isActive = 0;
-        $add->course_time = request('course_time');
-        $add->what_will_you_learn_title = json_encode(request('what_will_you_learn_title'));
-        $add->what_will_you_learn_description = json_encode(request('what_will_you_learn_description'));
-        $add->save();
+        Courses::createFor($request->user(),$data);
 
-        if (!empty(request('course_image'))) {
-
-            $request->course_image->move(public_path('uplaod/courses/coursesimages/'), $course_image_name);
-        }
-        if (!empty(request('course_video'))) {
-
-            $request->course_video->move(public_path('uplaod/courses/coursesvideos/'), $course_video_name);
-        }
-
-        $select = Courses::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->first();
-
-        $add = new CoursesFiles();
-        $add->video_title = json_encode(request('video_title'));
-        $add->video_category = json_encode(request('video_category'));
-        $add->video_url = json_encode(request('video_url'));
-        $add->course_id = $select->id;
-        $add->save();
-
-        session()->flash('success', 'Successfully added');
-
-        return redirect('/dashboard/courses');
+        return redirect('/dashboard/courses')->with('success', 'Successfully added');
     }
 
     /**

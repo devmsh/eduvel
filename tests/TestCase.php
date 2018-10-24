@@ -16,6 +16,7 @@ abstract class TestCase extends BaseTestCase
 
         Role::create(['name' => 'Admin']);
         Role::create(['name' => 'Editor']);
+        Role::create(['name' => 'Teacher']);
     }
 
     public function createAdmin()
@@ -34,6 +35,16 @@ abstract class TestCase extends BaseTestCase
         $editor->roles()->attach($this->getRoleId('Editor'));
 
         return $editor;
+    }
+
+
+    public function createTeacher()
+    {
+        $teacher = factory(User::class)->create();
+
+        $teacher->roles()->attach($this->getRoleId('Teacher'));
+
+        return $teacher;
     }
 
     public function getRoleId($role)
