@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Admin;
+use App\CourseCategory;
 use App\Courses;
 use App\Http\Middleware\VerifyCsrfToken;
 use App\Role;
@@ -17,25 +17,18 @@ class AddCourseTest extends TestCase
 {
     use DatabaseMigrations;
 
-    public function createAdmin()
-    {
-        $admin = factory(User::class)->create();
-
-        $admin->roles()->attach(1);
-
-        return $admin;
-    }
-
     protected function setUp()
     {
         parent::setUp();
         $this->withoutMiddleware(VerifyCsrfToken::class);
 
-        Role::create(['name' => 'Admin',]);
+        Role::create(['name' => 'Admin']);
     }
 
     public function test_admin_can_add_course()
     {
+        $category = factory(CourseCategory::class)->create();
+
         Storage::fake();
 
         $this->actingAs($this->createAdmin());
@@ -50,7 +43,7 @@ class AddCourseTest extends TestCase
             'course_image' => UploadedFile::fake()->image('any_image.jpg'),
             'course_video' => 'https://www.youtube.com/watch?v=LDgd_gUcqCw',
             'course_description' => 'Per consequat adolescens ex, cu nibh commune temporibus vim, ad sumo viris eloquentiam sed. Mea appareat omittantur eloquentiam ad, nam ei quas oportere democritum. Prima causae admodum id est, ei timeam inimicus sed. Sit an meis aliquam, cetero inermis vel ut. An sit illum euismod facilisis, tamquam vulputate pertinacia eum at.',
-            'category_id' => '1',
+            'category_id' => $category->id,
             'coupon_code' => 'coupon code',
             'coupon_code_discount_price' => '50',
             'whats_includes' => 'Mobile support, Lesson archive, Mobile support, Tutor chat, Course certificate',
@@ -108,7 +101,10 @@ class AddCourseTest extends TestCase
             'category_id',
             'course_time',
             'what_will_you_learn_title',
-            'what_will_you_learn_description'
+            'what_will_you_learn_description',
+            'video_title',
+            'video_category',
+            'video_url'
         ]);
     }
 }

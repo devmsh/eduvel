@@ -35,6 +35,10 @@ class CourseRequest extends FormRequest
             'course_time' => 'required',
             'what_will_you_learn_title' => 'required',
             'what_will_you_learn_description' => 'required',
+            'video_title' => 'required',
+            'video_category' => 'required',
+            'video_url' => 'required',
+
         ];
     }
 }
