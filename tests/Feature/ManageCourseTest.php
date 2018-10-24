@@ -27,7 +27,7 @@ class ManageCourseTest extends TestCase
 
     public function test_guest_cannot_add_course()
     {
-        $response = $this->post('admin/courses/store', []);
+        $response = $this->post('admin/courses', []);
 
         $response->assertRedirect('login');
     }
@@ -36,7 +36,7 @@ class ManageCourseTest extends TestCase
     {
         $this->actingAs($this->createAdmin());
 
-        $response = $this->post('admin/courses/store', []);
+        $response = $this->post('admin/courses', []);
 
         $response->assertSessionHasErrors([
             'course_title',
@@ -62,7 +62,7 @@ class ManageCourseTest extends TestCase
 
         $this->actingAs($this->createAdmin());
 
-        $response = $this->post('admin/courses/store', $this->validCourse($category));
+        $response = $this->post('admin/courses', $this->validCourse($category));
 
         $course = Courses::latest()->first();
 
@@ -93,7 +93,7 @@ class ManageCourseTest extends TestCase
 
         $this->actingAs($this->createEditor());
 
-        $response = $this->post('admin/courses/store', $this->validCourse($category));
+        $response = $this->post('admin/courses', $this->validCourse($category));
 
         $course = Courses::latest()->first();
 
@@ -124,7 +124,7 @@ class ManageCourseTest extends TestCase
 
         $this->actingAs($this->createTeacher());
 
-        $response = $this->post('dashboard/courses/store', $this->validCourse($category));
+        $response = $this->post('dashboard/courses', $this->validCourse($category));
 
         $course = Courses::latest()->first();
 
@@ -155,7 +155,7 @@ class ManageCourseTest extends TestCase
 
         $this->actingAs($this->createAdmin());
 
-        $response = $this->post('admin/courses/store', $this->validCourse($category, true));
+        $response = $this->post('admin/courses', $this->validCourse($category, true));
 
         $course = Courses::latest()->first();
 
@@ -173,12 +173,14 @@ class ManageCourseTest extends TestCase
 
     public function test_admin_can_edit_course()
     {
+        $this->withoutExceptionHandling();
+
         $course = factory(CoursesFiles::class)->create()->course;
         $category = $course->category;
 
         $this->actingAs($this->createAdmin());
 
-        $response = $this->put('admin/courses/1/update', $this->validCourse($category, true));
+        $response = $this->put('admin/courses/1', $this->validCourse($category, true));
 
         $course = Courses::latest()->first();
 

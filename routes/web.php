@@ -95,7 +95,7 @@ Route::group(['middleware' => ['roles'], 'roles' => ['teacher', 'Teacher']], fun
         // For Add Courses
         Route::get('courses', 'CoursesTeacherController@index');
         Route::get('add-courses', 'CoursesTeacherController@create');
-        Route::post('courses/store', 'CoursesTeacherController@store');
+        Route::post('courses', 'CoursesTeacherController@store');
         Route::get('course/{id}/edit', 'CoursesTeacherController@edit');
         Route::post('course/update', 'CoursesTeacherController@update');
         Route::get('course/{id}/delete', 'CoursesTeacherController@destroy');
