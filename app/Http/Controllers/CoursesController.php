@@ -5,25 +5,29 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CourseRequest;
 use App\CourseCategory;
 use App\Courses;
+use Illuminate\Support\Facades\View;
 
 class CoursesController extends Controller
 {
+    public function __construct()
+    {
+        View::composer('admin.courses.*', function ($view) {
+            $view->with('course_categorys',CourseCategory::all());
+        });
+    }
+
     public function index()
     {
-        $course_categorys = CourseCategory::get();
-
         $courses = Courses::latest()->when(request('category_id'),function($query){
             return $query->where('category_id',request('category_id'));
         })->paginate(3);
 
-        return view('admin.courses.index', compact('course_categorys', 'courses'));
+        return view('admin.courses.index', compact( 'courses'));
     }
 
     public function create()
     {
-        $course_categorys = CourseCategory::get();
-
-        return view('admin.courses.create', compact('course_categorys'));
+        return view('admin.courses.create');
     }
 
     public function store(CourseRequest $request)
@@ -47,9 +51,7 @@ class CoursesController extends Controller
 
     public function edit(Courses $course)
     {
-        $course_categorys = CourseCategory::get();
-        
-        return view('admin.courses.edit', compact('course', 'course_categorys'));
+        return view('admin.courses.edit', compact('course'));
     }
 
     public function update(Courses $course, CourseRequest $request)
