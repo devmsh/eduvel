@@ -91,16 +91,9 @@ Route::group(['middleware' => ['roles'], 'roles' => ['teacher', 'Teacher']], fun
 
     Route::group(['prefix' => 'dashboard'], function () {
 
-        Route::get('/', 'CoursesTeacherController@dashboard');
-        // For Add Courses
-        Route::get('courses', 'CoursesTeacherController@index');
-        Route::get('add-courses', 'CoursesTeacherController@create');
-        Route::post('courses', 'CoursesTeacherController@store');
-        Route::get('course/{id}/edit', 'CoursesTeacherController@edit');
-        Route::post('course/update', 'CoursesTeacherController@update');
-        Route::get('course/{id}/delete', 'CoursesTeacherController@destroy');
-        Route::get('category/{courses_category}', 'CoursesTeacherController@searsh_category');
+        Route::resource('courses', 'CoursesTeacherController');
 
+        Route::get('/', 'CoursesTeacherController@dashboard');
         Route::get('all-comments', 'CoursesTeacherController@all_comments');
         Route::get('comment/{id}/dane-read', 'CoursesTeacherController@dane_read_comment');
 

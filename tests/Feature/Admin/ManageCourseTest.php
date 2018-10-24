@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
 use App\CourseCategory;
 use App\Course;
@@ -118,37 +118,6 @@ class ManageCourseTest extends TestCase
         $this->assertEquals($course->courses_file->video_url, ["https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw"]);
     }
 
-    public function test_teacher_can_add_course()
-    {
-        $category = factory(CourseCategory::class)->create();
-
-        $this->actingAs($this->createTeacher());
-
-        $response = $this->post('dashboard/courses', $this->validCourse($category));
-
-        $course = Course::latest()->first();
-
-        $response->assertRedirect('dashboard/courses');
-        $response->assertSessionHas('success');
-        Storage::disk()->assertExists($course->course_image);
-
-        $this->assertFalse($course->isActive);
-        $this->assertEquals($course->course_title, 'Persius delenit has cu');
-        $this->assertEquals($course->teacher_name, 'Teacher name');
-        $this->assertEquals($course->course_start, '2018-07-07');
-        $this->assertEquals($course->course_price, 150);
-        $this->assertEquals($course->course_video, 'https://www.youtube.com/watch?v=LDgd_gUcqCw');
-        $this->assertEquals($course->course_description, 'Per consequat adolescens ex, cu nibh commune temporibus vim, ad sumo viris eloquentiam sed. Mea appareat omittantur eloquentiam ad, nam ei quas oportere democritum. Prima causae admodum id est, ei timeam inimicus sed. Sit an meis aliquam, cetero inermis vel ut. An sit illum euismod facilisis, tamquam vulputate pertinacia eum at.');
-        $this->assertEquals($course->category_id, $category->id);
-        $this->assertEquals($course->course_time, '1h 30min');
-        $this->assertEquals($course->what_will_you_learn_title, ["Suas summo id sed erat erant oporteat", "Illud singulis indoctum ad sed", "Alterum bonorum mentitum an mel"]);
-        $this->assertEquals($course->what_will_you_learn_description, ["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.", "Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.", "Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]);
-
-        $this->assertEquals($course->courses_file->video_title, ["Health Science", "Health and Social Care", "Health Science", "Health and Social Care"]);
-        $this->assertEquals($course->courses_file->video_category, ["Introdocution", "Generative Modeling Review", "Variational Autoencoders", "Gaussian Mixture Model Review"]);
-        $this->assertEquals($course->courses_file->video_url, ["https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw", "https://www.youtube.com/watch?v=LDgd_gUcqCw"]);
-    }
-
     public function test_can_add_course_with_extra_fields()
     {
         $category = factory(CourseCategory::class)->create();
@@ -173,8 +142,6 @@ class ManageCourseTest extends TestCase
 
     public function test_admin_can_edit_course()
     {
-        $this->withoutExceptionHandling();
-
         $course = factory(CoursesFiles::class)->create()->course;
         $category = $course->category;
 
