@@ -41,17 +41,17 @@ class Courses extends Model
             'video_title', 'video_category', 'video_url'
         ])->toArray());
 
-        $this->courses_file()->create($data->only([
+        $this->courses_file->update($data->only([
             'video_title', 'video_category', 'video_url'
         ])->toArray());
 
         return $this;
     }
 
-    // public function course_category()
-    // {
-    //     return $this->belongsTo('App\CourseCategory');
-    // }
+    public function category()
+    {
+        return $this->belongsTo(CourseCategory::class);
+    }
 
     public function courses_file()
     {

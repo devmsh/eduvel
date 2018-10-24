@@ -14,7 +14,7 @@ class CoursesFiles extends Model
         'video_url' => 'array',
     ];
 
-    public function courses()
+    public function course()
     {
         return $this->belongsTo(Courses::Class);
     }
