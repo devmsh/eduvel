@@ -14,7 +14,7 @@ use App\BlogComment;
 use App\Faq;
 use App\MediaGallery;
 use App\CourseCategory;
-use App\Courses;
+use App\Course;
 use App\Newsletter;
 use LRedis;
 
@@ -22,7 +22,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $countCourses = Courses::where('isActive', 0)->count();
+        $countCourses = Course::where('isActive', 0)->count();
         $countCourseCategory = CourseCategory::get()->count();
         $countMessages = Contacts::where('done_read', 0)->count();
         $countnewsletter = Newsletter::get()->count();

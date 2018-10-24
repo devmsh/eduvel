@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CourseRequest;
 use Illuminate\Http\Request;
 use App\CourseCategory;
-use App\Courses;
+use App\Course;
 use App\CoursesFiles;
 use App\CourseComment;
 use App\User;
@@ -18,10 +18,10 @@ class CoursesTeacherController extends Controller
     public function dashboard()
     {
 
-        $count_courses = Courses::where('user_id', auth()->user()->id)->where('isActive', 1)->count();
-        $count_inactive_courses = Courses::where('user_id', auth()->user()->id)->where('isActive', 0)->count();
+        $count_courses = Course::where('user_id', auth()->user()->id)->where('isActive', 1)->count();
+        $count_inactive_courses = Course::where('user_id', auth()->user()->id)->where('isActive', 0)->count();
 
-        $myCourses = Courses::where('user_id', auth()->user()->id)->get();
+        $myCourses = Course::where('user_id', auth()->user()->id)->get();
         $count_comments = 0;
         foreach ($myCourses as $myCourse) {
             $count_comments = $count_comments + CourseComment::where('course_id', $myCourse->id)->where('dane_read', 0)->count();
@@ -38,7 +38,7 @@ class CoursesTeacherController extends Controller
     public function index()
     {
         $course_categorys = CourseCategory::get();
-        $courses = Courses::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->paginate(3);
+        $courses = Course::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->paginate(3);
 
         return view('teacher.courses.index', compact('course_categorys', 'courses'));
     }
@@ -75,7 +75,7 @@ class CoursesTeacherController extends Controller
         $data['isActive'] = 0;
         $data['course_image'] = $request->course_image->store('upload/courses');
 
-        Courses::createFor($request->user(),$data);
+        Course::createFor($request->user(),$data);
 
         return redirect('/dashboard/courses')->with('success', 'Successfully added');
     }
@@ -99,7 +99,7 @@ class CoursesTeacherController extends Controller
      */
     public function edit($id)
     {
-        $course = Courses::where('user_id', auth()->user()->id)->find($id);
+        $course = Course::where('user_id', auth()->user()->id)->find($id);
         $course_categorys = CourseCategory::get();
         return view('teacher.courses.edit', compact('course', 'course_categorys'));
     }
@@ -127,7 +127,7 @@ class CoursesTeacherController extends Controller
             'what_will_you_learn_description' => 'required',
         ]);
 
-        $course = Courses::where('id', request('id'))->where('user_id', auth()->user()->id)->first();
+        $course = Course::where('id', request('id'))->where('user_id', auth()->user()->id)->first();
 
         if (!empty(request('course_image'))) {
             $course_image_name = time() . '.' . $request->course_image->getClientOriginalExtension();
@@ -140,7 +140,7 @@ class CoursesTeacherController extends Controller
             $course_video_name = $course->course_video;
         }
 
-        $add = Courses::find($course->id);
+        $add = Course::find($course->id);
         $add->course_title = request('course_title');
         $add->teacher_name = request('teacher_name');
         $add->course_start = request('course_start');
@@ -189,7 +189,7 @@ class CoursesTeacherController extends Controller
             ->first();
 
         $course_categorys = CourseCategory::get();
-        $courses = Courses::where('category_id', $courses_category->id)->where('user_id', auth()->user()->id)->paginate(3);
+        $courses = Course::where('category_id', $courses_category->id)->where('user_id', auth()->user()->id)->paginate(3);
 
         return view('teacher.courses.index', compact('course_categorys', 'courses'));
     }
@@ -203,7 +203,7 @@ class CoursesTeacherController extends Controller
     public function destroy($id)
     {
 
-        Courses::where('id', $id)->where('user_id', auth()->user()->id)->delete();
+        Course::where('id', $id)->where('user_id', auth()->user()->id)->delete();
         session()->flash('success', 'Deleted successfully');
         return back();
     }
@@ -225,7 +225,7 @@ class CoursesTeacherController extends Controller
             $user[$i] = User::where('id', $user_id[$i]['user_id'])->first();
         }
 
-        $course = Courses::where('user_id', auth()->user()->id)->first();
+        $course = Course::where('user_id', auth()->user()->id)->first();
 
         $comments = array_map(null, $get_comments->toArray(), $user);
 
@@ -249,7 +249,7 @@ class CoursesTeacherController extends Controller
     {
 
         $course_categorys = CourseCategory::get();
-        $courses = Courses::where('user_id', auth()->user()->id)->get();
+        $courses = Course::where('user_id', auth()->user()->id)->get();
         $courseFiles = CourseFiles::where('user_id', auth()->user()->id)->where('isActive', 1)->get();
 
         return view('teacher.courses.files', compact('course_categorys', 'courses', 'courseFiles'));

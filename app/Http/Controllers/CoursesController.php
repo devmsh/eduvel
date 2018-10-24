@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CourseRequest;
 use App\CourseCategory;
-use App\Courses;
+use App\Course;
 use Illuminate\Support\Facades\View;
 
 class CoursesController extends Controller
@@ -18,7 +18,7 @@ class CoursesController extends Controller
 
     public function index()
     {
-        $courses = Courses::latest()->when(request('category_id'),function($query){
+        $courses = Course::latest()->when(request('category_id'),function($query){
             return $query->where('category_id',request('category_id'));
         })->paginate(3);
 
@@ -44,17 +44,17 @@ class CoursesController extends Controller
 
         $data['course_image'] = $request->course_image->store('upload/courses');
 
-        Courses::createFor($request->user(), $data);
+        Course::createFor($request->user(), $data);
 
         return redirect('/admin/courses')->with('success', 'Successfully added');
     }
 
-    public function edit(Courses $course)
+    public function edit(Course $course)
     {
         return view('admin.courses.edit', compact('course'));
     }
 
-    public function update(Courses $course, CourseRequest $request)
+    public function update(Course $course, CourseRequest $request)
     {
         $data = $request->only([
             'course_title', 'teacher_name', 'course_start',
@@ -73,14 +73,14 @@ class CoursesController extends Controller
         return back()->with('success', 'Successfully added');
     }
 
-    public function approve(Courses $course)
+    public function approve(Course $course)
     {
         $course->approve();
 
         return back()->with('success', 'Approved successfully');
     }
 
-    public function destroy(Courses $course)
+    public function destroy(Course $course)
     {
         $course->delete();
 

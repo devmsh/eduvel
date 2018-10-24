@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Courses;
+use App\Course;
 use App\Coupon;
 
 class CouponController extends Controller
@@ -13,11 +13,11 @@ class CouponController extends Controller
         // return auth()->user()->type_user;
         if (auth()->user()->type_user == 'Admin' || auth()->user()->type_user == 'Editor') {
 
-            $courses = Courses::get();
+            $courses = Course::get();
             $coupons = Coupon::whereNull('deleted_at')->get();
             return view('admin.courses.coupon', compact('courses', 'coupons'));
         } elseif (auth()->user()->type_user == 'Teacher') {
-            $courses = Courses::where('user_id', auth()->user()->id)->get();
+            $courses = Course::where('user_id', auth()->user()->id)->get();
             $coupons = Coupon::where('user_id', auth()->user()->id)->whereNull('deleted_at')->where('isActive', 1)->get();
             return view('teacher.courses.coupon', compact('courses', 'coupons'));
         }
@@ -31,7 +31,7 @@ class CouponController extends Controller
             'coupon_code_discount_price' => 'required',
         ]);
 
-        $course = Courses::where('id', request('course_id'))->first();
+        $course = Course::where('id', request('course_id'))->first();
 
         if ($course->user_id == auth()->user()->id) {
 

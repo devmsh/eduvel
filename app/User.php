@@ -9,7 +9,7 @@ class User extends Authenticatable
 {
     public function courses()
     {
-        return $this->hasMany(Courses::Class);
+        return $this->hasMany(Course::Class);
     }
 
     public function courses_likes()

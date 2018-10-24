@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Courses extends Model
+class Course extends Model
 {
     protected $attributes = [
         'isActive' => 0
@@ -55,12 +55,7 @@ class Courses extends Model
 
     public function courses_file()
     {
-        return $this->hasOne(CoursesFiles::Class, 'course_id');
-    }
-
-    public function courses_files()
-    {
-        return $this->hasMany(CoursesFiles::Class, 'course_id');
+        return $this->hasOne(CoursesFiles::Class);
     }
 
     public function course_comments()

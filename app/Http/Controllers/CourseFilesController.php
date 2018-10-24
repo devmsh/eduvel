@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\CourseCategory;
-use App\Courses;
+use App\Course;
 use App\CourseFiles;
 use App\User;
 use App\Helpers\EducationAlzardHelpers;
@@ -15,7 +15,7 @@ class CourseFilesController extends Controller
     {
 
         $course_categorys = CourseCategory::get();
-        $courses = Courses::get();
+        $courses = Course::get();
         $courseFiles = CourseFiles::where('isActive', 1)->get();
 
         return view('teacher.courses.files', compact('course_categorys', 'courses', 'courseFiles'));

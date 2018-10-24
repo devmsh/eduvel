@@ -8,7 +8,7 @@ $factory->define(App\CoursesFiles::class, function (Faker $faker) {
         'video_category' => [],
         'video_url' => [],
         'course_id' => function(){
-            return factory(\App\Courses::class)->create()->id;
+            return factory(\App\Course::class)->create()->id;
         }
     ];
 });

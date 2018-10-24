@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\CourseCategory;
-use App\Courses;
+use App\Course;
 use App\CoursesFiles;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -64,7 +64,7 @@ class ManageCourseTest extends TestCase
 
         $response = $this->post('admin/courses', $this->validCourse($category));
 
-        $course = Courses::latest()->first();
+        $course = Course::latest()->first();
 
         $response->assertRedirect('admin/courses');
         $response->assertSessionHas('success');
@@ -95,7 +95,7 @@ class ManageCourseTest extends TestCase
 
         $response = $this->post('admin/courses', $this->validCourse($category));
 
-        $course = Courses::latest()->first();
+        $course = Course::latest()->first();
 
         $response->assertRedirect('admin/courses');
         $response->assertSessionHas('success');
@@ -126,7 +126,7 @@ class ManageCourseTest extends TestCase
 
         $response = $this->post('dashboard/courses', $this->validCourse($category));
 
-        $course = Courses::latest()->first();
+        $course = Course::latest()->first();
 
         $response->assertRedirect('dashboard/courses');
         $response->assertSessionHas('success');
@@ -157,7 +157,7 @@ class ManageCourseTest extends TestCase
 
         $response = $this->post('admin/courses', $this->validCourse($category, true));
 
-        $course = Courses::latest()->first();
+        $course = Course::latest()->first();
 
         $response->assertRedirect('admin/courses');
         $response->assertSessionHas('success');
@@ -182,7 +182,7 @@ class ManageCourseTest extends TestCase
 
         $response = $this->put('admin/courses/1', $this->validCourse($category, true));
 
-        $course = Courses::latest()->first();
+        $course = Course::latest()->first();
 
         $response->assertRedirect();
         $response->assertSessionHas('success');
@@ -213,7 +213,7 @@ class ManageCourseTest extends TestCase
 
     public function test_admin_can_approve_course()
     {
-        $course = factory(Courses::class)->create();
+        $course = factory(Course::class)->create();
         $this->actingAs($this->createAdmin());
 
         $this->assertFalse($course->isActive);
@@ -228,7 +228,7 @@ class ManageCourseTest extends TestCase
 
     public function test_admin_can_delete_course()
     {
-        $course = factory(Courses::class)->create();
+        $course = factory(Course::class)->create();
         $this->actingAs($this->createAdmin());
 
         $response = $this->delete("admin/courses/{$course->id}");
@@ -275,7 +275,7 @@ class ManageCourseTest extends TestCase
 
     public function test_can_view_list_of_courses()
     {
-        factory(Courses::class, 10)->create();
+        factory(Course::class, 10)->create();
 
         $this->actingAs($this->createAdmin());
 
@@ -295,7 +295,7 @@ class ManageCourseTest extends TestCase
     {
         $cats = factory(CourseCategory::class, 3)->create();
         foreach ($cats as $cat) {
-            factory(Courses::class, 2)->create([
+            factory(Course::class, 2)->create([
                 'category_id' => $cat->id
             ]);
         }
