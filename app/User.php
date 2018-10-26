@@ -7,6 +7,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    public function courses()
+    {
+        return $this->hasMany(Course::Class);
+    }
+
     public function courses_likes()
     {
         return $this->hasMany(User::Class);

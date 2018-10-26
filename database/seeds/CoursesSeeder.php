@@ -12,7 +12,7 @@ class CoursesSeeder extends Seeder
     public function run()
     {
         // factory(\App\Courses::class, 6)->create();
-        App\Courses::create([
+        App\Course::create([
 
             'user_id' => '2',
             'course_title' => 'Persius delenit has cu',
@@ -34,7 +34,7 @@ class CoursesSeeder extends Seeder
             'what_will_you_learn_description' => '["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]'
         ]);
 
-        App\Courses::create([
+        App\Course::create([
 
             'user_id' => '2',
             'course_title' => 'At deseruisse scriptorem',
@@ -56,7 +56,7 @@ class CoursesSeeder extends Seeder
             'what_will_you_learn_description' => '["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]'
         ]);
 
-        App\Courses::create([
+        App\Course::create([
 
             'user_id' => '2',
             'course_title' => 'Ea vel semper quaerendum',
@@ -78,7 +78,7 @@ class CoursesSeeder extends Seeder
             'what_will_you_learn_description' => '["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]'
         ]);
 
-        App\Courses::create([
+        App\Course::create([
 
             'user_id' => '2',
             'course_title' => 'Ei has exerci graecis',
@@ -100,7 +100,7 @@ class CoursesSeeder extends Seeder
             'what_will_you_learn_description' => '["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]'
         ]);
 
-        App\Courses::create([
+        App\Course::create([
 
             'user_id' => '2',
             'course_title' => 'Decore tractatos',
@@ -122,7 +122,7 @@ class CoursesSeeder extends Seeder
             'what_will_you_learn_description' => '["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]'
         ]);
 
-        App\Courses::create([
+        App\Course::create([
 
             'user_id' => '2',
             'course_title' => 'Eam id legimus torquatos',

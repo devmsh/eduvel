@@ -1,30 +1,6 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-Route::pattern('id', '[0-9]+');
-// Route::pattern('courses_category', '[a-z]+, [A-Z]+');
-
-/*Route::get('/', function () {
-    return view('welcome');
-});*/
-
-// Route::get('/get-message', 'DashboardController@get_message');
-// Route::get('/get-message/{id}', 'DashboardController@get_message_id');
-
 Route::get('/', 'IndexController@index');
-
-// Route::get('admission', 'AdmissionController@admission');
-// Route::post('admission', 'AdmissionController@admission_post');
 
 // contacts
 Route::get('contacts', 'IndexController@contacts');
@@ -91,16 +67,9 @@ Route::group(['middleware' => ['roles'], 'roles' => ['teacher', 'Teacher']], fun
 
     Route::group(['prefix' => 'dashboard'], function () {
 
-        Route::get('/', 'CoursesTeacherController@dashboard');
-        // For Add Courses
-        Route::get('courses', 'CoursesTeacherController@index');
-        Route::get('add-courses', 'CoursesTeacherController@create');
-        Route::post('courses/store', 'CoursesTeacherController@store');
-        Route::get('course/{id}/edit', 'CoursesTeacherController@edit');
-        Route::post('course/update', 'CoursesTeacherController@update');
-        Route::get('course/{id}/delete', 'CoursesTeacherController@destroy');
-        Route::get('category/{courses_category}', 'CoursesTeacherController@searsh_category');
+        Route::resource('courses', 'CoursesTeacherController');
 
+        Route::get('/', 'CoursesTeacherController@dashboard');
         Route::get('all-comments', 'CoursesTeacherController@all_comments');
         Route::get('comment/{id}/dane-read', 'CoursesTeacherController@dane_read_comment');
 
@@ -113,9 +82,7 @@ Route::group(['middleware' => ['roles'], 'roles' => ['teacher', 'Teacher']], fun
         Route::get('/files', 'CoursesTeacherController@add_course_files');
         Route::post('/files', 'CoursesTeacherController@store_course_files');
         Route::get('/files/{id}/delete', 'CoursesTeacherController@file_delete');
-
     });
-
 });
 
 Route::group(['middleware' => ['roles'], 'roles' => ['Admin', 'Editor', 'Teacher', 'Student']], function () {

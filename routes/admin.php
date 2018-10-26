@@ -1,9 +1,6 @@
 <?php
 
 // For In order to determine the input through the router
-Route::pattern('id', '[0-9]+');
-Route::pattern('category', '[0-9]+');
-Route::pattern('post', '[0-9]+');
 
 Route::group(['middleware' => 'guest'], function () {
 
@@ -28,7 +25,7 @@ Route::post('reset/password/{token}', 'AdminAuth@reset_password_post');
 
 Route::group(['prefix' => 'admin'], function () {
 
-    Route::group(['middleware' => ['roles'], 'roles' => ['admin', 'Editor']], function () {
+    Route::group(['middleware' => ['roles'], 'roles' => ['Admin', 'Editor']], function () {
 
 
         Route::get('/', 'DashboardController@index');
@@ -160,15 +157,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/newsletter', 'NewsletterController@index');
         Route::get('/newsletter/{id}/destroy', 'NewsletterController@destroy');
 
-        // For Add Courses
-        Route::get('courses', 'CoursesController@index');
-        Route::get('add-courses', 'CoursesController@create');
-        Route::post('courses/store', 'CoursesController@store');
-        Route::get('course/{id}/edit', 'CoursesController@edit');
-        Route::post('course/update', 'CoursesController@update');
-        Route::get('course/{id}/delete', 'CoursesController@destroy');
-        Route::get('course/{id}/approve', 'CoursesController@approve');
-        Route::get('category/{courses_category}', 'CoursesController@searsh_category');
-
+        Route::resource('courses', 'CoursesController');
+        Route::put('courses/{course}/approve', 'CoursesController@approve');
     });
 });

@@ -14,7 +14,7 @@ use App\BlogComment;
 use App\Faq;
 use App\MediaGallery;
 use App\CourseCategory;
-use App\Courses;
+use App\Course;
 use App\Newsletter;
 use App\CourseComment;
 use App\User;
@@ -45,7 +45,7 @@ class CartController extends Controller
         $categories = Category::get();
         $posts = Post::orderBy('id', 'desc')->paginate(4);
         $course_categorys = CourseCategory::get();
-        $courses = Courses::orderBy('id', 'desc')->where('isActive', 1)->paginate(6);
+        $courses = Course::orderBy('id', 'desc')->where('isActive', 1)->paginate(6);
 
         if (!Session::has('cart')) {
 
@@ -64,7 +64,7 @@ class CartController extends Controller
     public function getAddToCart(Request $request, $id)
     {
 
-        $product = Courses::find($id);
+        $product = Course::find($id);
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
         $cart = new Cart($oldCart);
         $cart->add($product, $product->id);
@@ -108,7 +108,7 @@ class CartController extends Controller
         $categories = Category::get();
         $posts = Post::orderBy('id', 'desc')->paginate(4);
         $course_categorys = CourseCategory::get();
-        $courses = Courses::orderBy('id', 'desc')->where('isActive', 1)->paginate(6);
+        $courses = Course::orderBy('id', 'desc')->where('isActive', 1)->paginate(6);
 
         if (!Session::has('cart')) {
 
@@ -214,7 +214,7 @@ class CartController extends Controller
         if (empty($coupon)) {
             return back();
         } else {
-            $product = Courses::find($coupon->course_id);
+            $product = Course::find($coupon->course_id);
             // return $course->course_price;
         }
 
