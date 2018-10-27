@@ -9,6 +9,11 @@ class Coupon extends Model
 {
     use SoftDeletes;
 
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+
     public function scopeActivated($query)
     {
         return $query->where('isActive', 1);
