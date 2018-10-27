@@ -12,11 +12,11 @@ class CouponController extends Controller
     {
         if (auth()->user()->hasAnyRole(['Admin','Editor'])) {
             $courses = Course::get();
-            $coupons = Coupon::whereNull('deleted_at')->get();
+            $coupons = Coupon::get();
             return view('admin.courses.coupon', compact('courses', 'coupons'));
         } elseif (auth()->user()->hasRole('Teacher')) {
             $courses = Course::where('user_id', auth()->user()->id)->get();
-            $coupons = Coupon::where('user_id', auth()->user()->id)->whereNull('deleted_at')->where('isActive', 1)->get();
+            $coupons = Coupon::where('user_id', auth()->user()->id)->where('isActive', 1)->get();
             return view('teacher.courses.coupon', compact('courses', 'coupons'));
         }
     }

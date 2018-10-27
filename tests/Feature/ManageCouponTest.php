@@ -40,10 +40,12 @@ class ManageCouponTest extends TestCase
     {
         $teacher = $this->createTeacher();
 
-        factory(Coupon::class, 5)->create([
+        $courses = factory(Coupon::class, 5)->create([
             'user_id' => $teacher->id,
             'isActive' => 1
         ]);
+
+        $courses->first()->delete();
 
         factory(Coupon::class, 5)->create([
             'user_id' => $teacher->id,
@@ -61,7 +63,7 @@ class ManageCouponTest extends TestCase
         $response->assertSuccessful();
 
         $response->assertViewHas('coupons', function ($coupons) {
-            $this->assertCount(5, $coupons);
+            $this->assertCount(4, $coupons);
             return true;
         });
     }
