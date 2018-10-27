@@ -131,4 +131,34 @@ class ManageCouponTest extends TestCase
 
         $this->assertNotNull($coupon->fresh()->deleted_at);
     }
+
+    public function test_teacher_can_delete_owned_coupon()
+    {
+        $teacher = $this->createTeacher();
+
+        $coupon = factory(Coupon::class)->create([
+            'user_id' => $teacher->id
+        ]);
+
+        $this->actingAs($teacher);
+
+        $response = $this->delete('dashboard/coupons/' . $coupon->coupon_code);
+
+        $response->assertRedirect();
+
+        $this->assertNotNull($coupon->fresh()->deleted_at);
+    }
+
+    public function test_teacher_cannot_delete_other_coupon()
+    {
+        $coupon = factory(Coupon::class)->create();
+
+        $this->actingAs($this->createTeacher());
+
+        $response = $this->delete('dashboard/coupons/' . $coupon->coupon_code);
+
+        $response->assertStatus(403);
+
+        $this->assertNull($coupon->fresh()->deleted_at);
+    }
 }
