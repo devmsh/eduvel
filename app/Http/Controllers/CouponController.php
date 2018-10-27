@@ -34,19 +34,7 @@ class CouponController extends Controller
 
     public function store(CouponRequest $request)
     {
-        if (auth()->user()->hasAnyRole(['Admin', 'Editor'])) {
-            Coupon::create($this->validInputs($request, [
-                'admin_id' => auth()->user()->id,
-                'user_id' => auth()->user()->id,
-                'coupon_code' => str_random(8),
-                'isActive' => 1,
-            ]));
-        } else {
-            Coupon::create($this->validInputs($request, [
-                'user_id' => auth()->user()->id,
-                'coupon_code' => str_random(8),
-            ]));
-        }
+        Coupon::create($request->validated());
 
         return back()->with('success', 'Your request has been successfully sent please wait for activation');
     }

@@ -11,6 +11,10 @@ class Coupon extends Model
 
     protected $guarded = [];
 
+    protected $attributes = [
+        'isActive' => 0
+    ];
+
     public function course()
     {
         return $this->belongsTo(Course::class);
