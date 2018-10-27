@@ -111,8 +111,6 @@ class ManageCourseTest extends TestCase
 
     public function test_teacher_can_edit_course()
     {
-        $this->withoutExceptionHandling();
-
         $course = factory(CoursesFiles::class)->create()->course;
         $category = $course->category;
 
@@ -198,8 +196,6 @@ class ManageCourseTest extends TestCase
 
     public function test_can_view_list_of_courses()
     {
-        $this->withoutExceptionHandling();
-
         factory(Course::class, 10)->create();
 
         $this->actingAs($this->createTeacher());

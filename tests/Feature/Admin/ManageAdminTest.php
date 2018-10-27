@@ -111,8 +111,6 @@ class ManageAdminTest extends TestCase
 
     public function test_can_view_list_of_admins()
     {
-        $this->withoutExceptionHandling();
-
         factory(User::class, 50)->create();
 
         $this->actingAs($this->createAdmin());
