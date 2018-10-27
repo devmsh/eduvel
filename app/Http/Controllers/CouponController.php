@@ -10,9 +10,7 @@ class CouponController extends Controller
 {
     public function index()
     {
-        // return auth()->user()->type_user;
         if (auth()->user()->type_user == 'Admin' || auth()->user()->type_user == 'Editor') {
-
             $courses = Course::get();
             $coupons = Coupon::whereNull('deleted_at')->get();
             return view('admin.courses.coupon', compact('courses', 'coupons'));
@@ -64,16 +62,6 @@ class CouponController extends Controller
         return back();
     }
 
-    public function approve($id)
-    {
-
-        $coupon = Coupon::find($id);
-        $coupon->isActive = 1;
-        $coupon->save();
-        session()->flash('success', 'Successfully Approved');
-        return back();
-    }
-
     public function delete($coupon_code)
     {
         if (auth()->user()->type_user == 'Admin' || auth()->user()->type_user == 'Editor') {
@@ -91,6 +79,15 @@ class CouponController extends Controller
 
         session()->flash('success', 'Successfully Deleted');
         // $coupon->delete();
+        return back();
+    }
+
+    public function approve($id)
+    {
+        $coupon = Coupon::find($id);
+        $coupon->isActive = 1;
+        $coupon->save();
+        session()->flash('success', 'Successfully Approved');
         return back();
     }
 }

@@ -73,9 +73,10 @@ Route::group(['middleware' => ['roles'], 'roles' => ['teacher', 'Teacher']], fun
         Route::get('all-comments', 'CoursesTeacherController@all_comments');
         Route::get('comment/{id}/dane-read', 'CoursesTeacherController@dane_read_comment');
 
-        Route::any('/coupon', 'CouponController@index');
-        Route::post('/add-coupon', 'CouponController@create');
-        Route::get('/{coupon_code}/delete', 'CouponController@delete');
+        Route::resource('/coupons', 'CouponController');
+//        Route::any('/coupon', 'CouponController@index');
+//        Route::post('/add-coupon', 'CouponController@create');
+//        Route::get('/{coupon_code}/delete', 'CouponController@delete');
 
         Route::get('/my-courses', 'ProfileTeacherController@my_courses');
 

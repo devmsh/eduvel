@@ -139,10 +139,11 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/courses-categories/{id}/destroy', 'CourseCategoryController@destroy');
 
         // For Coupon Courses
-        Route::any('/coupon', 'CouponController@index');
-        Route::post('/add-coupon', 'CouponController@create');
-        Route::get('/coupon/{id}/approve', 'CouponController@approve');
-        Route::get('/coupon/{id}/delete', 'CouponController@delete');
+        Route::resource('/coupons', 'CouponController');
+        Route::get('/coupon/{coupon}/approve', 'CouponController@approve');
+//        Route::any('/coupon', 'CouponController@index');
+//        Route::post('/add-coupon', 'CouponController@create');
+//        Route::get('/coupon/{id}/delete', 'CouponController@delete');
 
         // For Course Files
         Route::get('/files', 'CourseFilesController@add_course_files');
