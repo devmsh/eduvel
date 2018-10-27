@@ -8,17 +8,20 @@ use App\Coupon;
 
 class CouponController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        if (auth()->user()->hasAnyRole(['Admin','Editor'])) {
-            $courses = Course::get();
-            $coupons = Coupon::get();
-            return view('admin.courses.coupon', compact('courses', 'coupons'));
-        } elseif (auth()->user()->hasRole('Teacher')) {
-            $courses = Course::ownedBy(auth()->user())->get();
-            $coupons = Coupon::ownedBy(auth()->user())->activated()->get();
-            return view('teacher.courses.coupon', compact('courses', 'coupons'));
-        }
+        $user = $request->user();
+
+        $courses = Course::when($user->hasRole('Teacher'), function ($query) {
+            $query->ownedBy(auth()->user());
+        })->get();
+
+        $coupons = Coupon::when($user->hasRole('Teacher'), function ($query) {
+            $query->activated()->ownedBy(auth()->user());
+        })->get();
+
+        $view = $user->hasRole('Teacher') ? 'teacher.courses.coupon' : 'admin.courses.coupon';
+        return view($view, compact('courses', 'coupons'));
     }
 
     public function create(Request $request)
