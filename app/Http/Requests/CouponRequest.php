@@ -15,7 +15,7 @@ class CouponRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user()->can('create',Coupon::class);
+        return true;
     }
 
     /**
