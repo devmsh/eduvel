@@ -10,15 +10,20 @@ class CouponPolicy
 {
     use HandlesAuthorization;
 
+    public function before($user, $ability)
+    {
+        if ($user->hasAnyRole(['Admin', 'Editor'])) {
+            return true;
+        }
+    }
+
     public function create(User $user)
     {
-        return $user->hasAnyRole(['Admin','Editor'])
-            || $user->courses()->where('id',request('course_id'))->exists();
+        return $user->courses()->where('id', request('course_id'))->exists();
     }
 
     public function delete(User $user, Coupon $coupon)
     {
-        return $user->hasAnyRole(['Admin', 'Editor'])
-            || $coupon->user_id == $user->id;
+        return $coupon->user_id == $user->id;
     }
 }
