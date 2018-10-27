@@ -94,8 +94,6 @@ class ManageCouponTest extends TestCase
 
     public function test_teacher_can_add_coupon()
     {
-        $this->withoutExceptionHandling();
-
         $teacher = $this->createTeacher();
 
         $course = factory(Course::class)->create([
@@ -119,5 +117,20 @@ class ManageCouponTest extends TestCase
         $this->assertEquals(10, $coupon->coupon_code_discount_price);
         $this->assertEquals($teacher->id, $coupon->user_id);
         $this->assertNull($coupon->admin_id);
+    }
+
+    public function test_admin_can_delete_coupon()
+    {
+        $this->withoutExceptionHandling();
+
+        $coupon = factory(Coupon::class)->create();
+
+        $this->actingAs($this->createAdmin());
+
+        $response = $this->delete('admin/coupons/' . $coupon->id);
+
+        $response->assertRedirect();
+
+        $this->assertNull($coupon->fresh());
     }
 }

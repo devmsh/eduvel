@@ -45,7 +45,7 @@ class CouponController extends Controller
         return back()->with('success', 'Your request has been successfully sent please wait for activation');
     }
 
-    public function delete($coupon_code)
+    public function destroy($coupon_code)
     {
         if (auth()->user()->type_user == 'Admin' || auth()->user()->type_user == 'Editor') {
             $coupon = Coupon::where('coupon_code', $coupon_code)->first();
