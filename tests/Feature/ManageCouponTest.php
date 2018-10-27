@@ -121,16 +121,14 @@ class ManageCouponTest extends TestCase
 
     public function test_admin_can_delete_coupon()
     {
-        $this->withoutExceptionHandling();
-
         $coupon = factory(Coupon::class)->create();
 
         $this->actingAs($this->createAdmin());
 
-        $response = $this->delete('admin/coupons/' . $coupon->id);
+        $response = $this->delete('admin/coupons/' . $coupon->coupon_code);
 
         $response->assertRedirect();
 
-        $this->assertNull($coupon->fresh());
+        $this->assertNotNull($coupon->fresh()->deleted_at);
     }
 }

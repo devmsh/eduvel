@@ -45,24 +45,11 @@ class CouponController extends Controller
         return back()->with('success', 'Your request has been successfully sent please wait for activation');
     }
 
-    public function destroy($coupon_code)
+    public function destroy(Coupon $coupon)
     {
-        if (auth()->user()->type_user == 'Admin' || auth()->user()->type_user == 'Editor') {
-            $coupon = Coupon::where('coupon_code', $coupon_code)->first();
-            $coupon = Coupon::find($coupon->id);
-            $coupon->deleted_at = date('Y-m-d');
-            $coupon->save();
-        } elseif (auth()->user()->type_user == 'Teacher') {
+        $coupon->delete();
 
-            $coupon = Coupon::where('coupon_code', $coupon_code)->where('user_id', auth()->user()->id)->first();
-            $coupon = Coupon::find($coupon->id);
-            $coupon->deleted_at = date('Y-m-d');
-            $coupon->save();
-        }
-
-        session()->flash('success', 'Successfully Deleted');
-        // $coupon->delete();
-        return back();
+        return back()->with('success', 'Successfully Deleted');
     }
 
     public function approve($id)
