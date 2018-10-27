@@ -8,8 +8,7 @@ class DeleteCouponRequest extends FormRequest
 {
     public function authorize()
     {
-        return auth()->user()->hasAnyRole(['Admin','Editor'])
-            || request()->coupon->user_id == auth()->id();
+        return auth()->user()->can('delete',$this->coupon);
     }
 
     public function rules()
