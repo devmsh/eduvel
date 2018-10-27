@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CouponRequest;
 use Illuminate\Http\Request;
 use App\Course;
 use App\Coupon;
@@ -25,45 +26,25 @@ class CouponController extends Controller
         return view($view, compact('courses', 'coupons'));
     }
 
-    public function create(Request $request)
+    public function create(CouponRequest $request)
     {
-
-        $request->validate([
-            'course_id' => 'required',
-            'coupon_code_discount_price' => 'required',
-        ]);
-
-        $course = Course::where('id', request('course_id'))->first();
+        $course = Course::find($request->course_id);
 
         if ($course->user_id == auth()->user()->id) {
-
-            $coupon = new Coupon();
-            $coupon->user_id = auth()->user()->id;
-            $coupon->course_id = request('course_id');
-            $coupon->coupon_code = str_random(8);
-            $coupon->coupon_code_discount_price = request('coupon_code_discount_price');
-            $coupon->start_date = request('start_date');
-            $coupon->end_date = request('end_date');
-            $coupon->number_of_students = request('number_of_students');
-            $coupon->save();
-
-        } elseif (auth()->user()->type_user = 'Admin' || auth()->user()->type_user = 'Editor') {
-
-            $coupon = new Coupon();
-            $coupon->admin_id = auth()->user()->id;
-            $coupon->user_id = auth()->user()->id;
-            $coupon->course_id = request('course_id');
-            $coupon->coupon_code = str_random(8);
-            $coupon->coupon_code_discount_price = request('coupon_code_discount_price');
-            $coupon->start_date = request('start_date');
-            $coupon->end_date = request('end_date');
-            $coupon->number_of_students = request('number_of_students');
-            $coupon->isActive = 1;
-            $coupon->save();
+            Coupon::create($this->validInputs($request, [
+                'user_id' => auth()->user()->id,
+                'coupon_code' => str_random(8),
+            ]));
+        } elseif (auth()->user()->hasAnyRoles(['Admin', 'Editor'])) {
+            Coupon::create($this->validInputs($request, [
+                'admin_id' => auth()->user()->id,
+                'user_id' => auth()->user()->id,
+                'coupon_code' => str_random(8),
+                'isActive' => 1,
+            ]));
         }
 
-        session()->flash('success', 'Your request has been successfully sent please wait for activation');
-        return back();
+        return back()->with('success', 'Your request has been successfully sent please wait for activation');
     }
 
     public function delete($coupon_code)
