@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CouponRequest;
-use App\Http\Requests\DeleteCouponRequest;
 use Illuminate\Http\Request;
 use App\Course;
 use App\Coupon;
 
 class CouponController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(Coupon::class);
+    }
+
     public function index(Request $request)
     {
         $user = $request->user();
@@ -46,7 +51,7 @@ class CouponController extends Controller
         return back()->with('success', 'Your request has been successfully sent please wait for activation');
     }
 
-    public function destroy(DeleteCouponRequest $request, Coupon $coupon)
+    public function destroy(Coupon $coupon)
     {
         $coupon->delete();
 
