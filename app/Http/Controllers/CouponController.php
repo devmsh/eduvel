@@ -26,21 +26,19 @@ class CouponController extends Controller
         return view($view, compact('courses', 'coupons'));
     }
 
-    public function create(CouponRequest $request)
+    public function store(CouponRequest $request)
     {
-        $course = Course::find($request->course_id);
-
-        if ($course->user_id == auth()->user()->id) {
-            Coupon::create($this->validInputs($request, [
-                'user_id' => auth()->user()->id,
-                'coupon_code' => str_random(8),
-            ]));
-        } elseif (auth()->user()->hasAnyRoles(['Admin', 'Editor'])) {
+        if (auth()->user()->hasAnyRole(['Admin', 'Editor'])) {
             Coupon::create($this->validInputs($request, [
                 'admin_id' => auth()->user()->id,
                 'user_id' => auth()->user()->id,
                 'coupon_code' => str_random(8),
                 'isActive' => 1,
+            ]));
+        } else {
+            Coupon::create($this->validInputs($request, [
+                'user_id' => auth()->user()->id,
+                'coupon_code' => str_random(8),
             ]));
         }
 

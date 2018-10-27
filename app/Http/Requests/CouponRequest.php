@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Course;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CouponRequest extends FormRequest
@@ -13,7 +14,8 @@ class CouponRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return auth()->user()->hasAnyRole(['Admin','Editor'])
+            || auth()->user()->courses()->where('id',$this->course_id)->exists();
     }
 
     /**
