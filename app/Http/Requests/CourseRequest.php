@@ -38,6 +38,13 @@ class CourseRequest extends FormRequest
             'video_title' => 'required',
             'video_category' => 'required',
             'video_url' => 'required',
+
+            'isActive' => [],
+            'course_expire' => [],
+            'course_discount_price' => [],
+            'coupon_code' => [],
+            'coupon_code_discount_price' => [],
+            'whats_includes' => [],
         ];
     }
 }

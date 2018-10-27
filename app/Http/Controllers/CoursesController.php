@@ -32,19 +32,9 @@ class CoursesController extends Controller
 
     public function store(CourseRequest $request)
     {
-        $data = $request->only([
-            'course_title', 'teacher_name', 'course_start',
-            'course_expire', 'course_price', 'course_discount_price',
-            'course_image', 'course_video', 'course_description',
-            'category_id', 'coupon_code', 'coupon_code_discount_price',
-            'whats_includes', 'isActive', 'course_time',
-            'what_will_you_learn_title', 'what_will_you_learn_description',
-            'video_title', 'video_category', 'video_url',
-        ]);
-
-        $data['course_image'] = $request->course_image->store('upload/courses');
-
-        Course::createFor($request->user(), $data);
+        Course::createFor($request->user(), $this->validInputs($request,[
+            'course_image' => $request->course_image->store('upload/courses')
+        ]));
 
         return redirect('/admin/courses')->with('success', 'Successfully added');
     }
@@ -56,19 +46,9 @@ class CoursesController extends Controller
 
     public function update(Course $course, CourseRequest $request)
     {
-        $data = $request->only([
-            'course_title', 'teacher_name', 'course_start',
-            'course_expire', 'course_price', 'course_discount_price',
-            'course_image', 'course_video', 'course_description',
-            'category_id', 'coupon_code', 'coupon_code_discount_price',
-            'whats_includes', 'isActive', 'course_time',
-            'what_will_you_learn_title', 'what_will_you_learn_description',
-            'video_title', 'video_category', 'video_url',
-        ]);
-
-        $data['course_image'] = $request->course_image->store('upload/courses');
-
-        $course->updateFor($request->user(), $data);
+        $course->updateFor($request->user(), $this->validInputs($request,[
+            'course_image' => $request->course_image->store('upload/courses')
+        ]));
 
         return back()->with('success', 'Successfully added');
     }
