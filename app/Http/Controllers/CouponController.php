@@ -53,12 +53,10 @@ class CouponController extends Controller
         return back()->with('success', 'Successfully Deleted');
     }
 
-    public function approve($id)
+    public function approve(Coupon $coupon)
     {
-        $coupon = Coupon::find($id);
-        $coupon->isActive = 1;
-        $coupon->save();
-        session()->flash('success', 'Successfully Approved');
-        return back();
+        $coupon->approve();
+
+        return back()->with('success', 'Successfully Approved');
     }
 }

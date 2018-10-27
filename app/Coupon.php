@@ -30,4 +30,9 @@ class Coupon extends Model
     {
         return 'coupon_code';
     }
+
+    public function approve()
+    {
+        return $this->update(['isActive' => true]);
+    }
 }
