@@ -38,6 +38,8 @@ class ManageCouponTest extends TestCase
 
     public function test_teacher_can_view_own_active_coupons()
     {
+        $this->withoutExceptionHandling();
+
         $teacher = $this->createTeacher();
 
         $courses = factory(Coupon::class, 5)->create([

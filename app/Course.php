@@ -73,4 +73,9 @@ class Course extends Model
         return $this->update(['isActive' => true]);
     }
 
+    public function scopeOwnedBy($query,User $user)
+    {
+        return $query->where('user_id', $user->id);
+    }
+
 }

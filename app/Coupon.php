@@ -13,4 +13,9 @@ class Coupon extends Model
     {
         return $query->where('isActive', 1);
     }
+
+    public function scopeOwnedBy($query,User $user)
+    {
+        return $query->where('user_id', $user->id);
+    }
 }

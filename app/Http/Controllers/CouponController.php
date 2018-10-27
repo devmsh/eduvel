@@ -15,8 +15,8 @@ class CouponController extends Controller
             $coupons = Coupon::get();
             return view('admin.courses.coupon', compact('courses', 'coupons'));
         } elseif (auth()->user()->hasRole('Teacher')) {
-            $courses = Course::where('user_id', auth()->user()->id)->get();
-            $coupons = Coupon::where('user_id', auth()->user()->id)->activated()->get();
+            $courses = Course::ownedBy(auth()->user())->get();
+            $coupons = Coupon::ownedBy(auth()->user())->activated()->get();
             return view('teacher.courses.coupon', compact('courses', 'coupons'));
         }
     }
