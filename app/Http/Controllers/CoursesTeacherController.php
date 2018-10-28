@@ -68,18 +68,7 @@ class CoursesTeacherController extends Controller
         return back()->with('success', 'Deleted successfully');
     }
 
-    public function dane_read_comment($id)
-    {
 
-        $update = CourseComment::find($id);
-        $update->dane_read = 1;
-        $update->save();
-
-        // session()->flash('success', 'Successfully Dane Read');
-
-        return back();
-
-    }
 
     public function add_course_files()
     {

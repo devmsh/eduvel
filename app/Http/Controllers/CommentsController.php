@@ -81,4 +81,11 @@ class CommentsController extends Controller
     {
         //
     }
+
+    public function read(CourseComment $comment)
+    {
+        $comment->read();
+
+        return back()->with('success', 'Successfully Dane Read');
+    }
 }

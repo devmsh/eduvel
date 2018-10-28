@@ -68,11 +68,11 @@ Route::group(['middleware' => ['roles'], 'roles' => ['teacher', 'Teacher']], fun
     Route::group(['prefix' => 'dashboard'], function () {
 
         Route::resource('courses', 'CoursesTeacherController');
+
         Route::resource('comments', 'CommentsController');
+        Route::post('comments/{comment}/read', 'CommentsController@read');
 
         Route::get('/', 'CoursesTeacherController@dashboard');
-        Route::get('all-comments', 'CoursesTeacherController@all_comments');
-        Route::get('comment/{id}/dane-read', 'CoursesTeacherController@dane_read_comment');
 
         Route::resource('/coupons', 'CouponController');
 //        Route::any('/coupon', 'CouponController@index');
