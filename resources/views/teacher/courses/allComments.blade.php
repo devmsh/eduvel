@@ -22,8 +22,7 @@
                     <li>
                         <span>{{ \Carbon\Carbon::parse($comment[0]['created_at'])->diffForHumans() }}</span>
                         <figure><img src="{{ asset('/uplaod/user/'.$comment[1]['image']) }}" alt=""></figure>
-                        <?php $course = DB::table('courses')->where('id', $comment[0]["course_id"])->first(); ?>
-                        <h4>{{ $comment[1]['name'] }} <i class="approved"> {{ $course->course_title }}</i></h4>
+                        <h4>{{ $comment[1]['name'] }} <i class="approved"> {{ $comment->course->course_title }}</i></h4>
 
                         <div class="rating">
                             <style>

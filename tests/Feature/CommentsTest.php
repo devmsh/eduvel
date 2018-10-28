@@ -14,6 +14,8 @@ class CommentsTest extends TestCase
 
     public function test_can_get_comments()
     {
+        $this->withoutExceptionHandling();
+
         factory(CourseComment::class, 10)->create();
 
         $this->actingAs($this->createTeacher());

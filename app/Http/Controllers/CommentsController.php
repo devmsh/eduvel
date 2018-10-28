@@ -11,23 +11,7 @@ class CommentsController extends Controller
 {
     public function index()
     {
-        $get_comments = CourseComment::/*where('course_id', 2)->*/
-        get();
-        // return $get_comments;
-
-        $user_id = CourseComment::select('user_id')->/*where('course_id', 2)->*/
-        get()->toarray();
-        $user = [];
-        $length_users = count($user_id);
-        // return $user_id;
-        for ($i = 0; $i < $length_users; $i++) {
-
-            $user[$i] = User::where('id', $user_id[$i]['user_id'])->first();
-        }
-
-        $course = Course::where('user_id', auth()->user()->id)->first();
-
-        $comments = array_map(null, $get_comments->toArray(), $user);
+        $comments = CourseComment::with('user','course')->get();
 
         return view('teacher.courses.allComments', compact('comments'));
     }
