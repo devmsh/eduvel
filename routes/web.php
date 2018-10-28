@@ -68,6 +68,7 @@ Route::group(['middleware' => ['roles'], 'roles' => ['teacher', 'Teacher']], fun
     Route::group(['prefix' => 'dashboard'], function () {
 
         Route::resource('courses', 'CoursesTeacherController');
+        Route::resource('comments', 'CommentsController');
 
         Route::get('/', 'CoursesTeacherController@dashboard');
         Route::get('all-comments', 'CoursesTeacherController@all_comments');
