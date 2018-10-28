@@ -11,4 +11,11 @@ class Contacts extends Model
     {
         return Carbon::parse($val)->diffForHumans();
     }
+
+    public function read()
+    {
+        return $this->update([
+            'dane_read' => 1
+        ]);
+    }
 }

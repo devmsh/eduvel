@@ -88,9 +88,8 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/settings/our-founders/{id}/destroy', 'SettingsController@our_founders_destroy');
 
         // For Contacts
-        Route::get('/messages', 'ContactsController@index');
-        Route::get('/messages/{id}/destroy', 'ContactsController@destroy');
-        Route::get('/messages/{id}/done-read', 'ContactsController@done_read');
+        Route::resource('messages','ContactsController');
+        Route::get('/messages/{message}/read', 'ContactsController@read');
 
 
         // For Blog Website Categories
