@@ -27,10 +27,10 @@
                                 <div class="bloglist singlepost">
                                     <p>
                                         <img style="width: 100%" class=""
-                                             src="{{ asset('uplaod/coursecategorys/'.$course_categorys->image) }}"
+                                             src="{{ asset('uplaod/coursecategorys/'.$courses_category->image) }}"
                                              alt="No Image">
                                     </p>
-                                    <h1>{!! $course_categorys->name !!}</h1>
+                                    <h1>{!! $courses_category->name !!}</h1>
 
                                     <!-- /media gallery -->
                                 </div>
@@ -42,9 +42,9 @@
                             <div class="col-lg-3">
                                 <div class="postmeta">
                                     <ul>
-                                        {{-- <li><a href="#"><i class="icon_folder-alt"></i> {{ $course_categorys->title }}</a></li>
-                                        <li><a href="#"><i class="icon_folder-alt"></i> {{ $course_categorys->category }}</a></li>
-                                        <li><a href="#"><i class="icon_clock_alt"></i> {{ $course_categorys->created_at->toDayDateTimeString() }}</a></li> --}}
+                                        {{-- <li><a href="#"><i class="icon_folder-alt"></i> {{ $courses_category->title }}</a></li>
+                                        <li><a href="#"><i class="icon_folder-alt"></i> {{ $courses_category->category }}</a></li>
+                                        <li><a href="#"><i class="icon_clock_alt"></i> {{ $courses_category->created_at->toDayDateTimeString() }}</a></li> --}}
 
                                     </ul>
                                 </div>
@@ -61,9 +61,9 @@
 
     <a href="{{ url('/admin/courses-categories') }}" class="btn_1 medium "
        style="background: #335693 !important">Back</a>
-    <a href="{{ url('admin/courses-categories/'.$course_categorys->id.'/edit') }}" class="btn_1 bg-primary"><i
+    <a href="{{ url('admin/courses-categories/'.$courses_category->id.'/edit') }}" class="btn_1 bg-primary"><i
                 class="fa fa-fw fa-edit"></i> Edit</a>
-    <a href="{{ url('admin/courses-categories/'.$course_categorys->id.'/destroy') }}" class="btn_1 bg-danger"><i
+    <a href="{{ url('admin/courses-categories/'.$courses_category->id.'/destroy') }}" class="btn_1 bg-danger"><i
                 class="fa fa-fw fa-close"></i> Deleted</a>
 
     <!-- Modal -->
@@ -87,9 +87,9 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" style="cursor: pointer;">
                         Close
                     </button>
-                    <form action="/admin/blog/post/{{ $course_categorys->id }}/destroy" method="POST">
+                    <form action="/admin/blog/post/{{ $courses_category->id }}/destroy" method="POST">
                         {{ csrf_field() }}
-                        <input type="hidden" name="id" value="{{ $course_categorys->id }}">
+                        <input type="hidden" name="id" value="{{ $courses_category->id }}">
                         <button type="submit" name="item" class="btn btn-danger" style="cursor: pointer;">Yes sure
                         </button>
                     </form>

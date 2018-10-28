@@ -11,7 +11,11 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\User::class, 1)->create();
+        factory(\App\User::class, 1)->create([
+            'email' => 'mm@mm.mm',
+            'password' => bcrypt(123123)
+        ]);
+
         App\User::create([
             'uniqid' => '5b154bef024f0',
             'type_user' => 'Teacher',

@@ -41,22 +41,27 @@
                     </tfoot>
                     <tbody>
                     <span hidden="hidden">{{ $count=0 }}</span>
-                    @foreach($course_categorys as $value)
+                    @foreach($course_categories as $count => $category)
                         <tr>
-                            <td>{{ $count = $count+1 }}</td>
-                            <td>{!! substr($value->name, 0, 15) !!} ...</td>
+                            <td>{{ $count+1 }}</td>
+                            <td>{!! substr($category->name, 0, 15) !!} ...</td>
                             <td>
                                 <img style="width: 60px;" class=""
-                                     src="{{ asset('uplaod/coursecategorys/'.$value->image) }}" alt="No File">
+                                     src="{{ asset('uplaod/coursecategorys/'.$category->image) }}" alt="No File">
                             </td>
-                            <td>{{ $value->created_at->toDayDateTimeString() }}</td>
+                            <td>{{ $category->created_at->toDayDateTimeString() }}</td>
                             <td>
-                                <a href="courses-categories/{{ $value->id }}" class="btn_1 bg-sucsses"><i
+                                <a href="courses-categories/{{ $category->id }}" class="btn_1 bg-sucsses"><i
                                             class="fa fa-fw fa-eye"></i> Show</a>
-                                <a href="courses-categories/{{ $value->id }}/edit" class="btn_1 bg-primary"><i
+                                <a href="courses-categories/{{ $category->id }}/edit" class="btn_1 bg-primary"><i
                                             class="fa fa-fw fa-edit"></i> Edit</a>
-                                <a href="courses-categories/{{ $value->id }}/destroy" class="btn_1 bg-danger"><i
-                                            class="fa fa-fw fa-close"></i> Deleted</a>
+                                <form method="post" action="courses-categories/{{ $category->id }}">
+                                    {{csrf_field()}}
+                                    {{method_field('delete')}}
+                                    <button href="courses-categories/{{ $category->id }}/destroy" class="btn_1 bg-danger"><i
+                                                class="fa fa-fw fa-close"></i> Deleted</button>
+                                </form>
+
                             </td>
                         </tr>
                     @endforeach
@@ -68,7 +73,7 @@
     </div>
     <!-- /tables-->
 
-    <form action="courses-categories/store" method="POST" enctype="multipart/form-data">
+    <form action="courses-categories" method="POST" enctype="multipart/form-data">
         {{ csrf_field() }}
         <div class="box_general padding_bottom">
             <div class="header_box version_2">
