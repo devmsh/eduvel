@@ -131,12 +131,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/media-gallery/{id}/destroy', 'MediaGalleryController@destroy');
 
         // For Course Category
-        Route::get('/courses-categories', 'CourseCategoryController@index');
-        Route::get('/courses-categories/{id}', 'CourseCategoryController@show');
-        Route::post('/courses-categories/store', 'CourseCategoryController@store');
-        Route::get('/courses-categories/{id}/edit', 'CourseCategoryController@edit');
-        Route::post('/courses-categories/update', 'CourseCategoryController@update');
-        Route::get('/courses-categories/{id}/destroy', 'CourseCategoryController@destroy');
+        Route::resource('/courses-categories', 'CourseCategoryController');
 
         // For Coupon Courses
         Route::resource('/coupons', 'CouponController');
