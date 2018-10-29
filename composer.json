@@ -9,6 +9,7 @@
         "brozot/laravel-fcm": "^1.2",
         "fideloper/proxy": "~4.0",
         "laravel/framework": "5.7.*",
+        "laravel/nova": "^1.1",
         "laravel/socialite": "^3.0",
         "laravel/tinker": "~1.0",
         "predis/predis": "^1.1",
@@ -62,5 +63,11 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "optimize-autoloader": true
-    }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://nova.laravel.com"
+        }
+    ]
 }
