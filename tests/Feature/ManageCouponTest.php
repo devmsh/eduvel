@@ -39,7 +39,7 @@ class ManageCouponTest extends TestCase
 
     public function test_teacher_can_view_own_active_coupons()
     {
-        $teacher = $this->createTeacher();
+        $teacher = $this->createUser();
 
         $courses = factory(Coupon::class, 5)->create([
             'user_id' => $teacher->id,
@@ -94,7 +94,7 @@ class ManageCouponTest extends TestCase
 
     public function test_teacher_can_add_coupon()
     {
-        $teacher = $this->createTeacher();
+        $teacher = $this->createUser();
 
         $course = factory(Course::class)->create([
             'user_id' => $teacher
@@ -134,7 +134,7 @@ class ManageCouponTest extends TestCase
 
     public function test_teacher_can_delete_owned_coupon()
     {
-        $teacher = $this->createTeacher();
+        $teacher = $this->createUser();
 
         $coupon = factory(Coupon::class)->create([
             'user_id' => $teacher->id
@@ -153,7 +153,7 @@ class ManageCouponTest extends TestCase
     {
         $coupon = factory(Coupon::class)->create();
 
-        $this->actingAs($this->createTeacher());
+        $this->actingAs($this->createUser());
 
         $response = $this->delete('dashboard/coupons/' . $coupon->coupon_code);
 

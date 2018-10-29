@@ -34,11 +34,7 @@ class AdminController extends Controller
         $user->confirmed = 1;
         $user->save();
 
-        if (request('roles') == 'Admin') {
-            $user->roles()->attach(Role::where('name', 'Admin')->first());
-        } elseif (request('roles') == 'Editor') {
-            $user->roles()->attach(Role::where('name', 'Editor')->first());
-        }
+        $user->assignRole(request('roles'));
 
         return redirect('admin/admins')->with('success', 'Successfully added');
     }

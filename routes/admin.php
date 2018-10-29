@@ -4,7 +4,7 @@
 
 Route::group(['middleware' => 'guest'], function () {
 
-    Route::get('login', 'AdminAuth@login');
+    Route::get('login', 'AdminAuth@login')->name('login');
     Route::post('login', 'AdminAuth@dologin');
     Route::get('register', 'AdminAuth@register');
     Route::post('register', 'AdminAuth@doregister');
@@ -25,7 +25,7 @@ Route::post('reset/password/{token}', 'AdminAuth@reset_password_post');
 
 Route::group(['prefix' => 'admin'], function () {
 
-    Route::group(['middleware' => ['roles'], 'roles' => ['Admin', 'Editor']], function () {
+    Route::group(['middleware' => 'auth'], function () {
 
 
         Route::get('/', 'DashboardController@index');

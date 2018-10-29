@@ -23,7 +23,7 @@ class CourseRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'course_title' => 'required',
             'teacher_name' => 'required',
             'course_start' => 'required',
@@ -39,12 +39,18 @@ class CourseRequest extends FormRequest
             'video_category' => 'required',
             'video_url' => 'required',
 
-            'isActive' => [],
             'course_expire' => [],
             'course_discount_price' => [],
             'coupon_code' => [],
             'coupon_code_discount_price' => [],
             'whats_includes' => [],
         ];
+
+        if($this->user()->hasRole('Admin')){
+            $rules += [
+                'isActive' => []
+            ];
+        }
+        return $rules;
     }
 }

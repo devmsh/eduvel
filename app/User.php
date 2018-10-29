@@ -4,12 +4,28 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
+    use Notifiable, HasRoles;
+
     protected $casts = [
         'confirmed' => 'boolean',
     ];
+
+    protected $fillable = [
+        'name', 'email', 'password', 'control',
+    ];
+
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
+    public function orders($value = '')
+    {
+        return $this->hasMany('App\Order');
+    }
 
     public function courses()
     {
@@ -21,57 +37,10 @@ class User extends Authenticatable
         return $this->hasMany(User::Class);
     }
 
-    public function roles()
+    public function can($ability, $arguments = [])
     {
-        return $this->belongsToMany('App\Role', 'user_roles', 'user_id', 'role_id');
-    }
-
-    public function hasAnyRole($roles)
-    {
-        if (is_array($roles)) {
-            foreach ($roles as $role) {
-                if ($this->hasRole($role)) {
-                    return true;
-                }
-            }
-        } else {
-            if ($this->hasRole($role)) {
-                return true;
-            }
-        }
-    }
-
-    public function hasRole($role)
-    {
-        if ($this->roles()->where('name', $role)->first()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    use Notifiable;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'password', 'control',
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    public function orders($value = '')
-    {
-        return $this->hasMany('App\Order');
+        return $this->hasRole('Admin') ?
+            true :
+            parent::can($ability, $arguments);
     }
 }

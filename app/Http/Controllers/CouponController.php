@@ -20,15 +20,15 @@ class CouponController extends Controller
         $user = $request->user();
 
         // TODO: to be removed, currently used in coupon creation form
-        $courses = Course::when($user->hasRole('Teacher'), function ($query) {
+        $courses = Course::when(!$user->can('manage-coupon'), function ($query) {
             $query->ownedBy(auth()->user());
         })->get();
 
-        $coupons = Coupon::when($user->hasRole('Teacher'), function ($query) {
+        $coupons = Coupon::when(!$user->can('manage-coupon'), function ($query) {
             $query->activated()->ownedBy(auth()->user());
         })->with('course')->get();
 
-        $view = $user->hasRole('Teacher') ? 'teacher.courses.coupon' : 'admin.courses.coupon';
+        $view = $user->hasRole('Admin') ? 'admin.courses.coupon' : 'teacher.courses.coupon';
         return view($view, compact('courses', 'coupons'));
     }
 
