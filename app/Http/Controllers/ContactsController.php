@@ -10,23 +10,21 @@ class ContactsController extends Controller
 
     public function index()
     {
-        $contacts = Contacts::orderBy('id', 'desc')->paginate(3);
+        $contacts = Contacts::latest()->paginate(3);
         return view('admin.messages.index', compact('contacts'));
     }
 
-    public function done_read($id)
+    public function destroy(Contacts $message)
     {
-        $add = Contacts::find($id);
-        $add->done_read = 1;
-        $add->save();
+        $message->delete();
 
-        return back();
+        return back()->with('success', 'Deleted successfully');
     }
 
-    public function destroy($id)
+    public function read(Contacts $message)
     {
-        Contacts::find($id)->delete();
-        session()->flash('success', 'Deleted successfully');
+        $message->read();
+
         return back();
     }
 }

@@ -16,7 +16,7 @@
 
     <form action="{{ url('admin/courses-categories/update') }}" method="POST" enctype="multipart/form-data">
         {{ csrf_field() }}
-        <input type="hidden" name="id" value="{{ $course_categorys->id }}">
+        <input type="hidden" name="id" value="{{ $courses_category->id }}">
         <div class="box_general padding_bottom">
             <div class="header_box version_2">
                 <h2><i class="fa fa-camera"></i>Courses Categories</h2>
@@ -32,13 +32,13 @@
                                         <h6>Title</h6>
                                         <div class="form-group">
                                             <input type="text" class="form-control" name="name"
-                                                   placeholder="Photo Title" value="{{ $course_categorys->name }}">
+                                                   placeholder="Photo Title" value="{{ $courses_category->name }}">
                                         </div>
                                     </div>
                                     <div class="col-md-8">
                                         <h6>Image Or Video</h6>
                                         <div class="form-group">
-                                            <input type="hidden" name="oldimage" value="{{ $course_categorys->image }}">
+                                            <input type="hidden" name="oldimage" value="{{ $courses_category->image }}">
                                             <input type="file" class="form-control" name="image">
                                         </div>
                                     </div>
@@ -46,7 +46,7 @@
                                         <h6>Image</h6>
                                         <div class="form-group">
                                             <img style="width: 100%" class=""
-                                                 src="{{ asset('uplaod/coursecategorys/'.$course_categorys->image) }}"
+                                                 src="{{ asset('uplaod/coursecategorys/'.$courses_category->image) }}"
                                                  alt="No Image">
                                         </div>
                                     </div>

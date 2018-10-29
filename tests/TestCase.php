@@ -2,9 +2,9 @@
 
 namespace Tests;
 
-use App\Role;
 use App\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Spatie\Permission\Models\Role;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -15,7 +15,6 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         Role::create(['name' => 'Admin']);
-        Role::create(['name' => 'Editor']);
         Role::create(['name' => 'Teacher']);
     }
 
@@ -23,32 +22,19 @@ abstract class TestCase extends BaseTestCase
     {
         $admin = factory(User::class)->create();
 
-        $admin->roles()->attach($this->getRoleId('Admin'));
+        $admin->assignRole('Admin');
 
         return $admin;
     }
 
-    public function createEditor()
+    public function createTeacher($permissions = [])
     {
-        $editor = factory(User::class)->create();
+        $user = factory(User::class)->create();
 
-        $editor->roles()->attach($this->getRoleId('Editor'));
+        $user->assignRole('Teacher');
 
-        return $editor;
-    }
+        $user->givePermissionTo($permissions);
 
-
-    public function createTeacher()
-    {
-        $teacher = factory(User::class)->create();
-
-        $teacher->roles()->attach($this->getRoleId('Teacher'));
-
-        return $teacher;
-    }
-
-    public function getRoleId($role)
-    {
-        return Role::where('name', $role)->first()->id;
+        return $user;
     }
 }

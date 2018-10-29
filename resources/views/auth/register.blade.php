@@ -46,7 +46,8 @@
             <a href="{{ url('/') }}"><img src="{{ url('/design/educationalzard') }}/img/logo.png" width="149"
                                           height="42" data-retina="true" alt=""></a>
         </figure>
-        <form action="/register" method="POST" autocomplete="off">
+
+        <form method="POST" action="{{ route('register') }}" autocomplete="off">
             {{ csrf_field() }}
             <div class="form-group">
 

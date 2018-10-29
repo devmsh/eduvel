@@ -9,6 +9,7 @@ use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Permission\Models\Permission;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -23,6 +24,8 @@ class ManageCourseTest extends TestCase
         Storage::fake();
 
         $this->withoutMiddleware(VerifyCsrfToken::class);
+
+        Permission::create(['name'=> 'manage-course']);
     }
 
     public function test_guest_cannot_add_course()
@@ -34,7 +37,7 @@ class ManageCourseTest extends TestCase
 
     public function test_course_must_be_validated()
     {
-        $this->actingAs($this->createTeacher());
+        $this->actingAs($this->createTeacher('manage-course'));
 
         $response = $this->post('dashboard/courses', []);
 
@@ -60,7 +63,7 @@ class ManageCourseTest extends TestCase
     {
         $category = factory(CourseCategory::class)->create();
 
-        $this->actingAs($this->createTeacher());
+        $this->actingAs($this->createTeacher('manage-course'));
 
         $response = $this->post('dashboard/courses', $this->validCourse($category));
 
@@ -91,7 +94,7 @@ class ManageCourseTest extends TestCase
     {
         $category = factory(CourseCategory::class)->create();
 
-        $this->actingAs($this->createTeacher());
+        $this->actingAs($this->createTeacher('manage-course'));
 
         $response = $this->post('dashboard/courses', $this->validCourse($category, true));
 
@@ -111,12 +114,10 @@ class ManageCourseTest extends TestCase
 
     public function test_teacher_can_edit_course()
     {
-        $this->withoutExceptionHandling();
-
         $course = factory(CoursesFiles::class)->create()->course;
         $category = $course->category;
 
-        $this->actingAs($this->createTeacher());
+        $this->actingAs($this->createTeacher('manage-course'));
 
         $response = $this->put('dashboard/courses/1', $this->validCourse($category, true));
 
@@ -152,7 +153,7 @@ class ManageCourseTest extends TestCase
     public function test_teacher_can_delete_course()
     {
         $course = factory(Course::class)->create();
-        $this->actingAs($this->createTeacher());
+        $this->actingAs($this->createTeacher('manage-course'));
 
         $response = $this->delete("dashboard/courses/{$course->id}");
 
@@ -198,11 +199,9 @@ class ManageCourseTest extends TestCase
 
     public function test_can_view_list_of_courses()
     {
-        $this->withoutExceptionHandling();
-
         factory(Course::class, 10)->create();
 
-        $this->actingAs($this->createTeacher());
+        $this->actingAs($this->createTeacher('manage-course'));
 
         $response = $this->get('dashboard/courses');
 
@@ -225,7 +224,7 @@ class ManageCourseTest extends TestCase
             ]);
         }
 
-        $this->actingAs($this->createTeacher());
+        $this->actingAs($this->createTeacher('manage-course'));
 
         $response = $this->get('dashboard/courses?category_id=1');
 

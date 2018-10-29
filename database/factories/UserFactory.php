@@ -16,7 +16,6 @@ use Faker\Generator as Faker;
 $factory->define(App\User::class, function (Faker $faker) {
     return [
         'uniqid' => uniqid(),
-        'type_user' => 'Admin',
         'image' => 'user-image.png',
         'name' => $faker->email,
         'email' => $faker->email,

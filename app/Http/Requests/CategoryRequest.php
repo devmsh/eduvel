@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateAdminRequest extends FormRequest
+class CategoryRequest extends FormRequest
 {
     public function authorize()
     {
@@ -14,10 +14,8 @@ class CreateAdminRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:4|max:191',
-            'email' => 'required|email',
-            'password' => 'required',
-            'roles' => 'required',
+            'name' => 'required|min:6|max:191',
+            'description' => 'required'
         ];
     }
 }

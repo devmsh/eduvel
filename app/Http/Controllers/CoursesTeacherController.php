@@ -39,20 +39,10 @@ class CoursesTeacherController extends Controller
 
     public function store(CourseRequest $request)
     {
-        $data = $request->only([
-            'course_title', 'teacher_name', 'course_start',
-            'course_expire', 'course_price', 'course_discount_price',
-            'course_image', 'course_video', 'course_description',
-            'category_id', 'coupon_code', 'coupon_code_discount_price',
-            'whats_includes', 'isActive', 'course_time',
-            'what_will_you_learn_title', 'what_will_you_learn_description',
-            'video_title', 'video_category', 'video_url',
-        ]);
-
-        $data['isActive'] = 0;
-        $data['course_image'] = $request->course_image->store('upload/courses');
-
-        Course::createFor($request->user(), $data);
+        Course::createFor($request->user(), $this->validInputs($request, [
+            'isActive' => 0,
+            'course_image' => $request->course_image->store('upload/courses')
+        ]));
 
         return redirect('/dashboard/courses')->with('success', 'Successfully added');
     }
@@ -64,19 +54,9 @@ class CoursesTeacherController extends Controller
 
     public function update(Course $course, CourseRequest $request)
     {
-        $data = $request->only([
-            'course_title', 'teacher_name', 'course_start',
-            'course_expire', 'course_price', 'course_discount_price',
-            'course_image', 'course_video', 'course_description',
-            'category_id', 'coupon_code', 'coupon_code_discount_price',
-            'whats_includes', 'course_time',
-            'what_will_you_learn_title', 'what_will_you_learn_description',
-            'video_title', 'video_category', 'video_url',
-        ]);
-
-        $data['course_image'] = $request->course_image->store('upload/courses');
-
-        $course->updateFor($request->user(), $data);
+        $course->updateFor($request->user(), $this->validInputs($request, [
+            'course_image' => $request->course_image->store('upload/courses')
+        ]));
 
         return back()->with('success', 'Successfully added');
     }
@@ -88,42 +68,7 @@ class CoursesTeacherController extends Controller
         return back()->with('success', 'Deleted successfully');
     }
 
-    public function all_comments()
-    {
 
-        $get_comments = CourseComment::/*where('course_id', 2)->*/
-        get();
-        // return $get_comments;
-
-        $user_id = CourseComment::select('user_id')->/*where('course_id', 2)->*/
-        get()->toarray();
-        $user = [];
-        $length_users = count($user_id);
-        // return $user_id;
-        for ($i = 0; $i < $length_users; $i++) {
-
-            $user[$i] = User::where('id', $user_id[$i]['user_id'])->first();
-        }
-
-        $course = Course::where('user_id', auth()->user()->id)->first();
-
-        $comments = array_map(null, $get_comments->toArray(), $user);
-
-        return view('teacher.courses.allComments', compact('comments'));
-    }
-
-    public function dane_read_comment($id)
-    {
-
-        $update = CourseComment::find($id);
-        $update->dane_read = 1;
-        $update->save();
-
-        // session()->flash('success', 'Successfully Dane Read');
-
-        return back();
-
-    }
 
     public function add_course_files()
     {

@@ -49,7 +49,8 @@
                 <li>{{ $error }}</li>
             @endforeach
         </figure>
-        <form action="/login" method="POST">
+
+        <form method="POST" action="{{ route('login') }}">
             {{ csrf_field() }}
             <div class="access_social">
                 <a href="{{ url('login/facebook') }}" class="social_bt facebook">Login with Facebook</a>

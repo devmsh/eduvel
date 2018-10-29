@@ -2,137 +2,50 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\CourseCategoryRequest;
 use App\CourseCategory;
 
 class CourseCategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $course_categorys = CourseCategory::get();
-        return view('admin.coursecategorys.index', compact('course_categorys'));
+        $course_categories = CourseCategory::get();
+
+        return view('admin.courses-categories.index', compact('course_categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store(CourseCategoryRequest $request)
     {
-        //
+        CourseCategory::create($this->validInputs($request, [
+            'image' => $request->image->store('upload/courses-categories')
+        ]));
+
+        return redirect('/admin/courses-categories')->with('success', 'Added Successfully');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function show(CourseCategory $courses_category)
     {
-        $course_categorys = $this->validate(request(), [
-
-            'name' => 'required',
-            'image' => 'required',
-        ]);
-
-        if (!empty($request->image)) {
-
-            $img_name = time() . '.' . $request->image->getClientOriginalExtension();
-        }
-
-        $add = new CourseCategory;
-        $add->name = request('name');
-        $add->image = $img_name;
-        $add->save();
-
-        if (!empty($request->image)) {
-
-            $request->image->move(public_path('uplaod/coursecategorys/'), $img_name);
-        }
-
-        session()->flash('success', 'Added Successfully');
-        return redirect('/admin/courses-categories');
+        return view('admin.courses-categories.show', compact('courses_category'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function edit(CourseCategory $courses_category)
     {
-        $course_categorys = CourseCategory::where('id', $id)->first();
-        return view('admin.coursecategorys.show', compact('course_categorys'));
+        return view('admin.courses-categories.edit', compact('courses_category'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function update(CourseCategory $courses_category, CourseCategoryRequest $request)
     {
-        $course_categorys = CourseCategory::get()->find($id);
-        return view('admin.coursecategorys.edit', compact('course_categorys'));
+        $courses_category->update($this->validInputs($request, [
+            'image' => $request->image->store('upload/courses-categories')
+        ]));
+
+        return back()->with('success', 'Updated Successfully');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
+    public function destroy(CourseCategory $courses_category)
     {
+        $courses_category->delete();
 
-        $course_categorys = $this->validate(request(), [
-
-            'name' => 'required',
-        ]);
-
-        if (!empty($request->image)) {
-
-            $img_name = time() . '.' . $request->image->getClientOriginalExtension();
-        } elseif (empty($request->image)) {
-
-            $img_name = $request->oldimage;
-        }
-
-        $add = CourseCategory::get()->find($request->id);
-        $add->name = $request->name;
-        $add->image = $img_name;
-        $add->save();
-
-        if (!empty($request->image)) {
-
-            $request->image->move(public_path('uplaod/coursecategorys'), $img_name);
-
-        }
-
-        session()->flash('success', 'Updated Successfully');
-        return back();
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        CourseCategory::find($id)->delete();
-        session()->flash('success', 'Deleted successfully');
-        return redirect('/admin/courses-categories');
+        return redirect('/admin/courses-categories')->with('success', 'Deleted successfully');
     }
 }
