@@ -57,7 +57,7 @@ Route::group(['middleware' => ['roles'], 'roles' => ['Student', 'student']], fun
 });
 
 // For Login student
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'role:Teacher'], function () {
 
     Route::get('/my-profile/{name}', 'ProfileTeacherController@profile');
     Route::post('/profile/update', 'ProfileTeacherController@update_profile');

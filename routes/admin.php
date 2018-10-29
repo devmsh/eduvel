@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'role:Admin|Editor'], function () {
 
     Route::get('/', 'DashboardController@index');
     Route::get('/get-message', 'DashboardController@get_message');
