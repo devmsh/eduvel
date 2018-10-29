@@ -13,6 +13,8 @@ class Course extends Model
     protected $guarded = [];
 
     protected $casts = [
+        'course_start' => 'date',
+        'course_expire' => 'date',
         'isActive' => 'boolean',
         'what_will_you_learn_title' => 'array',
         'what_will_you_learn_description' => 'array',
@@ -66,6 +68,11 @@ class Course extends Model
     public function courses_likes()
     {
         return $this->hasMany(User::Class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::Class);
     }
 
     public function approve()
