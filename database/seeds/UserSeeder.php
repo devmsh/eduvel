@@ -11,12 +11,13 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\User::class, 1)->create([
+        $admin = factory(\App\User::class)->create([
             'email' => 'mm@mm.mm',
             'password' => bcrypt(123123)
         ]);
+        $admin->assignRole('Admin');
 
-        App\User::create([
+        $teacher = App\User::create([
             'uniqid' => '5b154bef024f0',
             'type_user' => 'Teacher',
             'image' => 'user-image.png',
@@ -26,8 +27,9 @@ class UserSeeder extends Seeder
             'remember_token' => str_random(10),
             'confirmed' => 1,
         ]);
+        $teacher->assignRole('Teacher');
 
-        App\User::create([
+        $student = App\User::create([
             'uniqid' => '5b154bef02400',
             'type_user' => 'Student',
             'image' => 'user-image.png',
@@ -37,5 +39,6 @@ class UserSeeder extends Seeder
             'remember_token' => str_random(10),
             'confirmed' => 1,
         ]);
+        $student->assignRole('Student');
     }
 }
