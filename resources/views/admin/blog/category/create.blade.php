@@ -14,7 +14,7 @@
 
     @include('admin.layouts.message')
 
-    <form action="store" method="POST">
+    <form action="/admin/blog/categories" method="post">
         {{ csrf_field() }}
 
         <div class="box_general padding_bottom">

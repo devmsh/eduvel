@@ -70,7 +70,6 @@ class RegisterController extends Controller
             'password' => bcrypt($data['password']),
 
             'uniqid' => uniqid(),
-            'type_user' => $data['type_user'],
         ]);
 
         $user->assignRole(request('type_user'));

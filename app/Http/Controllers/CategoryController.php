@@ -24,7 +24,7 @@ class CategoryController extends Controller
     {
         Category::create($request->validated());
 
-        return redirect('admin/blog/category')->with('success', 'Successfully added');;
+        return redirect('admin/blog/categories')->with('success', 'Successfully added');;
     }
 
     public function show(Category $category)
