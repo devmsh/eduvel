@@ -15,6 +15,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         Role::create(['name' => 'Admin']);
+        Role::create(['name' => 'Teacher']);
     }
 
     public function createAdmin()
@@ -26,9 +27,11 @@ abstract class TestCase extends BaseTestCase
         return $admin;
     }
 
-    public function createUser($permissions = [])
+    public function createTeacher($permissions = [])
     {
         $user = factory(User::class)->create();
+
+        $user->assignRole('Teacher');
 
         $user->givePermissionTo($permissions);
 

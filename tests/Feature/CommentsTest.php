@@ -17,7 +17,7 @@ class CommentsTest extends TestCase
     {
         factory(CourseComment::class, 10)->create();
 
-        $this->actingAs($this->createUser());
+        $this->actingAs($this->createTeacher());
 
         $response = $this->get('dashboard/comments');
 
@@ -34,7 +34,7 @@ class CommentsTest extends TestCase
 
         $comment = factory(CourseComment::class)->create();
 
-        $this->actingAs($this->createUser());
+        $this->actingAs($this->createTeacher());
 
         $this->assertEquals(0,$comment->dane_read);
 
