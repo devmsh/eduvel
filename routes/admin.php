@@ -19,12 +19,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'role:Admin|Editor'], functio
     Route::get('/teacher/{id}/edit', 'UserController@edit_teacher');
     Route::post('/teacher/{id}/update', 'UserController@update_teacher');
     Route::get('/teacher/{id}/destroy', 'UserController@destroy');
+
     // For All Teacher
     Route::get('/students', 'UserController@show_all_students');
     Route::get('/student/{id}/destroy', 'UserController@destroy');
 
     // For All Users
-    // Route::resource('/users', 'UserController');
     Route::post('/users/store', 'UserController@store');
     Route::post('/users/{id}/update', 'UserController@update');
     Route::get('/users/{id}/destroy', 'UserController@destroy');
@@ -92,7 +92,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'role:Admin|Editor'], functio
     // Media Gallery
     Route::get('/media-gallery', 'MediaGalleryController@index');
     Route::get('/media-gallery/{id}', 'MediaGalleryController@show');
-    // Route::get('/media-gallery/create', 'MediaGalleryController@create');
+    Route::get('/media-gallery/create', 'MediaGalleryController@create');
     Route::post('/media-gallery/store', 'MediaGalleryController@store');
     Route::get('/media-gallery/{id}/edit', 'MediaGalleryController@edit');
     Route::post('/media-gallery/update', 'MediaGalleryController@update');
@@ -104,9 +104,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'role:Admin|Editor'], functio
     // For Coupon Courses
     Route::resource('/coupons', 'CouponController');
     Route::get('/coupon/{coupon}/approve', 'CouponController@approve');
-//        Route::any('/coupon', 'CouponController@index');
-//        Route::post('/add-coupon', 'CouponController@create');
-//        Route::get('/coupon/{id}/delete', 'CouponController@delete');
 
     // For Course Files
     Route::get('/files', 'CourseFilesController@add_course_files');
