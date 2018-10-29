@@ -5,7 +5,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'role:Admin|Editor'], functio
     Route::get('/', 'DashboardController@index');
     Route::get('/get-message', 'DashboardController@get_message');
     Route::get('/get-message/{id}', 'DashboardController@get_message_id');
-    Route::get('/my-profile', 'AdminController@my_profile');
+    Route::get('/my-profile', 'AdminController@show');
 
     // For All Admins
     Route::resource('admins', 'AdminController');

@@ -38,7 +38,7 @@ class ManageAdminTest extends TestCase
 
         $response->assertSessionHasErrors([
             'name',
-            'new_email',
+            'email',
             'password',
             'roles',
         ]);
@@ -46,6 +46,8 @@ class ManageAdminTest extends TestCase
 
     public function test_admin_can_add_admin()
     {
+        $this->withoutExceptionHandling();
+
         $this->actingAs($this->createAdmin());
 
         $response = $this->post('admin/admins', $this->validAdmin());
@@ -103,7 +105,7 @@ class ManageAdminTest extends TestCase
     {
         return [
             'name' => 'The Admin',
-            'new_email' => 'admin@example.com',
+            'email' => 'admin@example.com',
             'password' => '123123',
             'roles' => 'Admin',
         ];
@@ -111,7 +113,10 @@ class ManageAdminTest extends TestCase
 
     public function test_can_view_list_of_admins()
     {
-        factory(User::class, 50)->create();
+        $admins = factory(User::class, 20)->create();
+        foreach ($admins as $admin) {
+            $admin->assignRole('Admin');
+        }
 
         $this->actingAs($this->createAdmin());
 

@@ -24,7 +24,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <form action="{{ url('/admin/admins/add-role') }}" method="post">
+                <form action="{{ url('/admin/admins/add-role/') }}" method="post">
                     {{ csrf_field() }}
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
@@ -57,34 +57,32 @@
                         <tbody>
                         <span hidden>{{ $count = 0 }}</span>
                         @foreach($admins as $admin)
-                            @if($admin->uniqid !== auth()->user()->uniqid)
-                                <input type="text" name="uniqid" value="{{ $admin->uniqid }}">
-                                <tr>
-                                <!-- <td><input type="checkbox" class="item_checkall" name="item[]" value="{{ $admin->id }}"></td> -->
-                                    <td>{{ $count = $count + 1 }}</td>
-                                    <td>{{ $admin->name }}  {!! json_encode(unserialize($admin->preferences)[0]) !!} </td>
-                                    <td>{{ $admin->email }}</td>
-                                    <td>
-                                        <input type="checkbox" class="form-control" name="role_admin"
-                                               onchange="this.form.submit()" {{ $admin->hasRole('admin') ? 'checked' : ' ' }}>
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" class="form-control" name="role_editor"
-                                               onchange="this.form.submit()" {{ $admin->hasRole('editor') ? 'checked' : ' ' }} >
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" class="form-control" name="role_user"
-                                               onchange="this.form.submit()" {{ $admin->hasRole('user') ? 'checked' : ' ' }}>
-                                    </td>
-                                    <td>{{ $admin->created_at }}</td>
-                                    <td>
-                                        <a href="{{ url('/admin/admins/'.$admin->id.'/edit') }}"
-                                           class="btn btn-outline-primary"><i class="fa fa-edit"></i> Edit</a>
-                                        <a href="{{ url('/admin/admins/'.$admin->id.'/destroy') }}"
-                                           class="btn btn-outline-danger"><i class="fa fa-close"></i> Delete</a>
-                                    </td>
-                                </tr>
-                            @endif
+                            <input type="text" name="uniqid" value="{{ $admin->uniqid }}">
+                            <tr>
+                            <!-- <td><input type="checkbox" class="item_checkall" name="item[]" value="{{ $admin->id }}"></td> -->
+                                <td>{{ $count = $count + 1 }}</td>
+                                <td>{{ $admin->name }}  {!! json_encode(unserialize($admin->preferences)[0]) !!} </td>
+                                <td>{{ $admin->email }}</td>
+                                <td>
+                                    <input type="checkbox" class="form-control" name="role" value="Admin"
+                                           onchange="this.form.submit()" {{ $admin->hasRole('Admin') ? 'checked' : ' ' }}>
+                                </td>
+                                <td>
+                                    <input type="checkbox" class="form-control" name="role" value="Editor"
+                                           onchange="this.form.submit()" {{ $admin->hasRole('Editor') ? 'checked' : ' ' }} >
+                                </td>
+                                <td>
+                                    <input type="checkbox" class="form-control" name="role" value="Teacher"
+                                           onchange="this.form.submit()" {{ $admin->hasRole('Teacher') ? 'checked' : ' ' }}>
+                                </td>
+                                <td>{{ $admin->created_at }}</td>
+                                <td>
+                                    <a href="{{ url('/admin/admins/'.$admin->id.'/edit') }}"
+                                       class="btn btn-outline-primary"><i class="fa fa-edit"></i> Edit</a>
+                                    <a href="{{ url('/admin/admins/'.$admin->id.'/destroy') }}"
+                                       class="btn btn-outline-danger"><i class="fa fa-close"></i> Delete</a>
+                                </td>
+                            </tr>
                         @endforeach
 
                         </tbody>
@@ -156,7 +154,7 @@
                     </button>
                     <form action="/admin/admins/destroy" method="POST">
                         {{ csrf_field() }}
-                        <input type="submit" name="destroy" value="{{ $admin->id }}">
+                        <input type="submit" name="destroy" value="">
                         <button type="submit" name="item" class="btn btn-danger" style="cursor: pointer;">Yes sure
                         </button>
                     </form>
