@@ -14,9 +14,7 @@ class User extends Authenticatable
         'confirmed' => 'boolean',
     ];
 
-    protected $fillable = [
-        'name', 'email', 'password', 'control',
-    ];
+    protected $guarded = [];
 
     protected $hidden = [
         'password', 'remember_token',

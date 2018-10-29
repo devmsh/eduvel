@@ -46,7 +46,6 @@ Route::post('/newsletter_form', 'IndexController@newsletter_form');
 
 Route::post('/searsh', 'IndexController@searsh');
 
-
 // For Login student
 Route::group(['middleware' => ['roles'], 'roles' => ['Student', 'student']], function () {
 
@@ -55,7 +54,6 @@ Route::group(['middleware' => ['roles'], 'roles' => ['Student', 'student']], fun
     Route::group(['prefix' => 'dashboard'], function () {
         Route::get('/my-course', 'ProfileStudentController@my_courses');
     });
-    Route::get('/logout', 'ProfileStudentController@logout');
 });
 
 // For Login student
@@ -63,7 +61,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/my-profile/{name}', 'ProfileTeacherController@profile');
     Route::post('/profile/update', 'ProfileTeacherController@update_profile');
-    Route::get('/logout', 'ProfileTeacherController@logout');
 
     Route::group(['prefix' => 'dashboard'], function () {
 
@@ -93,8 +90,14 @@ Route::group(['middleware' => ['roles'], 'roles' => ['Admin', 'Editor', 'Teacher
     Route::post('/course/comment-store', 'IndexController@course_comments_store');
 });
 
-Route::any('/logout', function () {
-
-    \Auth::logout();
-    return redirect('/login');
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('login/{provider}', 'ProviderSocialiteController@redirectToProvider');
+    Route::get('login/{provider}/callback', 'ProviderSocialiteController@handleProviderCallback');
 });
+
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect('/');
+});
+
+Auth::routes();
