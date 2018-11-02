@@ -30,8 +30,8 @@ class CoursesSeeder extends Seeder
             'whats_includes' => 'Mobile support, Lesson archive, Mobile support, Tutor chat, Course certificate',
             'isActive' => 1,
             'course_time' => '1h 30min',
-            'what_will_you_learn_title' => '["Suas summo id sed erat erant oporteat","Illud singulis indoctum ad sed","Alterum bonorum mentitum an mel"]',
-            'what_will_you_learn_description' => '["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]'
+            'what_will_you_learn_title' => ["Suas summo id sed erat erant oporteat","Illud singulis indoctum ad sed","Alterum bonorum mentitum an mel"],
+            'what_will_you_learn_description' => ["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]
         ]);
 
         App\Course::create([
@@ -52,8 +52,8 @@ class CoursesSeeder extends Seeder
             'whats_includes' => 'Mobile support, Lesson archive, Mobile support, Tutor chat, Course certificate',
             'isActive' => 1,
             'course_time' => '1h 30min',
-            'what_will_you_learn_title' => '["Suas summo id sed erat erant oporteat","Illud singulis indoctum ad sed","Alterum bonorum mentitum an mel"]',
-            'what_will_you_learn_description' => '["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]'
+            'what_will_you_learn_title' => ["Suas summo id sed erat erant oporteat","Illud singulis indoctum ad sed","Alterum bonorum mentitum an mel"],
+            'what_will_you_learn_description' => ["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]
         ]);
 
         App\Course::create([
@@ -74,8 +74,8 @@ class CoursesSeeder extends Seeder
             'whats_includes' => 'Mobile support, Lesson archive, Mobile support, Tutor chat, Course certificate',
             'isActive' => 1,
             'course_time' => '1h 30min',
-            'what_will_you_learn_title' => '["Suas summo id sed erat erant oporteat","Illud singulis indoctum ad sed","Alterum bonorum mentitum an mel"]',
-            'what_will_you_learn_description' => '["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]'
+            'what_will_you_learn_title' => ["Suas summo id sed erat erant oporteat","Illud singulis indoctum ad sed","Alterum bonorum mentitum an mel"],
+            'what_will_you_learn_description' => ["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]
         ]);
 
         App\Course::create([
@@ -96,8 +96,8 @@ class CoursesSeeder extends Seeder
             'whats_includes' => 'Mobile support, Lesson archive, Mobile support, Tutor chat, Course certificate',
             'isActive' => 1,
             'course_time' => '1h 30min',
-            'what_will_you_learn_title' => '["Suas summo id sed erat erant oporteat","Illud singulis indoctum ad sed","Alterum bonorum mentitum an mel"]',
-            'what_will_you_learn_description' => '["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]'
+            'what_will_you_learn_title' => ["Suas summo id sed erat erant oporteat","Illud singulis indoctum ad sed","Alterum bonorum mentitum an mel"],
+            'what_will_you_learn_description' => ["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]
         ]);
 
         App\Course::create([
@@ -118,8 +118,8 @@ class CoursesSeeder extends Seeder
             'whats_includes' => 'Mobile support, Lesson archive, Mobile support, Tutor chat, Course certificate',
             'isActive' => 1,
             'course_time' => '1h 30min',
-            'what_will_you_learn_title' => '["Suas summo id sed erat erant oporteat","Illud singulis indoctum ad sed","Alterum bonorum mentitum an mel"]',
-            'what_will_you_learn_description' => '["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]'
+            'what_will_you_learn_title' => ["Suas summo id sed erat erant oporteat","Illud singulis indoctum ad sed","Alterum bonorum mentitum an mel"],
+            'what_will_you_learn_description' => ["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]
         ]);
 
         App\Course::create([
@@ -140,8 +140,8 @@ class CoursesSeeder extends Seeder
             'whats_includes' => 'Mobile support, Lesson archive, Mobile support, Tutor chat, Course certificate',
             'isActive' => 1,
             'course_time' => '1h 30min',
-            'what_will_you_learn_title' => '["Suas summo id sed erat erant oporteat","Illud singulis indoctum ad sed","Alterum bonorum mentitum an mel"]',
-            'what_will_you_learn_description' => '["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]'
+            'what_will_you_learn_title' => ["Suas summo id sed erat erant oporteat","Illud singulis indoctum ad sed","Alterum bonorum mentitum an mel"],
+            'what_will_you_learn_description' => ["Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus.","Ut unum diceret eos, mel cu velit principes, ut quo inani dolorem mediocritatem. Mea in justo posidonium necessitatibus."]
         ]);
     }
 }

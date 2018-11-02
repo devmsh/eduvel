@@ -11,12 +11,11 @@
 
     @include('admin.layouts.message')
 
-
     <!-- Example DataTables Card-->
     <div class="card mb-3">
         <div class="card-header">
             <i class="fa fa-table"></i> Data Table Categories
-            <a href="{{ url('admin/blog/post/create') }}" class="btn btn-success mr-2" style="float: right;"><i
+            <a href="{{ url('admin/blog/posts/create') }}" class="btn btn-success mr-2" style="float: right;"><i
                         class="fa fa-edit"></i>Add New</a>
         </div>
         <div class="card-body">
@@ -59,11 +58,11 @@
                             </td>
                             <td>{{ $post->created_at->toDayDateTimeString() }}</td>
                             <td>
-                                <a href="{{ url('/admin/blog/post/'.$post->id) }}" class="btn btn-outline-success"><i
+                                <a href="{{ url('/admin/blog/posts/'.$post->id) }}" class="btn btn-outline-success"><i
                                             class="fa fa-eye"></i> Details</a>
-                                <a href="{{ url('/admin/blog/post/'.$post->id.'/edit') }}"
+                                <a href="{{ url('/admin/blog/posts/'.$post->id.'/edit') }}"
                                    class="btn btn-outline-primary"><i class="fa fa-edit"></i> Edit</a>
-                                <a href="{{ url('/admin/blog/post/'.$post->id.'/destroy') }}"
+                                <a href="{{ url('/admin/blog/posts/'.$post->id.'/destroy') }}"
                                    class="btn btn-outline-danger" data-toggle="modal" data-target="#sureDeleteCategory"><i
                                             class="fa fa-close"></i> Delete</a>
                             </td>
@@ -102,7 +101,7 @@
                     </button>
 
                     @if(!isset($posts))
-                        <form action="/admin/blog/post/{{ $post->id }}/destroy" method="POST">
+                        <form action="/admin/blog/posts/{{ $post->id }}/destroy" method="POST">
                             {{ csrf_field() }}
                             <input type="hidden" name="id" value="{{ $post->id }}">
                             <button type="submit" name="item" class="btn btn-danger" style="cursor: pointer;">Yes sure

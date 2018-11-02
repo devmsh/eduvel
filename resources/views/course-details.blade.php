@@ -33,9 +33,11 @@
                         <p>{!! $course_details->course_description !!}.</p>
                         <h5>What will you learn</h5>
                         <ul class="list_ok">
-                            <?php $arr_what_will_you_learn_title = json_decode($course_details->what_will_you_learn_title);
-                            $arr_what_will_you_learn_description = json_decode($course_details->what_will_you_learn_description); ?>
-                            @for ($i=0; $i < count($arr_what_will_you_learn_title); $i++)
+                            <?php
+                            $arr_what_will_you_learn_title = $course_details->what_will_you_learn_title;
+                            $arr_what_will_you_learn_description = $course_details->what_will_you_learn_description;
+                            ?>
+                                @for ($i=0; $i < count($arr_what_will_you_learn_title); $i++)
                                 <li>
                                     <h6>{{ $arr_what_will_you_learn_title[$i] }}</h6>
                                     <p>{{ $arr_what_will_you_learn_description[$i] }}.</p>
@@ -65,8 +67,11 @@
                     <!-- /row -->
                     </section>
                     <!-- /section -->
-                <?php $courses_files = DB::table('courses_files')->where('course_id', $course_details->id)->first(); ?>
-                <?php $arr_video_title = json_decode($courses_files->video_title); $arr_video_category = json_decode($courses_files->video_category); $arr_video_url = json_decode($courses_files->video_url); ?>
+                <?php
+                $arr_video_title = $course_details->courses_file->video_title;
+                $arr_video_category = $course_details->courses_file->video_category;
+                $arr_video_url = $course_details->courses_file->video_url;
+                ?>
                 <?php $arr = []; ?>
                 @for ($i=0; $i < count($arr_video_category); $i++)
                     @if($arr_video_category[$i]  == $arr_video_category[$i])

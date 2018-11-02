@@ -2,72 +2,31 @@
 
 namespace App\Http\Controllers;
 
-// use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Request;
 // use Illuminate\Http\Request;
 
 use App\User;
-use App\Mail\AdminResetPassword;
-use DB;
-use Carbon\Carbon;
-use Mail;
 use App\Admission;
-use App\Role;
 
-class UserController extends Controller
+class TeacherController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    // For Get All Users 
-    /* public function index()
-     {
-         //
-         $users = User::whereIn('type_user', ['Student'])->get();
-         return view('admin.users.index', compact('users'));
-     }*/
-
-    public function show_all_teachers()
+    public function index()
     {
+        $teachers = User::role('Teacher')->latest()->get();
 
-        $users = User::orderBy('created_at', 'desc')->whereIn('type_user', ['Teacher'])->get();
-        // return $users;
-        return view('admin.users.teachers', compact('users'));
+        return view('admin.users.teachers', compact('teachers'));
     }
 
-    public function show_all_students()
-    {
-
-        $users = User::whereIn('type_user', ['Student'])->get();
-        // return $users;
-        return view('admin.users.students', compact('users'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create_teacher()
+    public function create()
     {
         return view('admin.users.teacher.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store_teacher(Request $request)
+    public function store(Request $request)
     {
         $this->validate(request(), [
-
             'name' => 'required|min:4|max:191',
-            // 'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:users',
             'password' => 'required|confirmed',
             'password_confirmation' => 'required',
 
@@ -83,11 +42,6 @@ class UserController extends Controller
             'messagere_here' => 'required',
         ]);
 
-        // |in:user,company,vendor',
-
-        // $user = User::where('id', $id)->first();
-        // $admission = Admission::where('user_uniqid', $user->uniqid)->first();
-
         if (!empty(request('image'))) {
             $image_name = time() . '.' . request('image')->getClientOriginalExtension();
             request('image')->move(public_path('uplaod/user/'), $image_name);
@@ -95,7 +49,6 @@ class UserController extends Controller
 
         $user = new User();
         $user->uniqid = uniqid();
-        $user->type_user = 'Teacher';
         if (!empty(request('image'))) {
             $user->image = $image_name;
         } else {
@@ -133,33 +86,16 @@ class UserController extends Controller
         return redirect('admin/teachers');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function edit(User $teacher)
     {
-        //
+        $admission = Admission::where('user_uniqid', $teacher->uniqid)->first();
+
+        return view('admin.users.teacher.edit', compact('teacher', 'admission'));
     }
 
-    // Fot Edit Teachers
-    public function edit_teacher($id)
+    public function update(Request $request, $id)
     {
-        //
-        $user = User::find($id);
-        $admission = Admission::where('user_uniqid', $user->uniqid)->first();
-
-        return view('admin.users.teacher.edit', compact('user', 'admission'));
-    }
-
-    // Fot Update Teachers
-    public function update_teacher(Request $request, $id)
-    {
-
         $this->validate(request(), [
-
             'name' => 'required|min:4|max:191',
             'telephone' => 'required',
             'age' => 'required',
@@ -172,7 +108,6 @@ class UserController extends Controller
             'preferences' => 'required',
             'messagere_here' => 'required',
         ]);
-        // |in:user,company,vendor',
 
         $user = User::where('id', $id)->first();
         $admission = Admission::where('user_uniqid', $user->uniqid)->first();
@@ -213,17 +148,11 @@ class UserController extends Controller
         return redirect('admin/users');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(User $teacher)
     {
-        User::find($id)->delete();
-        session()->flash('success', 'Successfully Deleted');
-        return back();
+        $teacher->delete();
+
+        return back()->with('success', 'Successfully Deleted');
     }
 
     public function delete_user_all()

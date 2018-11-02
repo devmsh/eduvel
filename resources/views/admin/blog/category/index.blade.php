@@ -20,7 +20,7 @@
             <!-- <form action="users/create" method="POST">
               <input type="submit"  class="btn btn-primary mr-2" style="float: right;" name="" value="Add New">
             </form> -->
-            <a href="{{ url('admin/blog/category/create') }}" class="btn btn-success mr-2" style="float: right;"><i
+            <a href="{{ url('admin/blog/categories/create') }}" class="btn btn-success mr-2" style="float: right;"><i
                         class="fa fa-edit"></i>Add New</a>
         </div>
         <div class="card-body">
@@ -57,11 +57,11 @@
                             <td>{{ $category->description }}</td>
                             <td>{{ $category->created_at->toDayDateTimeString() }}</td>
                             <td>
-                                <a href="{{ url('/admin/blog/category/'.$category->id) }}" class="btn btn-success"><i
+                                <a href="{{ url('/admin/blog/categories/'.$category->id) }}" class="btn btn-success"><i
                                             class="fa fa-eye"></i> Show Posts</a>
-                                <a href="{{ url('/admin/blog/category/'.$category->id.'/edit') }}"
+                                <a href="{{ url('/admin/blog/categories/'.$category->id.'/edit') }}"
                                    class="btn btn-outline-primary"><i class="fa fa-edit"></i> Edit</a>
-                                <a href="{{ url('/admin/blog/category/'.$category->id.'/destroy') }}"
+                                <a href="{{ url('/admin/blog/categories/'.$category->id.'/destroy') }}"
                                    class="btn btn-outline-danger" data-toggle="modal" data-target="#sureDeleteCategory"><i
                                             class="fa fa-close"></i> Delete</a>
                             </td>

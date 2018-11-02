@@ -19,7 +19,6 @@ class UserSeeder extends Seeder
 
         $teacher = App\User::create([
             'uniqid' => '5b154bef024f0',
-            'type_user' => 'Teacher',
             'image' => 'user-image.png',
             'name' => 'Name Teacher',
             'email' => 'tt@tt.tt',
@@ -31,7 +30,6 @@ class UserSeeder extends Seeder
 
         $student = App\User::create([
             'uniqid' => '5b154bef02400',
-            'type_user' => 'Student',
             'image' => 'user-image.png',
             'name' => 'Name Student',
             'email' => 'ss@ss.ss',
